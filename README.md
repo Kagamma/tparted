@@ -17,6 +17,7 @@ Currently supported filesystems:
 | fat32 | :heavy_check_mark: | | | :heavy_check_mark: |
 | linux-swap | :heavy_check_mark: | | | |
 | ntfs | :heavy_check_mark: | | | :heavy_check_mark: |
+| xfs | :heavy_check_mark: | | | :heavy_check_mark: |
 
 ## Install
 

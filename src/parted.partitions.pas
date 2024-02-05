@@ -16,7 +16,7 @@ const
   );
 
   FileSystemFormattableArray: array of String = (
-    'btrfs', 'ext2', 'ext3', 'ext4', 'exfat', 'fat16', 'fat32', 'ntfs', 'linux-swap'
+    'btrfs', 'ext2', 'ext3', 'ext4', 'exfat', 'fat16', 'fat32', 'ntfs', 'linux-swap', 'xfs'
   );
 
   FileSystemResizableArray: array of String = (

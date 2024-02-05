@@ -103,6 +103,7 @@ uses
   FileSystem.NTFS,
   FileSystem.BTRFS,
   FileSystem.Swap,
+  FileSystem.XFS,
   FileSystem.ExFat,
   FileSystem.Fat;
 
@@ -315,6 +316,8 @@ var
         FS := TPartedFileSystemBTRFS.Create;
       'linux-swap':
         FS := TPartedFileSystemSwap.Create;
+      'xfs':
+        FS := TPartedFileSystemXfs.Create;
       else
         FS := TPartedFileSystem.Create;
     end;
