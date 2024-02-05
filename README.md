@@ -20,7 +20,7 @@ Currently supported filesystems:
 
 ## Install
 
-#### Pre-build binary
+#### Pre-built binary
 - See `Releases` section.
 
 #### Building from source
