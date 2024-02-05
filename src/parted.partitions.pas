@@ -158,12 +158,12 @@ begin
   MatchResult := Match(AText, ['([^\s]+)', '([^\s]+)', '([^\s]+)', '([^\s]+)']);
   APart.PartUsed := StrToQWord(MatchResult[2]);
   APart.PartFree := StrToQWord(MatchResult[3]);
-  if APart.FileSystem = 'ext4' then // Manually calculate the 5% reserved space for ext4 TODO: Can we get this info via tune2fs?
+  {if APart.FileSystem = 'ext4' then // Manually calculate the 5% reserved space for ext4 TODO: Can we get this info via tune2fs?
   begin
     Ext4ReservedSpace := APart.PartSize div 100 * 5;
     APart.PartUsed := Min(APart.PartUsed + Ext4ReservedSpace, APart.PartSize);
     APart.PartFree := Max(APart.PartFree + Ext4ReservedSpace, 0);
-  end;
+  end;}
   APart.CanBeResized := True;
 end;
 
