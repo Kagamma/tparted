@@ -20,7 +20,7 @@ const
   );
 
   FileSystemResizableArray: array of String = (
-    'ext2', 'ext3', 'ext4'
+    'btrfs', 'ext2', 'ext3', 'ext4'
   );
 
   FlagArray: array of String = (
@@ -261,12 +261,9 @@ begin
   begin
     // TODO: For some reasons ntfs filesystem makes the app freeze unless we use fpSystem()...
     S := Format('/bin/mkdir -p "%s" > /dev/null', [PathMnt]);
-    WriteLog(lsInfo, '+ ' + S);
-    fpSystem(S);
+    ExecSystem(S);
     S := Format('/bin/mount "%s" "%s" > /dev/null', [Path, PathMnt]);
-    WriteLog(lsInfo, '+ ' + S);
-    fpSystem(S);
-    Sleep(100);
+    ExecSystem(S);
   end;
   // For non-swap partitions
   if APart.FileSystem <> 'linux-swap' then
@@ -280,12 +277,9 @@ begin
   if (not APart.IsMounted) and (APart.FileSystem <> 'linux-swap') then
   begin
     S := Format('/bin/umount "%s" > /dev/null', [Path]);
-    WriteLog(lsInfo, '+ ' + S);
-    fpSystem(S);
-    Sleep(100);
+    ExecSystem(S);
     S := Format('/bin/rm -d "%s" > /dev/null', [PathMnt]);
-    WriteLog(lsInfo, '+ ' + S);
-    fpSystem(S);
+    ExecSystem(S);
   end;
   {$else}
   APart.PartUsed := 1024 * 1024 * 8;

@@ -5,6 +5,7 @@ unit Parted.Commons;
 interface
 
 uses
+  {$ifdef Unix}Unix,{$endif}
   SysUtils, Classes, Process, Types, StrUtils, RegExpr;
 
 resourcestring
@@ -101,6 +102,7 @@ type
 
 procedure DumpCallStack(var Report: String);
 function Match(S: String; RegexPattermArray: TStringDynArray): TStringDynArray;
+procedure ExecSystem(const S: String);
 function ExecS(const Prog: String; const Params: TStringDynArray): TExecResult;
 function ExecSA(const Prog: String; const Params: TStringDynArray): TExecResultDA;
 
@@ -275,6 +277,13 @@ begin
   finally
     SL.Free;
   end;
+end;
+
+procedure ExecSystem(const S: String);
+begin
+  WriteLog(lsInfo, '+ ' + S);
+  fpSystem(S);
+  Sleep(100);
 end;
 
 function ExecS(const Prog: String; const Params: TStringDynArray): TExecResult;

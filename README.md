@@ -8,7 +8,7 @@ Currently supported filesystems:
 
 | | Create | Move | Resize | Label |
 |-|-|-|-|-|
-| btrfs | :heavy_check_mark: | | | | | |
+| btrfs | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | |
 | ext2 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | ext3 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | ext4 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
