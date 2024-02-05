@@ -11,8 +11,11 @@ uses
 type
   TPartedFileSystem = class(TObject)
   public
-    procedure DoCreatePartitionOnly(const Part: PPartedPartition); virtual;
     procedure DoExec(const Name: String; const Params: TStringDynArray; const Delay: LongWord = 1000);
+    procedure DoMoveLeft(const PartAfter, PartBefore: PPartedPartition);
+    procedure DoMoveRight(const PartAfter, PartBefore: PPartedPartition);
+    procedure DoCreatePartitionOnly(const Part: PPartedPartition);
+
     procedure DoCreate(const PartAfter, PartBefore: PPartedPartition); virtual;
     procedure DoDelete(const PartAfter, PartBefore: PPartedPartition); virtual;
     procedure DoFormat(const PartAfter, PartBefore: PPartedPartition); virtual;
@@ -53,6 +56,32 @@ begin
   // Set partition name
   if (Part^.Name <> '') and (Part^.Name <> 'primary') then
     DoExec('/bin/parted', [Part^.Device^.Path, 'name', IntToStr(Part^.Number), Part^.Name]);
+end;
+
+procedure TPartedFileSystem.DoMoveLeft(const PartAfter, PartBefore: PPartedPartition);
+var
+  TempPart: TPartedPartition;
+begin
+  TempPart := PartAfter^;
+  TempPart.PartEnd := PartBefore^.PartEnd;
+  TempPart.PartSize := TempPart.PartEnd - TempPart.PartStart + 1;
+  // Move partition, the command with
+  DoExec('/bin/sh', ['-c', Format('echo "-%dM," | sfdisk --move-data %s -N %d', [BToMBFloor(PartBefore^.PartStart - TempPart.PartStart + 1), PartAfter^.Device^.Path, PartAfter^.Number])]);
+  // Calculate the shift part to determine if we need to shrink or grow later
+  PartBefore^.PartEnd := PartBefore^.PartEnd - (PartBefore^.PartStart - TempPart.PartStart);
+end;
+
+procedure TPartedFileSystem.DoMoveRight(const PartAfter, PartBefore: PPartedPartition);
+var
+  TempPart: TPartedPartition;
+begin
+  TempPart := PartAfter^;
+  TempPart.PartStart := PartBefore^.PartStart;
+  TempPart.PartSize := TempPart.PartEnd - TempPart.PartStart + 1;
+  // Move partition, the command with
+  DoExec('/bin/sh', ['-c', Format('echo "+%dM," | sfdisk --move-data %s -N %d', [BToMBFloor(PartAfter^.PartStart - TempPart.PartStart + 1), PartAfter^.Device^.Path, PartAfter^.Number])]);
+  // Calculate the shift part to determine if we need to shrink or grow later
+  PartBefore^.PartEnd := PartBefore^.PartEnd + (PartAfter^.PartStart - TempPart.PartStart);
 end;
 
 procedure TPartedFileSystem.DoCreate(const PartAfter, PartBefore: PPartedPartition);

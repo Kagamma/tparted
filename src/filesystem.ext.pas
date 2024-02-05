@@ -79,43 +79,17 @@ procedure TPartedFileSystemExt.DoResize(const PartAfter, PartBefore: PPartedPart
     DoExec('/bin/sh', ['-c', Format('echo "Yes" | parted %s ---pretend-input-tty resizepart %d %dB', [PartAfter^.Device^.Path, PartAfter^.Number, PartAfter^.PartEnd])]);
   end;
 
-  procedure MoveLeft;
-  var
-    TempPart: TPartedPartition;
-  begin
-    TempPart := PartAfter^;
-    TempPart.PartEnd := PartBefore^.PartEnd;
-    TempPart.PartSize := TempPart.PartEnd - TempPart.PartStart + 1;
-    // Move partition, the command with
-    DoExec('/bin/sh', ['-c', Format('echo "-%dM," | sfdisk --move-data %s -N %d', [BToMBFloor(PartBefore^.PartStart - TempPart.PartStart + 1), PartAfter^.Device^.Path, PartAfter^.Number])]);
-    // Calculate the shift part to determine if we need to shrink or grow later
-    PartBefore^.PartEnd := PartBefore^.PartEnd - (PartBefore^.PartStart - TempPart.PartStart);
-  end;
-
-  procedure MoveRight;
-  var
-    TempPart: TPartedPartition;
-  begin
-    TempPart := PartAfter^;
-    TempPart.PartStart := PartBefore^.PartStart;
-    TempPart.PartSize := TempPart.PartEnd - TempPart.PartStart + 1;
-    // Move partition, the command with
-    DoExec('/bin/sh', ['-c', Format('echo "+%dM," | sfdisk --move-data %s -N %d', [BToMBFloor(PartAfter^.PartStart - TempPart.PartStart + 1), PartAfter^.Device^.Path, PartAfter^.Number])]);
-    // Calculate the shift part to determine if we need to shrink or grow later
-    PartBefore^.PartEnd := PartBefore^.PartEnd + (PartAfter^.PartStart - TempPart.PartStart);
-  end;
-
 begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemExt.DoResize');
   // Move partition to the left
   if PartAfter^.PartStart < PartBefore^.PartStart then
   begin
-    MoveLeft;
+    DoMoveLeft(PartAfter, PartBefore);
   end else
   if PartAfter^.PartStart > PartBefore^.PartStart then
   begin
-    MoveRight;
+    DoMoveRight(PartAfter, PartBefore);
   end;
   // Shrink / Expand right
   if PartAfter^.PartEnd > PartBefore^.PartEnd then

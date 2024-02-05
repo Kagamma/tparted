@@ -30,6 +30,8 @@ Currently supported filesystems:
 
 ## Dependencies
 - `parted`
-- `sfdisk` for Move operations.
+- `sfdisk` for moving partitions.
+- `mkfs`
+- `resize2fs` for resizing Ext2/3/4 partitions.
 
 ![image](./docs/images/1.png)
