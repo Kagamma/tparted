@@ -28,6 +28,9 @@ begin
   WriteLog(lsInfo, 'TPartedFileSystemBTRFS.DoCreate');
   // Format the new partition
   DoExec('/bin/mkfs.btrfs', ['-f', PartAfter^.GetPartitionPath]);
+  // Change label if needed
+  if PartAfter^.LabelName <> '' then
+    DoExec('/bin/btrfs', ['filesystem', 'label', PartAfter^.GetPartitionPath, PartAfter^.LabelName]);
 end;
 
 procedure TPartedFileSystemBTRFS.DoDelete(const PartAfter, PartBefore: PPartedPartition);
@@ -53,6 +56,8 @@ procedure TPartedFileSystemBTRFS.DoLabelName(const PartAfter, PartBefore: PParte
 begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemBTRFS.DoLabelName');
+  if PartAfter^.LabelName <> '' then
+    DoExec('/bin/btrfs', ['filesystem', 'label', PartAfter^.GetPartitionPath, PartAfter^.LabelName]);
 end;
 
 procedure TPartedFileSystemBTRFS.DoResize(const PartAfter, PartBefore: PPartedPartition);

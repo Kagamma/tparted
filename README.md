@@ -8,7 +8,7 @@ Currently supported filesystems:
 
 | | Create | Move | Resize | Label |
 |-|-|-|-|-|
-| btrfs | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | |
+| btrfs | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | ext2 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | ext3 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | ext4 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
@@ -32,6 +32,7 @@ Currently supported filesystems:
 - `parted`
 - `sfdisk` for moving partitions.
 - `mkfs`
-- `resize2fs` for resizing Ext2/3/4 partitions.
+- `resize2fs` for resizing ext2/3/4 partitions.
+- `btrfs` for labeling & resizing btrfs partitions.
 
 ![image](./docs/images/1.png)
