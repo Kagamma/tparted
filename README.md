@@ -4,7 +4,7 @@ TUI frontend for `parted`, an utility for creating, reorganizing, and deleting (
 
 The app is currently in beta state, thus critical bugs can occur at anytime.
 
-Supported filesystems:
+Currently supported filesystems:
 
 | | Create | Delete | Format | Move | Resize | Label | Flags |
 |-|-|-|-|-|-|-|-|
@@ -23,7 +23,7 @@ Supported filesystems:
 - See `Releases` section.
 
 #### Building from source
-- Since the app requires Unicode version of Free Vision, you need to have Free Pascal 3.3.1 installed on the system.
+- Since the app requires Unicode version of Free Vision, you need to have Free Pascal 3.1.1 or later installed on the system.
 - Run `make build` to build the app. The binary is located in `./bin` directory.
 - Run `make install` to install the app to `/usr/bin`
 
