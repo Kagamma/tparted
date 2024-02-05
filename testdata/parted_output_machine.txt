@@ -1,0 +1,17 @@
+BYT;
+/dev/sda:1000GB:scsi:512:4096:gpt:ATA HGST HTS721010A9:;
+1:1049kB:473MB:472MB:ntfs::diag;
+2:473MB:578MB:105MB:fat32::boot, esp;
+3:578MB:17.8GB:17.2GB:linux-swap(v1)::swap;
+6:17.8GB:121GB:103GB:ext4::;
+7:121GB:420GB:299GB:ext4::;
+8:420GB:1000GB:580GB:ext4::;
+
+BYT;
+/dev/sdb:240GB:scsi:512:512:gpt:ATA WD Green M.2 228:;
+1:1049kB:106MB:105MB:fat32::boot, esp;
+2:106MB:240GB:240GB:ext4::;
+
+BYT;
+/dev/sdc:1000GB:scsi:512:512:msdos:StoreJet Transcend:;
+1:32.8kB:1000GB:1000GB:ntfs::boot;

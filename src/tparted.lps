@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <Version Value="12"/>
+    <BuildModes Active="Default"/>
+    <Units>
+      <Unit>
+        <Filename Value="tparted.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="TParted"/>
+        <CursorPos X="33" Y="26"/>
+        <UsageCount Value="24"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="parted.commons.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Parted.Commons"/>
+        <EditorIndex Value="6"/>
+        <TopLine Value="29"/>
+        <CursorPos X="34" Y="30"/>
+        <UsageCount Value="24"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="parted.devices.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Parted.Devices"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="11"/>
+        <CursorPos X="21" Y="29"/>
+        <UsageCount Value="23"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="parted.partitions.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Parted.Partitions"/>
+        <EditorIndex Value="5"/>
+        <CursorPos X="17" Y="9"/>
+        <UsageCount Value="23"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="parted.operations.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Parted.Operations"/>
+        <EditorIndex Value="1"/>
+        <CursorPos X="28" Y="13"/>
+        <UsageCount Value="23"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="ui.main.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="UI.Main"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="79"/>
+        <CursorPos X="49" Y="102"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="ui.partitions.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="UI.Partitions"/>
+        <EditorIndex Value="4"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="tparted.pas"/>
+        <UnitName Value="TParted"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="91"/>
+        <CursorPos X="5" Y="123"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../sdks/fpc/fpcsrc/packages/fcl-process/src/processbody.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="189"/>
+        <CursorPos X="14" Y="203"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../sdks/fpc/fpcsrc/packages/fcl-process/src/pipes.pp"/>
+        <UnitName Value="Pipes"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="22"/>
+        <CursorPos X="3" Y="37"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../sdks/fpc/fpcsrc/packages/rtl-extra/src/inc/objects.pp"/>
+        <UnitName Value="Objects"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="593"/>
+        <CursorPos X="4" Y="609"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../sdks/fpc/fpcsrc/rtl/objpas/sysutils/sysstrh.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="119"/>
+        <CursorPos X="10" Y="135"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../sdks/fpc/fpcsrc/packages/fv/src/msgbox.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="313"/>
+        <CursorPos X="4" Y="305"/>
+        <UsageCount Value="11"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../sdks/fpc/fpcsrc/packages/regexpr/src/regexpr.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="791"/>
+        <CursorPos X="19" Y="810"/>
+        <UsageCount Value="10"/>
+      </Unit>
+    </Units>
+    <JumpHistory HistoryIndex="29">
+      <Position>
+        <Filename Value="tparted.lpr"/>
+        <Caret Line="43" Column="14" TopLine="37"/>
+      </Position>
+      <Position>
+        <Filename Value="tparted.lpr"/>
+        <Caret Line="62" Column="28" TopLine="43"/>
+      </Position>
+      <Position>
+        <Filename Value="tparted.lpr"/>
+        <Caret Line="65" Column="54" TopLine="47"/>
+      </Position>
+      <Position>
+        <Filename Value="tparted.lpr"/>
+        <Caret Line="64" Column="115" TopLine="48"/>
+      </Position>
+      <Position>
+        <Filename Value="tparted.lpr"/>
+        <Caret Line="84" Column="19" TopLine="77"/>
+      </Position>
+      <Position>
+        <Filename Value="parted.commons.pas"/>
+        <Caret Line="25" Column="53" TopLine="7"/>
+      </Position>
+      <Position>
+        <Filename Value="parted.commons.pas"/>
+        <Caret Line="17" Column="15" TopLine="7"/>
+      </Position>
+      <Position>
+        <Filename Value="parted.commons.pas"/>
+        <Caret Line="31" Column="28" TopLine="7"/>
+      </Position>
+      <Position>
+        <Filename Value="parted.commons.pas"/>
+        <Caret Line="33" Column="52" TopLine="7"/>
+      </Position>
+      <Position>
+        <Filename Value="parted.devices.pas"/>
+        <Caret Line="36" Column="19" TopLine="11"/>
+      </Position>
+      <Position>
+        <Filename Value="parted.commons.pas"/>
+        <Caret Line="40" Column="13" TopLine="10"/>
+      </Position>
+      <Position>
+        <Filename Value="parted.commons.pas"/>
+        <Caret Line="21" Column="19" TopLine="6"/>
+      </Position>
+      <Position>
+        <Filename Value="parted.commons.pas"/>
+        <Caret Line="29" Column="19" TopLine="14"/>
+      </Position>
+      <Position>
+        <Filename Value="parted.devices.pas"/>
+        <Caret Line="30" Column="44" TopLine="14"/>
+      </Position>
+      <Position>
+        <Filename Value="parted.commons.pas"/>
+        <Caret Line="31" Column="42" TopLine="10"/>
+      </Position>
+      <Position>
+        <Filename Value="parted.commons.pas"/>
+        <Caret Line="26" Column="28" TopLine="10"/>
+      </Position>
+      <Position>
+        <Filename Value="parted.devices.pas"/>
+        <Caret Line="12" Column="16"/>
+      </Position>
+      <Position>
+        <Filename Value="parted.devices.pas"/>
+        <Caret Line="11" Column="16"/>
+      </Position>
+      <Position>
+        <Filename Value="parted.devices.pas"/>
+        <Caret Line="16" Column="21"/>
+      </Position>
+      <Position>
+        <Filename Value="tparted.lpr"/>
+        <Caret Line="71" Column="26" TopLine="62"/>
+      </Position>
+      <Position>
+        <Filename Value="tparted.lpr"/>
+        <Caret Line="84" Column="39" TopLine="70"/>
+      </Position>
+      <Position>
+        <Filename Value="tparted.lpr"/>
+        <Caret Line="106" Column="53" TopLine="85"/>
+      </Position>
+      <Position>
+        <Filename Value="tparted.lpr"/>
+        <Caret Line="100" Column="101" TopLine="85"/>
+      </Position>
+      <Position>
+        <Filename Value="tparted.lpr"/>
+        <Caret Line="87" Column="28" TopLine="84"/>
+      </Position>
+      <Position>
+        <Filename Value="ui.main.pas"/>
+        <Caret Line="31" Column="10" TopLine="10"/>
+      </Position>
+      <Position>
+        <Filename Value="ui.main.pas"/>
+        <Caret Line="32" Column="17" TopLine="22"/>
+      </Position>
+      <Position>
+        <Filename Value="ui.main.pas"/>
+        <Caret Line="17" Column="10"/>
+      </Position>
+      <Position>
+        <Filename Value="ui.main.pas"/>
+        <Caret Line="29" Column="9" TopLine="7"/>
+      </Position>
+      <Position>
+        <Filename Value="ui.main.pas"/>
+        <Caret Line="102" Column="49" TopLine="79"/>
+      </Position>
+      <Position>
+        <Filename Value="tparted.lpr"/>
+        <Caret Line="24" Column="67"/>
+      </Position>
+    </JumpHistory>
+    <RunParams>
+      <FormatVersion Value="2"/>
+      <Modes ActiveMode=""/>
+    </RunParams>
+  </ProjectSession>
+</CONFIG>

@@ -1,0 +1,11 @@
+{
+   "disk": {
+      "path": "/dev/sdc",
+      "size": "30987517952B",
+      "model": " USB FLASH DRIVE",
+      "transport": "scsi",
+      "logical-sector-size": 512,
+      "physical-sector-size": 512,
+      "label": "unknown"
+   }
+}

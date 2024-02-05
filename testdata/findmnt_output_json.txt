@@ -1,0 +1,10 @@
+{
+   "filesystems": [
+      {
+         "target": "/home",
+         "source": "/dev/sda7",
+         "fstype": "ext4",
+         "options": "rw,noatime"
+      }
+   ]
+}

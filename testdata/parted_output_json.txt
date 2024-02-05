@@ -1,0 +1,89 @@
+{
+   "disk": {
+      "path": "/dev/sda",
+      "size": "1000204886016B",
+      "model": "ATA HGST HTS721010A9",
+      "transport": "scsi",
+      "logical-sector-size": 512,
+      "physical-sector-size": 4096,
+      "label": "gpt",
+      "uuid": "e2df9260-9634-03a4-98e4-b7388d25e900",
+      "max-partitions": 128,
+      "partitions": [
+         {
+            "number": 0,
+            "start": "1048576B",
+            "end": "472907775B",
+            "size": "471859200B",
+            "type": "primary",
+            "filesystem": "",
+            "flags": []
+         },
+         {
+            "number": 1,
+            "start": "1048576B",
+            "end": "472907775B",
+            "size": "471859200B",
+            "type": "primary",
+            "type-uuid": "de94bba4-06d1-4d40-a16a-bfd50179d6ac",
+            "uuid": "8f41abbc-f26c-49a0-ab9c-873369d33add",
+            "name": "test",
+            "filesystem": "ntfs",
+            "flags": [
+                "diag"
+            ]
+         },{
+            "number": 2,
+            "start": "472907776B",
+            "end": "577765375B",
+            "size": "104857600B",
+            "type": "primary",
+            "type-uuid": "c12a7328-f81f-11d2-ba4b-00a0c93ec93b",
+            "uuid": "fe2a9fe7-a0c4-4dfd-bfcf-03130bbe9648",
+            "filesystem": "fat32",
+            "flags": [
+                "boot", "esp"
+            ]
+         },{
+            "number": 3,
+            "start": "577765376B",
+            "end": "17757634559B",
+            "size": "17179869184B",
+            "type": "primary",
+            "type-uuid": "0657fd6d-a4ab-43c4-84e5-0933c84b4f4f",
+            "uuid": "e691918c-0321-4e6a-a516-5904e892a2c3",
+            "filesystem": "linux-swap(v1)",
+            "flags": [
+                "swap"
+            ]
+         },{
+            "number": 6,
+            "start": "17757634560B",
+            "end": "120836849663B",
+            "size": "103079215104B",
+            "type": "primary",
+            "type-uuid": "0fc63daf-8483-4772-8e79-3d69d8477de4",
+            "uuid": "e5bd396d-ddef-fb4d-b118-2d90f8272951",
+            "filesystem": "ext4"
+         },{
+            "number": 7,
+            "start": "120836849664B",
+            "end": "420299669503B",
+            "size": "299462819840B",
+            "type": "primary",
+            "type-uuid": "0fc63daf-8483-4772-8e79-3d69d8477de4",
+            "uuid": "458647aa-13cc-a64d-851f-d3dfe86b5116",
+            "filesystem": "ext4"
+         },{
+            "number": 8,
+            "start": "420302815232B",
+            "end": "1000204140543B",
+            "size": "579901325312B",
+            "type": "primary",
+            "type-uuid": "0fc63daf-8483-4772-8e79-3d69d8477de4",
+            "uuid": "06682d29-db83-4773-ac2b-312bf436c40c",
+            "filesystem": "ext4"
+         }
+      ]
+   }
+}
