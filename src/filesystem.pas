@@ -40,8 +40,11 @@ procedure TPartedFileSystem.DoCreatePartitionOnly(const Part: PPartedPartition);
 var
   S: String;
 begin
+  S := Part^.FileSystem;
+  if S = 'exfat' then // TODO: parted does not support exfat?
+    S := 'fat32';
   // Create a new partition
-  DoExec('/bin/parted', [Part^.Device^.Path, 'mkpart', Part^.Kind, Part^.FileSystem, IntToStr(Part^.PartStart) + 'B', IntToStr(Part^.PartEnd) + 'B']);
+  DoExec('/bin/parted', [Part^.Device^.Path, 'mkpart', Part^.Kind, S, IntToStr(Part^.PartStart) + 'B', IntToStr(Part^.PartEnd) + 'B']);
   // Loop through list of flags and set it
   for S in Part^.Flags do
   begin

@@ -5,7 +5,7 @@ unit Parted.Devices;
 interface
 
 uses
-  Classes, SysUtils, Types, Parted.Commons, StrUtils, Parted.Logs;
+  Classes, SysUtils, Types, Parted.Commons, StrUtils, Parted.Logs{$ifdef UNIX}, Unix{$endif};
 
 type
   PPartedDevice = ^TPartedDevice;
@@ -51,6 +51,8 @@ type
     procedure ResizePartitionInMB(const Preceding, Size: Int64);
     // Guess and assign a number for this partition
     procedure AutoAssignNumber;
+    // Tell the kernel about the changes in this partition
+    procedure Probe;
   end;
   TPartedPartitionDynArray = array of TPartedPartition;
 
@@ -482,6 +484,11 @@ begin
   if N = -1 then
     WriteLogAndRaise(S_MaximumPartitionReached);
   Self.Number := N;
+end;
+
+procedure TPartedPartition.Probe;
+begin
+  fpSystem('partprobe ' + Self.GetPartitionPath);
 end;
 
 // --------------------------
