@@ -11,12 +11,12 @@ uses
 
 const
   FileSystemArray: array of String = (
-    'btrfs', 'ext2', 'ext3', 'ext4', 'fat16', 'fat32',
+    'btrfs', 'ext2', 'ext3', 'ext4', 'exfat', 'fat16', 'fat32',
     'hfs', 'hfs+', 'linux-swap', 'ntfs', 'reiserfs', 'udf', 'xfs'
   );
 
   FileSystemFormattableArray: array of String = (
-    'btrfs', 'ext2', 'ext3', 'ext4', 'fat16', 'fat32', 'ntfs', 'linux-swap'
+    'btrfs', 'ext2', 'ext3', 'ext4', 'exfat', 'fat16', 'fat32', 'ntfs', 'linux-swap'
   );
 
   FileSystemResizableArray: array of String = (
@@ -52,6 +52,8 @@ function QueryPartitionUsedAndAvail(var APart: TPartedPartition): TExecResultDA;
 function QueryPartitionLabel(var APart: TPartedPartition): TExecResult;
 // /bin/umount APath
 function QueryPartitionUnmount(var APart: TPartedPartition): TExecResult;
+// /bin/blkid -s TYPE -o value APath
+function QueryPartitionFileSystem(var APart: TPartedPartition): TExecResult;
 
 implementation
 
@@ -119,7 +121,12 @@ begin
           PPart^.UUID := PartJson.Strings['uuid'];
         end;
         // FileSystem is optional
-        try PPart^.FileSystem := PartJson.Strings['filesystem']; except on E: Exception do; end;
+        try
+          PPart^.FileSystem := PartJson.Strings['filesystem'];
+        except
+          on E: Exception do
+            QueryPartitionFileSystem(PPart^); // Use blkid to detect filesystem, in case parted failed to do so
+        end;
         // We remove (v1) from linux-swap...
         if PPart^.FileSystem = 'linux-swap(v1)' then
           PPart^.FileSystem := 'linux-swap';
@@ -253,10 +260,10 @@ begin
   if not APart.IsMounted then
   begin
     // TODO: For some reasons ntfs filesystem makes the app freeze unless we use fpSystem()...
-    S := Format('/bin/mkdir -p "%s"', [PathMnt]);
+    S := Format('/bin/mkdir -p "%s" > /dev/null', [PathMnt]);
     WriteLog(lsInfo, '+ ' + S);
     fpSystem(S);
-    S := Format('/bin/mount "%s" "%s"', [Path, PathMnt]);
+    S := Format('/bin/mount "%s" "%s" > /dev/null', [Path, PathMnt]);
     WriteLog(lsInfo, '+ ' + S);
     fpSystem(S);
     Sleep(100);
@@ -272,11 +279,11 @@ begin
   // Try to unmount the device again after we're done
   if (not APart.IsMounted) and (APart.FileSystem <> 'linux-swap') then
   begin
-    S := Format('/bin/umount "%s"', [Path]);
+    S := Format('/bin/umount "%s" > /dev/null', [Path]);
     WriteLog(lsInfo, '+ ' + S);
     fpSystem(S);
     Sleep(100);
-    S := Format('/bin/rm -d "%s"', [PathMnt]);
+    S := Format('/bin/rm -d "%s" > /dev/null', [PathMnt]);
     WriteLog(lsInfo, '+ ' + S);
     fpSystem(S);
   end;
@@ -302,6 +309,25 @@ begin
   APart.LabelName := Trim(Result.Message);
   {$else}
   APart.LabelName := 'test_label'
+  {$endif}
+end;
+
+function QueryPartitionFileSystem(var APart: TPartedPartition): TExecResult;
+var
+  Path: String; // Partition path
+begin
+  Result.ExitCode := -1;
+  {$ifndef TPARTED_TEST}
+  // Immediately skip if this is unallocated space
+  if APart.Number <= 0 then
+    Exit;
+  Path := APart.GetPartitionPath;
+  Result := ExecS('/bin/blkid', ['-s', 'TYPE', '-o', 'value', Path]);
+  if Result.ExitCode <> 0 then
+    WriteLogAndRaise(Format(S_ProcessExitCode, ['blkid -s TYPE -o value ' + Path, Result.ExitCode, Result.Message]));
+  APart.FileSystem := Trim(Result.Message);
+  {$else}
+  APart.LabelName := 'ext4'
   {$endif}
 end;
 

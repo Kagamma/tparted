@@ -103,6 +103,7 @@ uses
   FileSystem.NTFS,
   FileSystem.BTRFS,
   FileSystem.Swap,
+  FileSystem.ExFat,
   FileSystem.Fat;
 
 destructor TPartedOpList.Destroy;
@@ -220,6 +221,7 @@ var
   begin
     PData := AData;
     AffectedPartNew^.FileSystem := FileSystemFormattableArray[PData^.FileSystem];
+    AffectedPartNew^.LabelName := '';
   end;
 
   procedure HandleResize;
@@ -305,6 +307,8 @@ var
         FS := TPartedFileSystemExt.Create;
       'fat16', 'fat32':
         FS := TPartedFileSystemFat.Create;
+      'exfat':
+        FS := TPartedFileSystemExFat.Create;
       'ntfs':
         FS := TPartedFileSystemNTFS.Create;
       'btrfs':

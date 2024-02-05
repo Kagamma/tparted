@@ -56,7 +56,7 @@ begin
       CItem^.Next := NewSItem(FileSystemFormattableArray[I], nil);
       CItem := CItem^.Next;
     end;
-    R.Assign(HW - HW + 3, 2, HW + 3, 2 + Length(FileSystemArray));
+    R.Assign(HW - HW + 3, 2, HW + 3, 11);
     D^.Insert(New(PRadioButtons, Init(R, CItemRoot)));
 
     // Ok-Button
