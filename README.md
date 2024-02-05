@@ -11,7 +11,7 @@ Currently supported filesystems:
 | ext2 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | ext3 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | ext4 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| linux-swap | :heavy_check_mark: | | | :heavy_check_mark: |
+| linux-swap | :heavy_check_mark: | | | |
 | fat16 | :heavy_check_mark: | | | :heavy_check_mark: |
 | fat32 | :heavy_check_mark: | | | :heavy_check_mark: |
 | ntfs | :heavy_check_mark: | | | :heavy_check_mark: |
