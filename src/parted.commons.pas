@@ -75,7 +75,7 @@ resourcestring
   S_PartitionUnmounted = #3'"%s" unmounted!';
   S_PartitionUnmounting = 'Unmounting %s...';
   S_CreatePartitionTableAsk = 'Device %s has no partition table.'#13'Do you want to create a GUID Partition Table?';
-  S_ProcessExitCode = '"%s" exited with exit code %d'#13'%s';
+  S_ProcessExitCode = '"%s" exited with exit code %d: %s';
   S_FormatsDialogTitle = 'Format %s';
   S_FlagsDialogTitle = 'Edit %s flags';
   S_CreateDialogTitle = 'Create new partition';
