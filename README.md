@@ -32,9 +32,12 @@ Currently supported filesystems:
 ## Dependencies
 - `parted`
 - `sfdisk` for moving partitions.
-- `mkfs`
-- `resize2fs` for resizing ext2/3/4 partitions.
-- `ntfs-utils` for resizing ntfs partitions.
-- `btrfs-utils` for labeling & resizing btrfs partitions.
+- `dosfstools` for fat operations.
+- `exfatprogs` for exfat operations.
+- `e2fsprogs` for ext2/3/4 operations.
+- `ntfs-3g` for ntfs operations.
+- `btrfs-progs` for btrfs operations.
+- `xfsprogs` for xfs operations.
+- `util-linux` for linux-swap operations.
 
 ![image](./docs/images/1.png)
