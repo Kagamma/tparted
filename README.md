@@ -34,6 +34,7 @@ Currently supported filesystems:
 - `sfdisk` for moving partitions.
 - `mkfs`
 - `resize2fs` for resizing ext2/3/4 partitions.
-- `btrfs` for labeling & resizing btrfs partitions.
+- `ntfs-utils` for resizing ntfs partitions.
+- `btrfs-utils` for labeling & resizing btrfs partitions.
 
 ![image](./docs/images/1.png)

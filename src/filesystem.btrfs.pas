@@ -105,7 +105,7 @@ var
 begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemBTRFS.DoResize');
-  // Move partition to the left
+  // Move partition to the left or right
   if PartAfter^.PartStart < PartBefore^.PartStart then
   begin
     DoMoveLeft(PartAfter, PartBefore);
