@@ -97,12 +97,12 @@ begin
   Inc(R.B.X);
   R.B.Y := R.A.Y + 1;
   S := Format('%s│%s│%s│%s│%s│%s', [
-    PadCenter(S_Partition, 15),
-    PadCenter(S_FileSystem, 15),
-    PadCenter(S_Size, 7),
-    PadCenter(S_Used, 7),
-    PadRight(S_Flags, 16),
-    PadRight(S_Label, 16)
+    PadCenterLimit(S_Partition, 15),
+    PadCenterLimit(S_FileSystem, 15),
+    PadCenterLimit(S_Size, 7),
+    PadCenterLimit(S_Used, 7),
+    PadRightLimit(S_Flags, 20),
+    PadRightLimit(S_Label, 20)
   ]);
   Self.ListHeader := New(PUILabel, Init(R, S, @Self, #7#7#19#7));
   Self.Insert(Self.ListHeader);
@@ -157,12 +157,12 @@ begin
   begin
     // Prepare partition string
     S := Format('%s│%s│%s│%s│%s│%s', [
-      PadRight(PPart^.GetPartitionPathForDisplay, 15),
-      PadRight(PPart^.FileSystem, 15),
-      PadLeft(SizeString(PPart^.PartSize), 7),
-      PadLeft(SizeString(PPart^.PartUsed), 7),
-      PadRight(SAToS(PPart^.Flags, ','), 16),
-      PadRight(PPart^.LabelName, 16)
+      PadRightLimit(PPart^.GetPartitionPathForDisplay, 15),
+      PadRightLimit(PPart^.FileSystem, 15),
+      PadLeftLimit(SizeString(PPart^.PartSize), 7),
+      PadLeftLimit(SizeString(PPart^.PartUsed), 7),
+      PadRightLimit(SAToS(PPart^.Flags, ','), 20),
+      PadRightLimit(PPart^.LabelName, 20)
     ]);
     Self.ListCollection^.Insert(GetUnicodeStr(S));
     PPart := PPart^.Next;

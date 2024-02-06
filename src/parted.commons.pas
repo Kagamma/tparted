@@ -174,6 +174,11 @@ function SAToFlag(const Values: TStringDynArray; const FlagNames: TStringDynArra
 // Convert a value to index
 function SToIndex(const V: String; const FlagNames: TStringDynArray): LongInt;
 
+// Pad a string and limit the length
+function PadRightLimit(S: String; Limit: LongInt): String;
+function PadLeftLimit(S: String; Limit: LongInt): String;
+function PadCenterLimit(S: String; Limit: LongInt): String;
+
 implementation
 
 uses
@@ -554,6 +559,39 @@ begin
       Exit;
     end;
   end;
+end;
+
+function PadRightLimit(S: String; Limit: LongInt): String;
+begin
+  if Length(S) > Limit then
+  begin
+    SetLength(S, Limit);
+    S[Limit] := '.';
+    S[Limit - 1] := '.';
+  end;
+  Result := PadRight(S, Limit);
+end;
+
+function PadLeftLimit(S: String; Limit: LongInt): String;
+begin
+  if Length(S) > Limit then
+  begin
+    SetLength(S, Limit);
+    S[Limit] := '.';
+    S[Limit - 1] := '.';
+  end;
+  Result := PadLeft(S, Limit);
+end;
+
+function PadCenterLimit(S: String; Limit: LongInt): String;
+begin
+  if Length(S) > Limit then
+  begin
+    SetLength(S, Limit);
+    S[Limit] := '.';
+    S[Limit - 1] := '.';
+  end;
+  Result := PadCenter(S, Limit);
 end;
 
 initialization
