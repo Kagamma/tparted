@@ -63,7 +63,7 @@ resourcestring
   S_Log = 'Display ~L~ogs';
   S_RefreshDevices = '~R~efresh Devices';
   S_QuitMessage = #3'You have pending operations.'#13#3'Quit TParted?';
-  S_AboutMessage = #3'TParted (%s) by kagamma'#13#3'Built with Free Pascal %s'#13#3'This software is in beta state,'#13#3'Use it at your own risk!';
+  S_AboutMessage = #3'TParted (%s) by kagamma'#13#3'Built with Free Pascal %s'#13#13#3'This software is in beta state!';
   S_LoadingPartitions = 'Loading partitions...';
   S_PartitionFileSystem = 'File System: %s';
   S_PartitionLabel = 'Label: %s';
