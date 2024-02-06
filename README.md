@@ -1,6 +1,6 @@
 # tparted
 
-TUI frontend for `parted`, an utility for creating, reorganizing, and deleting (for now) GPT disk partitions, based on Free Vision application framework.
+TUI frontend for `parted`, a simple, user-friendly utility for creating, reorganizing, and deleting (for now) GPT disk partitions, based on Free Vision application framework.
 
 The app is currently in beta state, thus bugs can occur at anytime.
 
