@@ -37,7 +37,15 @@ const
     'btrfs', 'ext2', 'ext3', 'ext4', 'exfat', 'fat16', 'fat32', 'ntfs', 'linux-swap', 'xfs'
   );
 
-  FileSystemResizableArray: array of String = (
+  FileSystemMoveArray: array of String = (
+    'btrfs', 'ext2', 'ext3', 'ext4', 'exfat', 'fat16', 'fat32', 'ntfs', 'linux-swap', 'xfs'
+  );
+
+  FileSystemGrowArray: array of String = (
+    'btrfs', 'ext2', 'ext3', 'ext4', 'ntfs', 'xfs'
+  );
+
+  FileSystemShrinkArray: array of String = (
     'btrfs', 'ext2', 'ext3', 'ext4', 'ntfs'
   );
 

@@ -58,6 +58,8 @@ var
       Result := 1
     else
       Result := V;
+    if ((Result <> DataOld.Preceding) and (SToIndex(PPart^.FileSystem, FileSystemMoveArray) < 0)) then
+      Result := DataOld.Preceding;
   end;
 
   function PrecedingMax(V: Int64): Int64;
@@ -72,6 +74,8 @@ var
       Result := Ceiling
     else
       Result := V;
+    if ((Result <> DataOld.Preceding) and (SToIndex(PPart^.FileSystem, FileSystemMoveArray) < 0)) then
+      Result := DataOld.Preceding;
   end;
 
   // Real-time correction for size
@@ -84,6 +88,9 @@ var
       Result := M
     else
       Result := V;
+    if ((Result > DataOld.Size) and (SToIndex(PPart^.FileSystem, FileSystemGrowArray) < 0)) or
+       ((Result < DataOld.Size) and (SToIndex(PPart^.FileSystem, FileSystemShrinkArray) < 0)) then
+      Result := DataOld.Size;
   end;
 
   function SizeMax(V: Int64): Int64;
@@ -95,6 +102,9 @@ var
       Result := Ceiling
     else
       Result := V;
+    if ((Result > DataOld.Size) and (SToIndex(PPart^.FileSystem, FileSystemGrowArray) < 0)) or
+       ((Result < DataOld.Size) and (SToIndex(PPart^.FileSystem, FileSystemShrinkArray) < 0)) then
+      Result := DataOld.Size;
   end;
 
 begin
@@ -112,22 +122,29 @@ begin
     D^.GetExtent(R);
 
     // Free space preceding
-    R.Assign(5, 3, 30, 4);
-    Preceding := New(PUIInputNumber, Init(R, 16));
-    Preceding^.OnMin := @PrecedingMin;
-    Preceding^.OnMax := @PrecedingMax;
-    D^.Insert(Preceding);
-    R.Assign(5, 2, 30, 3);
-    D^.Insert(New(PLabel, Init(R, UTF8Decode(S_FreeSpacePreceding), Preceding)));
+    if SToIndex(PPart^.FileSystem, FileSystemMoveArray) >= 0 then
+    begin
+      R.Assign(5, 3, 30, 4);
+      Preceding := New(PUIInputNumber, Init(R, 16));
+      Preceding^.OnMin := @PrecedingMin;
+      Preceding^.OnMax := @PrecedingMax;
+      D^.Insert(Preceding);
+      R.Assign(5, 2, 30, 3);
+      D^.Insert(New(PLabel, Init(R, UTF8Decode(S_FreeSpacePreceding), Preceding)));
+    end;
 
     // New size
-    R.Assign(5, 5, 30, 6);
-    Size := New(PUIInputNumber, Init(R, 16));
-    Size^.OnMin := @SizeMin;
-    Size^.OnMax := @SizeMax;
-    D^.Insert(Size);
-    R.Assign(5, 4, 30, 5);
-    D^.Insert(New(PLabel, Init(R, UTF8Decode(S_NewSize), Size)));
+    if (SToIndex(PPart^.FileSystem, FileSystemGrowArray) >= 0) or
+       (SToIndex(PPart^.FileSystem, FileSystemShrinkArray) >= 0) then
+    begin
+      R.Assign(5, 5, 30, 6);
+      Size := New(PUIInputNumber, Init(R, 16));
+      Size^.OnMin := @SizeMin;
+      Size^.OnMax := @SizeMax;
+      D^.Insert(Size);
+      R.Assign(5, 4, 30, 5);
+      D^.Insert(New(PLabel, Init(R, UTF8Decode(S_NewSize), Size)));
+    end;
 
     // Total size
     R.Assign(6, 6, 30, 8);

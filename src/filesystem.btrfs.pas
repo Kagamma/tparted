@@ -105,15 +105,6 @@ var
 begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemBTRFS.DoResize');
-  // Move partition to the left or right
-  if PartAfter^.PartStart < PartBefore^.PartStart then
-  begin
-    DoMoveLeft(PartAfter, PartBefore);
-  end else
-  if PartAfter^.PartStart > PartBefore^.PartStart then
-  begin
-    DoMoveRight(PartAfter, PartBefore);
-  end;
   // Shrink / Expand right
   Path := PartAfter^.GetPartitionPath;
   PathMnt := '/tmp/tparted_' + StringReplace(Path, '/', '_', [rfReplaceAll]);

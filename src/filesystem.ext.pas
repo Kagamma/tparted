@@ -100,15 +100,6 @@ procedure TPartedFileSystemExt.DoResize(const PartAfter, PartBefore: PPartedPart
 begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemExt.DoResize');
-  // Move partition to the left or right
-  if PartAfter^.PartStart < PartBefore^.PartStart then
-  begin
-    DoMoveLeft(PartAfter, PartBefore);
-  end else
-  if PartAfter^.PartStart > PartBefore^.PartStart then
-  begin
-    DoMoveRight(PartAfter, PartBefore);
-  end;
   // Shrink / Expand right
   if PartAfter^.PartEnd > PartBefore^.PartEnd then
   begin

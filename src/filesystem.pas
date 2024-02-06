@@ -158,6 +158,15 @@ procedure TPartedFileSystem.DoResize(const PartAfter, PartBefore: PPartedPartiti
 begin
   WriteLog(lsInfo, 'TPartedFileSystem.DoResize');
   QueryDeviceExists(PartAfter^.Device^.Path);
+  // Move partition to the left or right
+  if PartAfter^.PartStart < PartBefore^.PartStart then
+  begin
+    DoMoveLeft(PartAfter, PartBefore);
+  end else
+  if PartAfter^.PartStart > PartBefore^.PartStart then
+  begin
+    DoMoveRight(PartAfter, PartBefore);
+  end;
 end;
 
 end.

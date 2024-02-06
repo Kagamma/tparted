@@ -538,8 +538,9 @@ function SToIndex(const V: String; const FlagNames: TStringDynArray): LongInt;
 var
   I: LongInt;
 begin
+  Result := -1;
   if V = '' then
-    Exit(-1);
+    Exit;
   for I := 0 to High(FlagNames) do
   begin
     if V = FlagNames[I] then

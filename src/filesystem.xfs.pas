@@ -79,9 +79,29 @@ begin
 end;
 
 procedure TPartedFileSystemXfs.DoResize(const PartAfter, PartBefore: PPartedPartition);
+var
+  Path, PathMnt, S: String;
+
+  procedure Grow;
+  begin
+    DoExec('/bin/parted', [PartAfter^.Device^.Path, 'resizepart', IntToStr(PartAfter^.Number), IntToStr(PartAfter^.PartEnd) + 'B']);
+    ExecSystem(Format('/bin/mkdir -p "%s" > /dev/null', [PathMnt]));
+    ExecSystem(Format('/bin/mount "%s" "%s" > /dev/null', [Path, PathMnt]));
+    DoExec('/bin/xfs_growfs', [PathMnt]);
+    ExecSystem(Format('/bin/umount "%s" > /dev/null', [Path]));
+    ExecSystem(Format('/bin/rm -d "%s" > /dev/null', [PathMnt]));
+  end;
+
 begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemXfs.DoResize');
+  // Shrink / Expand right
+  Path := PartAfter^.GetPartitionPath;
+  PathMnt := '/tmp/tparted_' + StringReplace(Path, '/', '_', [rfReplaceAll]);
+  if PartAfter^.PartEnd > PartBefore^.PartEnd then
+  begin
+    Grow;
+  end;
 end;
 
 end.
