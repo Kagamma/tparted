@@ -140,9 +140,12 @@ begin
     if SToFlag(S, PartAfter^.Flags) <> 0 then
       State := 'on'
     else
-      State := 'off';
-    // TODO: Optimization is needed here
-    DoExec('/bin/parted', [PartAfter^.Device^.Path, 'set', IntToStr(PartAfter^.Number), S, State], 16);
+    if SToFlag(S, PartBefore^.Flags) <> 0 then
+      State := 'off'
+    else
+      State := '';
+    if State <> '' then
+      DoExec('/bin/parted', [PartAfter^.Device^.Path, 'set', IntToStr(PartAfter^.Number), S, State], 16);
   end;
 end;
 
