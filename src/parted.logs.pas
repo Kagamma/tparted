@@ -43,10 +43,17 @@ implementation
 uses
   Parted.Commons;
 
+procedure TruncateLog;
+begin
+  if Log.Count > 10000 then
+    Log.Delete(0);
+end;
+
 procedure WriteLog(Status: TPartedLogStatus; Text: String);
 var
   S: String;
 begin
+  TruncateLog;
   S := '';
   Text := StringReplace(Text, #10, '', [rfReplaceAll]);
   Text := StringReplace(Text, #13, '', [rfReplaceAll]);
@@ -62,6 +69,7 @@ procedure WriteLog(Path: String; Params: TStringDynArray);
 var
   S, I: String;
 begin
+  TruncateLog;
   S := '';
   S := S + '+ ' + Path;
   for I in Params do
@@ -73,6 +81,7 @@ procedure WriteLogAndRaise(Text: String);
 var
   S: String;
 begin
+  TruncateLog;
   S := '';
   Text := StringReplace(Text, #10, '', [rfReplaceAll]);
   Text := StringReplace(Text, #13, '', [rfReplaceAll]);
