@@ -407,7 +407,7 @@ begin
           end;
         okResize:
           begin
-            WriteLog(lsInfo, 'NAME');
+            WriteLog(lsInfo, 'RESIZE');
             FileSystemCreate;
             try
               FS.DoResize(Op.AffectedPartNew, Op.AffectedPartOld);
