@@ -118,6 +118,7 @@ type
 
   ExceptionAbnormalExitCode = class(Exception);
 
+function GetTempMountPath(Path: String): String;
 procedure DumpCallStack(var Report: String);
 function Match(S: String; RegexPattermArray: TStringDynArray): TStringDynArray;
 procedure ExecSystem(const S: String);
@@ -177,6 +178,11 @@ implementation
 
 uses
   Math, FreeVision, UI.Commons, Parted.Logs;
+
+function GetTempMountPath(Path: String): String;
+begin
+  Result := GetTempMountPath(Path);
+end;
 
 procedure DumpCallStack(var Report: String);
 var

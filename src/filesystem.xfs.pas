@@ -97,7 +97,7 @@ begin
   WriteLog(lsInfo, 'TPartedFileSystemXfs.DoResize');
   // Shrink / Expand right
   Path := PartAfter^.GetPartitionPath;
-  PathMnt := '/tmp/tparted_' + StringReplace(Path, '/', '_', [rfReplaceAll]);
+  PathMnt := GetTempMountPath(Path);
   if PartAfter^.PartEnd > PartBefore^.PartEnd then
   begin
     Grow;

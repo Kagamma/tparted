@@ -280,7 +280,7 @@ begin
   if (APart.Number <= 0) or APart.ContainsFlag('esp') or (APart.FileSystem = '') or (APart.FileSystem = 'linux-swap') then
     Exit;
   Path := APart.GetPartitionPath;
-  PathMnt := '/tmp/tparted_' + StringReplace(Path, '/', '_', [rfReplaceAll]);
+  PathMnt := GetTempMountPath(Path);
   // We will try to mount the partition, in case it is unmount
   // - TODO: For now we dont check the usage of linux-swap
   if not APart.IsMounted then
