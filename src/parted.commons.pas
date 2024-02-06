@@ -181,7 +181,7 @@ uses
 
 function GetTempMountPath(Path: String): String;
 begin
-  Result := GetTempMountPath(Path);
+  Result := '/tmp/tparted_' + StringReplace(Path, '/', '_', [rfReplaceAll]);
 end;
 
 procedure DumpCallStack(var Report: String);

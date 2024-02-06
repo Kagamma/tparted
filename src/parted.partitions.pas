@@ -52,7 +52,7 @@ const
   FlagArray: array of String = (
     'bios_grub', 'bls_boot', 'boot', 'chromeos_kernel', 'diag',
     'esp', 'hidden', 'irst', 'legacy_boot', 'linux-home',
-    'lvm', 'msftres', 'no_automount', 'raid', 'swap'
+    'lvm', 'msftdata', 'msftres', 'no_automount', 'raid', 'swap'
   );
 
 // Parse for device info from "parted -j /dev/Xxx unit B print free" string
