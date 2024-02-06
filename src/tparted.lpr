@@ -25,7 +25,7 @@ begin
       begin
         // All exceptions need to be handled!
         // If it makes to this message box, then stop the app immediately!
-        MsgBox(UTF8Decode(E.Message), nil, mfError + mfOKButton);
+        MsgBox(E.Message, nil, mfError + mfOKButton);
         DumpCallStack(Report);
         WriteLog(lsError, Report);
       end;

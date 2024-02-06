@@ -518,6 +518,7 @@ var
   LSA: TStringDynArray;
   DeviceCount: LongInt = 0;
 begin
+  SetLength(Result, 0);
   for S in SA do
   begin
     if NextIsDeviceInfo then

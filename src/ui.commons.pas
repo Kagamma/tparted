@@ -34,7 +34,7 @@ const
 type
   TUIWindow = object(TWindow)
   public
-    constructor Init(var Bounds: TRect; ATitle: Sw_String; ANumber: LongInt);
+    constructor Init(var Bounds: TRect; ATitle: String; ANumber: LongInt);
     function GetPalette: PPalette; virtual;
   end;
   PUIWindow = ^TUIWindow;
@@ -133,7 +133,7 @@ procedure LoadingStop;
 
 // Copied from Free Vision source code. Since the original MessageBox is buggy, we implement fixes
 // on our own instead. See https://gitlab.com/freepascal.org/fpc/source/-/issues/40607
-FUNCTION MsgBox(Const Msg: Sw_String; Params: Pointer; AOptions: Word): Word;
+FUNCTION MsgBox(Const Msg: String; Params: Pointer; AOptions: Word): Word;
 FUNCTION MsgBoxRect(Var R: TRect; Const Msg: Sw_String; Params: Pointer;
   AOptions: Word): Word;
 
@@ -205,7 +205,7 @@ BEGIN
   Dispose (Dialog, Done);                            { Dispose of dialog }
 END;
 
-FUNCTION MsgBox(Const Msg: Sw_String; Params: Pointer; AOptions: Word): Word;
+FUNCTION MsgBox(Const Msg: String; Params: Pointer; AOptions: Word): Word;
 VAR R: TRect;
 BEGIN
    R.Assign(0, 0, 50, 10);                             { Assign area }
@@ -214,7 +214,7 @@ BEGIN
        (Desktop^.Size.Y - R.B.Y) DIV 2) Else          { Calculate position }
      R.Move((Application^.Size.X - R.B.X) DIV 2,
        (Application^.Size.Y - R.B.Y) DIV 2);          { Calculate position }
-   MsgBox := MsgBoxRect(R, Msg, Params,
+   MsgBox := MsgBoxRect(R, UTF8Decode(Msg), Params,
      AOptions);                                       { Create message box }
 END;
 
@@ -238,7 +238,7 @@ begin
   end;
 end;
 
-constructor TUIWindow.Init(var Bounds: TRect; ATitle: Sw_String; ANumber: LongInt);
+constructor TUIWindow.Init(var Bounds: TRect; ATitle: String; ANumber: LongInt);
 begin
   inherited Init(Bounds, UTF8Decode(ATitle), ANumber);
   Self.Palette := wpBlueWindow;

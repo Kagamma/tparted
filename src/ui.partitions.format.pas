@@ -49,12 +49,12 @@ begin
   Result := False;
   if PPart^.IsMounted then // Prevent user to perform format operation on a mounted partition
   begin
-    MsgBox(UTF8Decode(Format(S_PartitionIsMounted, [PPart^.GetPartitionPath])), nil, mfInformation + mfOKButton);
+    MsgBox(Format(S_PartitionIsMounted, [PPart^.GetPartitionPath]), nil, mfInformation + mfOKButton);
     Exit;
   end;
   if PPart^.Number = 0 then // Prevent user to perform format operation on an unallocated space
   begin
-    MsgBox(UTF8Decode(Format(S_PartitionIsUnallocated, [])), nil, mfInformation + mfOKButton);
+    MsgBox(Format(S_PartitionIsUnallocated, []), nil, mfInformation + mfOKButton);
     Exit;
   end;
 

@@ -197,8 +197,8 @@ var
     AffectedPartNew^.SplitPartitionInMB(PData^.Preceding, PData^.Size);
     AffectedPartNew^.Flags := FlagToSA(PData^.Flags, FlagArray);
     AffectedPartNew^.FileSystem := FileSystemFormattableArray[PData^.FileSystem];
-    AffectedPartNew^.Name := PData^.Name;
-    AffectedPartNew^.LabelName := PData^.LabelName;
+    AffectedPartNew^.Name := UTF8Encode(PData^.Name);
+    AffectedPartNew^.LabelName := UTF8Encode(PData^.LabelName);
     AffectedPartNew^.Kind := 'primary';
     AffectedPartNew^.AutoAssignNumber;
     AffectedPartNew^.Number := -AffectedPartNew^.Number;
@@ -230,8 +230,8 @@ var
     PData: PPartedOpDataLabel;
   begin
     PData := AData;
-    AffectedPartNew^.LabelName := PData^.LabelName;
-    AffectedPartNew^.Name := PData^.Name;
+    AffectedPartNew^.Name := UTF8Encode(PData^.Name);
+    AffectedPartNew^.LabelName := UTF8Encode(PData^.LabelName);
   end;
 
   procedure HandleFormat;
@@ -288,6 +288,8 @@ begin
       begin
         HandleResize;
       end;
+    else
+      raise Exception.Create('Unhandled op! This should not happened!');
   end;
   //
   Self.Add(NewOp);

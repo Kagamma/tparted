@@ -47,6 +47,7 @@ procedure WriteLog(Status: TPartedLogStatus; Text: String);
 var
   S: String;
 begin
+  S := '';
   Text := StringReplace(Text, #10, '', [rfReplaceAll]);
   Text := StringReplace(Text, #13, '', [rfReplaceAll]);
   case Status of
@@ -61,6 +62,7 @@ procedure WriteLog(Path: String; Params: TStringDynArray);
 var
   S, I: String;
 begin
+  S := '';
   S := S + '+ ' + Path;
   for I in Params do
     S := S + ' ' + I;
@@ -71,6 +73,7 @@ procedure WriteLogAndRaise(Text: String);
 var
   S: String;
 begin
+  S := '';
   Text := StringReplace(Text, #10, '', [rfReplaceAll]);
   Text := StringReplace(Text, #13, '', [rfReplaceAll]);
   S := S + '[ERROR] ' + Text;

@@ -43,6 +43,7 @@ var
   S: String;
   MX, MY: LongInt;
 begin
+  Result := True;
   if PPart = nil then
     Exit;
   Desktop^.GetExtent(R);

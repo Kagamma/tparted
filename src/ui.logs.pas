@@ -44,7 +44,7 @@ begin
   Desktop^.GetExtent(R);
   R.Grow(-1, -1);
 
-  D := New(PDialog, Init(R, S_Logs));
+  D := New(PDialog, Init(R, UTF8Decode(S_Logs)));
 
   // Scrollbar
   D^.GetExtent(R);
@@ -70,8 +70,8 @@ begin
 
   Desktop^.ExecView(D);
 
-  Dispose(D);
-  Dispose(C);
+  Dispose(D, Done);
+  Dispose(C, Done);
 end;
 
 end.

@@ -42,13 +42,13 @@ begin
       LoadingStart(Format(S_PartitionUnmounting, [PPart^.GetPartitionPath]));
       QueryPartitionUnmount(PPart^);
       LoadingStop;
-      MsgBox(UTF8Decode(Format(S_PartitionUnmounted, [PPart^.GetPartitionPath])), nil, mfInformation + mfOKButton);
+      MsgBox(Format(S_PartitionUnmounted, [PPart^.GetPartitionPath]), nil, mfInformation + mfOKButton);
       Result := True;
     except
       on E: Exception do
       begin
         LoadingStop;
-        MsgBox(UTF8Decode(E.Message), nil, mfError + mfOKButton);
+        MsgBox(E.Message, nil, mfError + mfOKButton);
       end;
     end;
   end;

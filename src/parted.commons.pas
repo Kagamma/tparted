@@ -226,7 +226,6 @@ var
   RE: TRegExpr;
   RP: String;
 begin
-  SetLength(Result, 0);
   for RP in RegexPattermArray do
   begin
     RE := TRegExpr.Create(RP);

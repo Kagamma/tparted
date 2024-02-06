@@ -180,7 +180,7 @@ begin
         begin
           if Message(Desktop, evBroadcast, cmOperatorExists, nil) <> nil then
           begin
-            if MsgBox(UTF8Decode(S_QuitMessage), nil, mfConfirmation + mfYesButton + mfNoButton) <> cmYes then
+            if MsgBox(S_QuitMessage, nil, mfConfirmation + mfYesButton + mfNoButton) <> cmYes then
               Self.ClearEvent(E);
           end;
         end;
@@ -191,7 +191,7 @@ begin
         end;
       cmMenuAbout:
         begin
-          MsgBox(UTF8Decode(Format(S_AboutMessage, [{$I %DATE%}, IntToStr(FPC_VERSION) + '.' + IntToStr(FPC_RELEASE) + '.' + IntToStr(FPC_PATCH)])), nil, mfInformation + mfOKButton);
+          MsgBox(Format(S_AboutMessage, [{$I %DATE%}, IntToStr(FPC_VERSION) + '.' + IntToStr(FPC_RELEASE) + '.' + IntToStr(FPC_PATCH)]), nil, mfInformation + mfOKButton);
           Self.ClearEvent(E);
         end;
       cmMenuDisplayLog:
@@ -222,10 +222,10 @@ begin
               QueryDeviceAndPartitions(Path, LDevice^);
               if LDevice^.Table = 'unknown' then // This device has no partition table, wanna create it?
               begin
-                if MsgBox(UTF8Decode(Format(S_CreatePartitionTableAsk, [LDevice^.Path])), nil, mfInformation + mfYesButton + mfNoButton) = cmYes then
+                if MsgBox(Format(S_CreatePartitionTableAsk, [LDevice^.Path]), nil, mfInformation + mfYesButton + mfNoButton) = cmYes then
                 begin
                   // TODO: Create a new GPT
-                  LoadingStart(UTF8Decode(S_CreatingGPT));
+                  LoadingStart(S_CreatingGPT);
                   QueryCreateGPT(LDevice^.Path);
                   // Query for device again
                   QueryDeviceAndPartitions(Path, LDevice^);
@@ -241,7 +241,7 @@ begin
               on E: Exception do
               begin
                 LoadingStop;
-                MsgBox(UTF8Decode(E.Message), nil, mfOKButton);
+                MsgBox(E.Message, nil, mfOKButton);
                 LDevice^.Done; // An exception here is dangerous - set partitions to empty to avoid further damage
               end;
             end;

@@ -95,7 +95,7 @@ begin
   begin
     if (OpenedDeviceWindowList[I] <> nil) and (OpenedDeviceWindowList[I]^.OpList.GetCurrentDevice^.Path = ADevice.Path) then
     begin
-      MsgBox(UTF8Decode(Format(S_DeviceAlreadyOpened, [ADevice.Path])), nil, mfInformation + mfOKButton);
+      MsgBox(Format(S_DeviceAlreadyOpened, [ADevice.Path]), nil, mfInformation + mfOKButton);
       Exit(True);
     end;
   end;
@@ -119,7 +119,7 @@ begin
     end;
   end;
   // No slot left, show message
-  MsgBox(UTF8Decode(Format(S_MaxDeviceWindow, [High(OpenedDeviceWindowList)])), nil, mfInformation + mfOKButton);
+  MsgBox(Format(S_MaxDeviceWindow, [High(OpenedDeviceWindowList)]), nil, mfInformation + mfOKButton);
 end;
 
 procedure RemoveDeviceWindowFromList(const ADeviceWindow: PUIDevice);
@@ -191,7 +191,7 @@ begin
   Inc(XPos);
   Inc(YPos);
   //
-  inherited Init(R, UTF8Decode(Format(S_PartitionWindowTitle, [ADevice.Path, ADevice.SizeApprox, ADevice.Name])), AIndex);
+  inherited Init(R, Format(S_PartitionWindowTitle, [ADevice.Path, ADevice.SizeApprox, ADevice.Name]), AIndex);
   Self.OpList := TPartedOpList.Create;
   Op.Device := ADevice.Clone;
   Op.OpData := nil;
@@ -399,8 +399,8 @@ procedure TUIDevice.HandleEvent(var E: TEvent);
     FillChar(Data^, SizeOf(TPartedOpDataLabel), 0);
     with Data^ do
     begin
-      LabelName := PPart^.LabelName;
-      Name := PPart^.Name;
+      LabelName := UTF8Decode(PPart^.LabelName);
+      Name := UTF8Decode(PPart^.Name);
     end;
     if ShowLabelNameDialog(PPart, Data) then
     begin
@@ -480,7 +480,7 @@ procedure TUIDevice.HandleEvent(var E: TEvent);
   procedure DoApplyRefreshDevice;
   begin
     Self.OpList.Empty;
-    LoadingStart(UTF8Decode(S_LoadingPartitions));
+    LoadingStart(S_LoadingPartitions);
     try
       QueryDeviceAndPartitions(Self.OpList.GetCurrentDevice^.Path, Self.OpList.GetCurrentDevice^);
       QueryDeviceAll(Self.OpList.GetCurrentDevice^);
@@ -600,7 +600,7 @@ begin
         end;
       cmOperationApply:
         begin
-          if MsgBox(UTF8Decode(Format(S_OperationAdvise, [Self.OpList.GetCurrentDevice^.Path])), nil, mfConfirmation + mfYesButton + mfNoButton) = cmYes then
+          if MsgBox(Format(S_OperationAdvise, [Self.OpList.GetCurrentDevice^.Path]), nil, mfConfirmation + mfYesButton + mfNoButton) = cmYes then
             DoApplyOperations;
           Exit;
         end;
@@ -608,7 +608,7 @@ begin
         begin
           if Self.OpList.GetOpCount > 0 then
           begin
-            if MsgBox(UTF8Decode(Format(S_CloseMessage, [Self.OpList.GetCurrentDevice^.Path])), nil, mfConfirmation + mfYesButton + mfNoButton) <> cmYes then
+            if MsgBox(Format(S_CloseMessage, [Self.OpList.GetCurrentDevice^.Path]), nil, mfConfirmation + mfYesButton + mfNoButton) <> cmYes then
             begin
               Exit;
             end;
