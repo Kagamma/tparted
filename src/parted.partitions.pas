@@ -38,7 +38,7 @@ const
   );
 
   FileSystemResizableArray: array of String = (
-    'btrfs', 'ext2', 'ext3', 'ext4'
+    'btrfs', 'ext2', 'ext3', 'ext4', 'ntfs'
   );
 
   FlagArray: array of String = (

@@ -16,7 +16,7 @@ Currently supported filesystems:
 | fat16 | :heavy_check_mark: | | | :heavy_check_mark: |
 | fat32 | :heavy_check_mark: | | | :heavy_check_mark: |
 | linux-swap | :heavy_check_mark: | | | |
-| ntfs | :heavy_check_mark: | | | |
+| ntfs | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | xfs | :heavy_check_mark: | | | :heavy_check_mark: |
 
 ## Install
@@ -34,6 +34,7 @@ Currently supported filesystems:
 - `sfdisk` for moving partitions.
 - `mkfs`
 - `resize2fs` for resizing ext2/3/4 partitions.
+- `ntfs-utils` for resizing ntfs partitions.
 - `btrfs-utils` for labeling & resizing btrfs partitions.
 
 ![image](./docs/images/1.png)
