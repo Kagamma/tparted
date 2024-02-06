@@ -169,7 +169,7 @@ begin
     if Desktop^.ExecView(D) = cmOk then
     begin
       D^.GetData(AData^);
-      Result := True;
+      Result := (DataOld.Preceding <> AData^.Preceding) or (DataOld.Size <> AData^.Size);
     end;
   finally
     Dispose(D, Done);
