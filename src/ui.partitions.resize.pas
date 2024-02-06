@@ -61,7 +61,7 @@ var
   var
     M: Int64;
   begin
-    M := BToMBFloor(PPart^.PartUsed);
+    M := BToMBCeil(PPart^.PartUsed);
     if V < M then
       Result := M
     else
