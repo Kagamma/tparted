@@ -422,7 +422,9 @@ procedure TUIDevice.HandleEvent(var E: TEvent);
     FillChar(Data^, SizeOf(TPartedOpDataFormat), 0);
     with Data^ do
     begin
-      FileSystem := SToIndex('ext4', FileSystemFormattableArray);
+      FileSystem := SToIndex(PPart^.FileSystem, FileSystemFormattableArray);
+      if FileSystem < 0 then
+        FileSystem := SToIndex('ext4', FileSystemFormattableArray);
     end;
     if ShowFormatDialog(PPart, Data) then
     begin
