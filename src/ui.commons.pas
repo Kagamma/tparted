@@ -82,6 +82,7 @@ type
   // Loading window, show it to user while doing something
   TUILoadingDialog = object(TDialog)
   public
+    Status: String;
     constructor Init(const AText: String);
     procedure HandleEvent(var E: TEvent); virtual;
   end;
@@ -350,6 +351,7 @@ begin
   R.B.Y := (R.B.Y div 2) + 2;
   inherited Init(R, '');
   //
+  Self.Status := AText;
   R.Assign(2, 2, 2 + Length(AText) + 1, 3);
   L := New(PLabel, Init(R, UTF8Decode(AText), nil));
   Self.Insert(L);

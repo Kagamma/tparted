@@ -118,12 +118,15 @@ type
 
   ExceptionAbnormalExitCode = class(Exception);
 
+  TSignalMethod = procedure(SL: TStringList) of object;
+
 function GetTempMountPath(Path: String): String;
 procedure DumpCallStack(var Report: String);
 function Match(S: String; RegexPattermArray: TStringDynArray): TStringDynArray;
 procedure ExecSystem(const S: String);
 function ExecS(const Prog: String; const Params: TStringDynArray): TExecResult;
 function ExecSA(const Prog: String; const Params: TStringDynArray): TExecResultDA;
+function ExecAsync(const Prog: String; const Params: TStringDynArray; const ASignal: TSignalMethod): TExecResult;
 
 // Converts TStringList to TStringDynArray
 function SLToSA(const SL: Classes.TStringList): TStringDynArray;
@@ -329,16 +332,10 @@ begin
     P.Executable := Prog;
     for S in Params do
       P.Parameters.Add(S);
-    P.Options := P.Options + [poWaitOnExit, poUsePipes];
+    P.Options := P.Options + [poWaitOnExit, poUsePipes, poStderrToOutPut];
     P.Execute;
     Result.ExitCode := P.ExitStatus;
-    if Result.ExitCode = 0 then
-    begin
-      SL.LoadFromStream(P.Output);
-    end else
-    begin
-      SL.LoadFromStream(P.stderr);
-    end;
+    SL.LoadFromStream(P.Output);
     Result.Message := SL.Text;
   finally
     SL.Free;
@@ -361,17 +358,54 @@ begin
     P.Executable := Prog;
     for S in Params do
       P.Parameters.Add(S);
-    P.Options := P.Options + [poWaitOnExit, poUsePipes];
+    P.Options := P.Options + [poWaitOnExit, poUsePipes, poStderrToOutPut];
     P.Execute;
     Result.ExitCode := P.ExitStatus;
-    if Result.ExitCode = 0 then
-    begin
-      SL.LoadFromStream(P.Output);
-    end else
-    begin
-      SL.LoadFromStream(P.stderr);
-    end;
+    SL.LoadFromStream(P.Output);
     Result.MessageArray := SLToSA(SL);
+  finally
+    SL.Free;
+    P.Free;
+  end;
+end;
+
+function ExecAsync(const Prog: String; const Params: TStringDynArray; const ASignal: TSignalMethod): TExecResult;
+var
+  I: LongInt;
+  P: TProcess;
+  S: String;
+  SL: Classes.TStringList;
+
+  procedure PollForData;
+  begin
+    SL.Clear;
+    SL.LoadFromStream(P.Output);
+    if SL.Count > 0 then
+    begin
+      if ASignal <> nil then
+        ASignal(SL);
+      Result.Message := Result.Message + SL.Text;
+    end;
+  end;
+
+begin
+  WriteLog(Prog, Params);
+  Result.ExitCode := -1;
+  P := TProcess.Create(nil);
+  SL := Classes.TStringList.Create;
+  try
+    P.Executable := Prog;
+    for S in Params do
+      P.Parameters.Add(S);
+    P.Options := P.Options + [poUsePipes, poStderrToOutPut] - [poWaitOnExit];
+    P.Execute;
+    while P.Running do
+    begin
+      PollForData;
+      Sleep(1000);
+    end;
+    Result.ExitCode := P.ExitStatus;
+    PollForData;
   finally
     SL.Free;
     P.Free;
