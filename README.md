@@ -1,6 +1,6 @@
 # tparted
 
-TUI frontend for `parted`: A simple, user-friendly utility for creating, reorganizing, and deleting (for now) GPT disk partitions, based on Free Vision application framework.
+TUI frontend for `parted`: A simple, user-friendly utility for creating, reorganizing, and deleting GPT disk partitions, based on Free Vision application framework.
 
 Currently supported filesystems:
 
@@ -11,6 +11,7 @@ Currently supported filesystems:
 | ext3 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | ext4 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | exfat | :heavy_check_mark: | :heavy_check_mark: | | | :heavy_check_mark: |
+| f2fs | :heavy_check_mark: | :heavy_check_mark: | | :heavy_check_mark: | :heavy_check_mark:** |
 | fat16 | :heavy_check_mark: | :heavy_check_mark: | | | :heavy_check_mark: |
 | fat32 | :heavy_check_mark: | :heavy_check_mark: | | | :heavy_check_mark: |
 | jfs | :heavy_check_mark: | :heavy_check_mark: | | :heavy_check_mark: | :heavy_check_mark: |
@@ -19,6 +20,7 @@ Currently supported filesystems:
 | xfs | :heavy_check_mark: | :heavy_check_mark: | | :heavy_check_mark: | :heavy_check_mark: |
 
 *In case of btrfs, for now the app doesn't deal with multi disk array.
+**You can only set label during the creation of the partition.
 
 ## Install
 
@@ -40,6 +42,7 @@ Currently supported filesystems:
 - `btrfs-progs` for btrfs operations.
 - `xfsprogs` for xfs operations.
 - `jfsutils` for jfs operations.
+- `f2fs-tools` for f2fs operations.
 - `util-linux` for linux-swap operations.
 
 ![image](./docs/images/1.png)

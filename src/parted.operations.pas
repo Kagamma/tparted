@@ -124,6 +124,7 @@ uses
   FileSystem.XFS,
   FileSystem.JFS,
   FileSystem.ExFat,
+  FileSystem.F2FS,
   FileSystem.Fat;
 
 destructor TPartedOpList.Destroy;
@@ -341,6 +342,8 @@ var
         FS := TPartedFileSystemXfs.Create;
       'jfs':
         FS := TPartedFileSystemJfs.Create;
+      'f2fs':
+        FS := TPartedFileSystemF2FS.Create;
       else
         FS := TPartedFileSystem.Create;
     end;
