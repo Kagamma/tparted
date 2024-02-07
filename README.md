@@ -2,8 +2,6 @@
 
 TUI frontend for `parted`: A simple, user-friendly utility for creating, reorganizing, and deleting (for now) GPT disk partitions, based on Free Vision application framework.
 
-The app is currently in beta state, thus bugs can occur.
-
 Currently supported filesystems:
 
 | | Create | Move | Shrink | Grow | Label |
