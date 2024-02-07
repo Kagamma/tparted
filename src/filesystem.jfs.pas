@@ -79,9 +79,30 @@ begin
 end;
 
 procedure TPartedFileSystemJfs.DoResize(const PartAfter, PartBefore: PPartedPartition);
+var
+  Path, PathMnt, S: String;
+
+  procedure Grow;
+  begin
+    DoExec('/bin/jfs_fsck', ['-f', Path]);
+    DoExec('/bin/parted', [PartAfter^.Device^.Path, 'resizepart', IntToStr(PartAfter^.Number), IntToStr(PartAfter^.PartEnd) + 'B']);
+    ExecSystem(Format('/bin/mkdir -p "%s" > /dev/null', [PathMnt]));
+    ExecSystem(Format('/bin/mount -v -t jfs "%s" "%s" > /dev/null', [Path, PathMnt]));
+    ExecSystem(Format('/bin/mount -v -t jfs -o remount,resize "%s" "%s" > /dev/null', [Path, PathMnt]));
+    ExecSystem(Format('/bin/umount -v "%s" > /dev/null', [Path]));
+    ExecSystem(Format('/bin/rm -d "%s" > /dev/null', [PathMnt]));
+  end;
+
 begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemJfs.DoResize');
+  // Shrink / Expand right
+  Path := PartAfter^.GetPartitionPath;
+  PathMnt := GetTempMountPath(Path);
+  if PartAfter^.PartEnd > PartBefore^.PartEnd then
+  begin
+    Grow;
+  end;
 end;
 
 end.

@@ -13,7 +13,7 @@ Currently supported filesystems:
 | exfat | :heavy_check_mark: | :heavy_check_mark: | | | :heavy_check_mark: |
 | fat16 | :heavy_check_mark: | :heavy_check_mark: | | | :heavy_check_mark: |
 | fat32 | :heavy_check_mark: | :heavy_check_mark: | | | :heavy_check_mark: |
-| jfs | :heavy_check_mark: | :heavy_check_mark: | | | :heavy_check_mark: |
+| jfs | :heavy_check_mark: | :heavy_check_mark: | | :heavy_check_mark: | :heavy_check_mark: |
 | linux-swap | :heavy_check_mark: | :heavy_check_mark: | | | |
 | ntfs | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | xfs | :heavy_check_mark: | :heavy_check_mark: | | :heavy_check_mark: | :heavy_check_mark: |
@@ -39,6 +39,7 @@ Currently supported filesystems:
 - `ntfs-3g` for ntfs operations.
 - `btrfs-progs` for btrfs operations.
 - `xfsprogs` for xfs operations.
+- `jfsutils` for jfs operations.
 - `util-linux` for linux-swap operations.
 
 ![image](./docs/images/1.png)

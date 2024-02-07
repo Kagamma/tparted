@@ -42,7 +42,7 @@ const
   );
 
   FileSystemGrowArray: array of String = (
-    'btrfs', 'ext2', 'ext3', 'ext4', 'ntfs', 'xfs'
+    'btrfs', 'ext2', 'ext3', 'ext4', 'jfs', 'ntfs', 'xfs'
   );
 
   FileSystemShrinkArray: array of String = (
