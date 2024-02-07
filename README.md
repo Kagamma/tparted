@@ -13,6 +13,7 @@ Currently supported filesystems:
 | exfat | :heavy_check_mark: | :heavy_check_mark: | | | :heavy_check_mark: |
 | fat16 | :heavy_check_mark: | :heavy_check_mark: | | | :heavy_check_mark: |
 | fat32 | :heavy_check_mark: | :heavy_check_mark: | | | :heavy_check_mark: |
+| jfs | :heavy_check_mark: | :heavy_check_mark: | | | :heavy_check_mark: |
 | linux-swap | :heavy_check_mark: | :heavy_check_mark: | | | |
 | ntfs | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | xfs | :heavy_check_mark: | :heavy_check_mark: | | :heavy_check_mark: | :heavy_check_mark: |

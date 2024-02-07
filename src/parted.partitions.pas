@@ -34,11 +34,11 @@ const
   );
 
   FileSystemFormattableArray: array of String = (
-    'btrfs', 'ext2', 'ext3', 'ext4', 'exfat', 'fat16', 'fat32', 'ntfs', 'linux-swap', 'xfs'
+    'btrfs', 'ext2', 'ext3', 'ext4', 'exfat', 'fat16', 'fat32', 'jfs', 'ntfs', 'linux-swap', 'xfs'
   );
 
   FileSystemMoveArray: array of String = (
-    'btrfs', 'ext2', 'ext3', 'ext4', 'exfat', 'fat16', 'fat32', 'ntfs', 'linux-swap', 'xfs'
+    'btrfs', 'ext2', 'ext3', 'ext4', 'exfat', 'fat16', 'fat32', 'jfs', 'ntfs', 'linux-swap', 'xfs'
   );
 
   FileSystemGrowArray: array of String = (

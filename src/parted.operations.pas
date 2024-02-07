@@ -122,6 +122,7 @@ uses
   FileSystem.BTRFS,
   FileSystem.Swap,
   FileSystem.XFS,
+  FileSystem.JFS,
   FileSystem.ExFat,
   FileSystem.Fat;
 
@@ -338,6 +339,8 @@ var
         FS := TPartedFileSystemSwap.Create;
       'xfs':
         FS := TPartedFileSystemXfs.Create;
+      'jfs':
+        FS := TPartedFileSystemJfs.Create;
       else
         FS := TPartedFileSystem.Create;
     end;
