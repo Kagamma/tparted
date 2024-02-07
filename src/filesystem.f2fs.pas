@@ -45,7 +45,10 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemF2FS.DoCreate');
   // Format the new partition
-  DoExec('/bin/mkfs.f2fs', ['-f', '-l', PartAfter^.LabelName, PartAfter^.GetPartitionPath]);
+  if PartAfter^.LabelName <> '' then
+    DoExec('/bin/mkfs.f2fs', ['-f', '-l', PartAfter^.LabelName, PartAfter^.GetPartitionPath])
+  else
+    DoExec('/bin/mkfs.f2fs', ['-f', PartAfter^.GetPartitionPath]);
 end;
 
 procedure TPartedFileSystemF2FS.DoDelete(const PartAfter, PartBefore: PPartedPartition);
