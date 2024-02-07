@@ -47,7 +47,10 @@ type
   TPartedFileSystemMinSizeMap = specialize TDictionary<String, Int64>;
 
 procedure RegisterFileSystem(AFSClass: TPartedFileSystemClass; FileSystemTypeArray: TStringDynArray; MinSizeMap: TInt64DynArray; IsMoveable, IsShrinkable, IsGrowable: Boolean);
+// Show a message box, and return false, if Size is invalid
 function VerifyFileSystemMinSize(FS: String; Size: Int64): Boolean;
+// Return the minimal size of file system
+function GetFileSystemMinSize(FS: String): Int64;
 
 var
   FileSystemMap: TPartedFileSystemMap;
@@ -79,6 +82,17 @@ begin
     begin
       Result := True;
     end;
+  end;
+end;
+
+function GetFileSystemMinSize(FS: String): Int64;
+var
+  MinSize: Int64;
+begin
+  Result := 1;
+  if FileSystemMinSizeMap.ContainsKey(FS) then
+  begin
+    Result := FileSystemMinSizeMap[FS];
   end;
 end;
 
