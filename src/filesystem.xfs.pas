@@ -105,6 +105,6 @@ begin
 end;
 
 initialization
-  RegisterFileSystem(TPartedFileSystemXfs, ['xfs'], [1], True, False, True);
+  RegisterFileSystem(TPartedFileSystemXfs, ['xfs'], [300], True, False, True);
 
 end.

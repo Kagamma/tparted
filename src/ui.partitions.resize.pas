@@ -170,7 +170,8 @@ begin
     if Desktop^.ExecView(D) = cmOk then
     begin
       D^.GetData(AData^);
-      Result := (DataOld.Preceding <> AData^.Preceding) or (DataOld.Size <> AData^.Size);
+      Result := (DataOld.Preceding <> AData^.Preceding) or (DataOld.Size <> AData^.Size) and
+                 VerifyFileSystemMinSize(PPart^.FileSystem, AData^.Size);
     end;
   finally
     Dispose(D, Done);

@@ -94,6 +94,6 @@ begin
 end;
 
 initialization
-  RegisterFileSystem(TPartedFileSystemFat, ['fat16', 'fat32'], [1, 1], True, False, False);
+  RegisterFileSystem(TPartedFileSystemFat, ['fat16', 'fat32'], [16, 33], True, False, False);
 
 end.

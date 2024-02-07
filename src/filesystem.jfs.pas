@@ -106,6 +106,6 @@ begin
 end;
 
 initialization
-  RegisterFileSystem(TPartedFileSystemJfs, ['jfs'], [1], True, False, True);
+  RegisterFileSystem(TPartedFileSystemJfs, ['jfs'], [16], True, False, True);
 
 end.

@@ -104,6 +104,7 @@ resourcestring
   S_MaximumPartitionReached = 'Maximum number of partitions reached!';
   S_OperationAdvise = 'Are you sure you want to apply the pending operations to %s? Editing partitions has the potential to cause LOSS of DATA.';
   S_Executing = 'Performing %d/%d operations...';
+  S_VerifyMinSize = '%s requires a minimal size of %dMB!';
 
 type
   TExecResult = record
@@ -187,9 +188,12 @@ implementation
 uses
   Math, FreeVision, UI.Commons, Parted.Logs;
 
+var
+  TempRandom: String;
+
 function GetTempMountPath(Path: String): String;
 begin
-  Result := '/tmp/tparted_' + StringReplace(Path, '/', '_', [rfReplaceAll]);
+  Result := '/tmp/tparted_' + StringReplace(Path, '/', '_', [rfReplaceAll]) + TempRandom;
 end;
 
 procedure DumpCallStack(var Report: String);
@@ -635,6 +639,8 @@ begin
 end;
 
 initialization
+  Randomize;
+  TempRandom := IntToStr(Random($FFFFFFFF));
   DefaultFormatSettings.DecimalSeparator := '.';
 
 end.

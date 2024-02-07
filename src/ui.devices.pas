@@ -153,7 +153,7 @@ begin
   IsDisabled := (APart.PartEnd <= 1024 * 1024) // The first 1MB in device
     or (APart.PartSize < 1024 * 1024) // Partition is less than 1MB in size
     or (Self.OpList[0].Device^.Table <> 'gpt'); // Parition is not a gpt partition
-  IsResizeableDisabled := SToFlag(APart.FileSystem, FileSystemMoveArray) = 0; // Can it be resize?
+  IsResizeableDisabled := (SToFlag(APart.FileSystem, FileSystemMoveArray) = 0) or (APart.Number < 0); // Can it be resize?
   // Create button
   Self.ButtonPartitionArray[1]^.SetDisabled((APart.Number <> 0) or IsDisabled);
   // Delete button

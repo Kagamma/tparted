@@ -109,6 +109,6 @@ begin
 end;
 
 initialization
-  RegisterFileSystem(TPartedFileSystemNTFS, ['ntfs'], [1], True, True, True);
+  RegisterFileSystem(TPartedFileSystemNTFS, ['ntfs'], [2], True, True, True);
 
 end.
