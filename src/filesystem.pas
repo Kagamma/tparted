@@ -59,6 +59,7 @@ var
 implementation
 
 uses
+  UI.Commons,
   Math;
 
 procedure TPartedFileSystem.DoExec(const Name: String; const Params: TStringDynArray; const Delay: LongWord = 1000);
@@ -68,7 +69,7 @@ begin
   Sleep(Delay);
   ExecResult := ExecS(Name, Params);
   if ExecResult.ExitCode <> 0 then
-    WriteLogAndRaise(Format('Exit code %d: %s', [ExecResult.ExitCode, ExecResult.Message]));
+    WriteLogAndRaise(Format(S_ProcessExitCode, [Name, ExecResult.ExitCode, ExecResult.Message]));
 end;
 
 procedure TPartedFileSystem.DoCreatePartitionOnly(const Part: PPartedPartition);

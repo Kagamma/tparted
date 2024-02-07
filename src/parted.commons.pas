@@ -332,10 +332,13 @@ begin
     P.Executable := Prog;
     for S in Params do
       P.Parameters.Add(S);
-    P.Options := P.Options + [poWaitOnExit, poUsePipes, poStderrToOutPut];
+    P.Options := P.Options + [poWaitOnExit, poUsePipes];
     P.Execute;
     Result.ExitCode := P.ExitStatus;
-    SL.LoadFromStream(P.Output);
+    if Result.ExitCode = 0 then
+      SL.LoadFromStream(P.Output)
+    else
+      SL.LoadFromStream(P.StdErr);
     Result.Message := SL.Text;
   finally
     SL.Free;
@@ -358,10 +361,13 @@ begin
     P.Executable := Prog;
     for S in Params do
       P.Parameters.Add(S);
-    P.Options := P.Options + [poWaitOnExit, poUsePipes, poStderrToOutPut];
+    P.Options := P.Options + [poWaitOnExit, poUsePipes];
     P.Execute;
     Result.ExitCode := P.ExitStatus;
-    SL.LoadFromStream(P.Output);
+    if Result.ExitCode = 0 then
+      SL.LoadFromStream(P.Output)
+    else
+      SL.LoadFromStream(P.StdErr);
     Result.MessageArray := SLToSA(SL);
   finally
     SL.Free;
