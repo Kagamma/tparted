@@ -342,6 +342,7 @@ begin
             FileSystemCreate;
             try
               FS.DoCreate(Op.AffectedPartNew, Op.AffectedPartOld);
+              Op.AffectedPartNew^.Probe;
             finally
               FS.Free;
             end;
@@ -362,6 +363,7 @@ begin
             FileSystemCreate;
             try
               FS.DoFormat(Op.AffectedPartNew, Op.AffectedPartOld);
+              Op.AffectedPartNew^.Probe;
             finally
               FS.Free;
             end;
@@ -392,6 +394,7 @@ begin
             FileSystemCreate;
             try
               FS.DoResize(Op.AffectedPartNew, Op.AffectedPartOld);
+              Op.AffectedPartNew^.Probe;
             finally
               FS.Free;
             end;

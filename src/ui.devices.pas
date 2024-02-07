@@ -482,14 +482,17 @@ procedure TUIDevice.HandleEvent(var E: TEvent);
 
   procedure DoApplyRefreshDevice;
   begin
-    Self.OpList.Empty;
     LoadingStart(S_LoadingPartitions);
     try
+      Self.OpList.Empty;
       QueryDeviceAndPartitions(Self.OpList.GetCurrentDevice^.Path, Self.OpList.GetCurrentDevice^);
       QueryDeviceAll(Self.OpList.GetCurrentDevice^);
     except
       on E: Exception do
+      begin
+        MsgBox(E.Message, nil, mfOKButton);
         Self.OpList.GetCurrentDevice^.Done;
+      end;
     end;
     LoadingStop;
     Self.Refresh;
