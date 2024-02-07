@@ -498,15 +498,12 @@ procedure TUIDevice.HandleEvent(var E: TEvent);
   procedure DoApplyOperations;
   begin
     try
-      try
-        Self.OpList.Execute;
-      except
-        on E: Exception do
-          MsgBox(E.Message, nil, mfError + mfOKButton);
-      end;
-    finally
-      DoApplyRefreshDevice;
+      Self.OpList.Execute;
+    except
+      on E: Exception do
+        MsgBox(E.Message, nil, mfError + mfOKButton);
     end;
+    DoApplyRefreshDevice;
   end;
 
 begin
