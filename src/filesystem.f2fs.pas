@@ -74,6 +74,8 @@ procedure TPartedFileSystemF2FS.DoLabelName(const PartAfter, PartBefore: PParted
 begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemF2FS.DoLabelName');
+  if PartAfter^.LabelName <> '' then
+    DoExec('/bin/f2fslabel', [PartAfter^.GetPartitionPath, PartAfter^.LabelName]);
 end;
 
 procedure TPartedFileSystemF2FS.DoResize(const PartAfter, PartBefore: PPartedPartition);

@@ -11,7 +11,7 @@ Currently supported filesystems:
 | ext3 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | ext4 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | exfat | :heavy_check_mark: | :heavy_check_mark: | | | :heavy_check_mark: |
-| f2fs | :heavy_check_mark: | :heavy_check_mark: | | :heavy_check_mark: | :heavy_check_mark:** |
+| f2fs | :heavy_check_mark: | :heavy_check_mark: | | :heavy_check_mark: | :heavy_check_mark: |
 | fat16 | :heavy_check_mark: | :heavy_check_mark: | | | :heavy_check_mark: |
 | fat32 | :heavy_check_mark: | :heavy_check_mark: | | | :heavy_check_mark: |
 | jfs | :heavy_check_mark: | :heavy_check_mark: | | :heavy_check_mark: | :heavy_check_mark: |
@@ -20,8 +20,6 @@ Currently supported filesystems:
 | xfs | :heavy_check_mark: | :heavy_check_mark: | | :heavy_check_mark: | :heavy_check_mark: |
 
 *In case of btrfs, for now the app doesn't deal with multi disk array.
-
-**You can only set label during the creation of the partition.
 
 ## Install
 
