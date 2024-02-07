@@ -7,6 +7,17 @@ uses
   CThreads, cwstring, Unix,
   {$endif}
   SysUtils, Classes, Types,
+  FileSystem,
+  // You must include file system implementation behind FileSystem!
+  FileSystem.Ext,
+  FileSystem.NTFS,
+  FileSystem.BTRFS,
+  FileSystem.Swap,
+  FileSystem.XFS,
+  FileSystem.JFS,
+  FileSystem.ExFat,
+  FileSystem.F2FS,
+  FileSystem.Fat,
   FreeVision,
   Parted.Commons, Parted.Devices, Parted.Partitions,
   Parted.Operations, Parted.Logs,

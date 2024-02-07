@@ -93,4 +93,7 @@ begin
   WriteLog(lsInfo, 'TPartedFileSystemFat.DoResize');
 end;
 
+initialization
+  RegisterFileSystem(TPartedFileSystemFat, ['fat16', 'fat32'], [1, 1], True, False, False);
+
 end.

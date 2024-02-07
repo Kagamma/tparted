@@ -79,4 +79,7 @@ begin
   WriteLog(lsInfo, 'TPartedFileSystemSwap.DoResize');
 end;
 
+initialization
+  RegisterFileSystem(TPartedFileSystemSwap, ['linux-swap'], [1], True, False, False);
+
 end.

@@ -111,4 +111,7 @@ begin
   end;
 end;
 
+initialization
+  RegisterFileSystem(TPartedFileSystemExt, ['ext2', 'ext3', 'ext4'], [1, 1, 1], True, True, True);
+
 end.

@@ -116,16 +116,7 @@ type
 implementation
 
 uses
-  FileSystem,
-  FileSystem.Ext,
-  FileSystem.NTFS,
-  FileSystem.BTRFS,
-  FileSystem.Swap,
-  FileSystem.XFS,
-  FileSystem.JFS,
-  FileSystem.ExFat,
-  FileSystem.F2FS,
-  FileSystem.Fat;
+  FileSystem;
 
 destructor TPartedOpList.Destroy;
 var
@@ -325,28 +316,10 @@ var
 
   procedure FileSystemCreate;
   begin
-    case Op.AffectedPartNew^.FileSystem of
-      'ext2', 'ext3', 'ext4':
-        FS := TPartedFileSystemExt.Create;
-      'fat16', 'fat32':
-        FS := TPartedFileSystemFat.Create;
-      'exfat':
-        FS := TPartedFileSystemExFat.Create;
-      'ntfs':
-        FS := TPartedFileSystemNTFS.Create;
-      'btrfs':
-        FS := TPartedFileSystemBTRFS.Create;
-      'linux-swap':
-        FS := TPartedFileSystemSwap.Create;
-      'xfs':
-        FS := TPartedFileSystemXfs.Create;
-      'jfs':
-        FS := TPartedFileSystemJfs.Create;
-      'f2fs':
-        FS := TPartedFileSystemF2FS.Create;
-      else
-        FS := TPartedFileSystem.Create;
-    end;
+    if FileSystemMap.ContainsKey(Op.AffectedPartNew^.FileSystem) then
+      FS := FileSystemMap[Op.AffectedPartNew^.FileSystem].Create
+    else
+      FS := TPartedFileSystem.Create;
   end;
 
 var

@@ -118,4 +118,7 @@ begin
   end;
 end;
 
+initialization
+  RegisterFileSystem(TPartedFileSystemBTRFS, ['btrfs'], [1], True, True, True);
+
 end.

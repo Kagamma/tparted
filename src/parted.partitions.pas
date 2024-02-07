@@ -28,27 +28,6 @@ uses
   Parted.Commons, Parted.Devices, Parted.Logs;
 
 const
-  FileSystemArray: array of String = (
-    'btrfs', 'ext2', 'ext3', 'ext4', 'exfat', 'f2fs', 'fat16', 'fat32',
-    'hfs', 'hfs+', 'linux-swap', 'ntfs', 'reiserfs', 'udf', 'xfs'
-  );
-
-  FileSystemFormattableArray: array of String = (
-    'btrfs', 'ext2', 'ext3', 'ext4', 'exfat', 'f2fs', 'fat16', 'fat32', 'jfs', 'ntfs', 'linux-swap', 'xfs'
-  );
-
-  FileSystemMoveArray: array of String = (
-    'btrfs', 'ext2', 'ext3', 'ext4', 'exfat', 'f2fs', 'fat16', 'fat32', 'jfs', 'ntfs', 'linux-swap', 'xfs'
-  );
-
-  FileSystemGrowArray: array of String = (
-    'btrfs', 'ext2', 'ext3', 'ext4', 'f2fs', 'jfs', 'ntfs', 'xfs'
-  );
-
-  FileSystemShrinkArray: array of String = (
-    'btrfs', 'ext2', 'ext3', 'ext4', 'ntfs'
-  );
-
   FlagArray: array of String = (
     'bios_grub', 'bls_boot', 'boot', 'chromeos_kernel', 'diag',
     'esp', 'hidden', 'irst', 'legacy_boot', 'linux-home',

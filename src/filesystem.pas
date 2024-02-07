@@ -23,7 +23,7 @@ unit FileSystem;
 interface
 
 uses
-  Classes, SysUtils, Types,
+  Classes, SysUtils, Types, Generics.Collections,
   Parted.Commons, Parted.Devices, Parted.Operations, Parted.Partitions, Parted.Logs;
 
 type
@@ -41,6 +41,20 @@ type
     procedure DoLabelName(const PartAfter, PartBefore: PPartedPartition); virtual;
     procedure DoResize(const PartAfter, PartBefore: PPartedPartition); virtual;
   end;
+  TPartedFileSystemClass = class of TPartedFileSystem;
+
+  TPartedFileSystemMap = specialize TDictionary<String, TPartedFileSystemClass>;
+  TPartedFileSystemMinSizeMap = specialize TDictionary<String, Int64>;
+
+procedure RegisterFileSystem(AFSClass: TPartedFileSystemClass; FileSystemTypeArray: TStringDynArray; MinSizeMap: TInt64DynArray; IsMoveable, IsShrinkable, IsGrowable: Boolean);
+
+var
+  FileSystemMap: TPartedFileSystemMap;
+  FileSystemMinSizeMap: TPartedFileSystemMinSizeMap;
+  FileSystemFormattableArray: array of String;
+  FileSystemMoveArray: array of String;
+  FileSystemGrowArray: array of String;
+  FileSystemShrinkArray: array of String;
 
 implementation
 
@@ -171,5 +185,63 @@ begin
     DoMoveRight(PartAfter, PartBefore);
   end;
 end;
+
+// --------------------------------------
+
+procedure RegisterFileSystem(AFSClass: TPartedFileSystemClass; FileSystemTypeArray: TStringDynArray; MinSizeMap: TInt64DynArray; IsMoveable, IsShrinkable, IsGrowable: Boolean);
+var
+  I: LongInt;
+  S: String;
+  L: LongInt;
+  SL: TStringList; // Ugly way to sort string...
+begin
+  Assert(Length(FileSystemTypeArray) = Length(MinSizeMap), 'Length must be the same!');
+  SL := TStringList.Create;
+  try
+    SL.Sorted := True;
+    for S in FileSystemFormattableArray do
+      SL.Add(S);
+    for I := 0 to Pred(Length(FileSystemTypeArray)) do
+    begin
+      S := FileSystemTypeArray[I];
+      FileSystemMap.Add(S, AFSClass);
+      FileSystemMinSizeMap.Add(S, MinSizeMap[I]);
+      SL.Add(S);
+    end;
+    SetLength(FileSystemFormattableArray, SL.Count);
+    for I := 0 to Pred(SL.Count) do
+    begin
+      FileSystemFormattableArray[I] := SL[I];
+    end;
+  finally
+    SL.Free;
+  end;
+  if IsMoveable then
+  begin
+    L := Length(FileSystemMoveArray) + 1;
+    SetLength(FileSystemMoveArray, L);
+    FileSystemMoveArray[Pred(L)] := S;
+  end;
+  if IsShrinkable then
+  begin
+    L := Length(FileSystemShrinkArray) + 1;
+    SetLength(FileSystemShrinkArray, L);
+    FileSystemShrinkArray[Pred(L)] := S;
+  end;
+  if IsGrowable then
+  begin
+    L := Length(FileSystemGrowArray) + 1;
+    SetLength(FileSystemGrowArray, L);
+    FileSystemGrowArray[Pred(L)] := S;
+  end;
+end;
+
+initialization
+  FileSystemMap := TPartedFileSystemMap.Create;
+  FileSystemMinSizeMap := TPartedFileSystemMinSizeMap.Create;
+
+finalization
+  FilesystemMap.Free;
+  FileSystemMinSizeMap.Free;
 
 end.

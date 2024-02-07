@@ -25,6 +25,7 @@ interface
 uses
   Classes, SysUtils,
   FreeVision,
+  FileSystem,
   Parted.Devices,
   Parted.Partitions,
   Parted.Commons,

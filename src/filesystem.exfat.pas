@@ -84,4 +84,7 @@ begin
   WriteLog(lsInfo, 'TPartedFileSystemExFat.DoResize');
 end;
 
+initialization
+  RegisterFileSystem(TPartedFileSystemExFat, ['exfat'], [1], True, False, False);
+
 end.

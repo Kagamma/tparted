@@ -95,4 +95,7 @@ begin
   end;
 end;
 
+initialization
+  RegisterFileSystem(TPartedFileSystemF2FS, ['f2fs'], [1], True, False, True);
+
 end.

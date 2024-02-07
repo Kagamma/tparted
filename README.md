@@ -20,6 +20,7 @@ Currently supported filesystems:
 | xfs | :heavy_check_mark: | :heavy_check_mark: | | :heavy_check_mark: | :heavy_check_mark: |
 
 *In case of btrfs, for now the app doesn't deal with multi disk array.
+
 **You can only set label during the creation of the partition.
 
 ## Install
