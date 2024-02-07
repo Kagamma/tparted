@@ -23,7 +23,10 @@ unit Parted.Logs;
 interface
 
 uses
-  SysUtils, Classes, Types;
+  SysUtils, Classes, Types, StrUtils;
+
+const
+  LOG_PATH = '/var/log/tparted/log.txt';
 
 type
   TPartedLogStatus = (
@@ -43,6 +46,20 @@ implementation
 uses
   Parted.Commons;
 
+procedure WriteToLogFile(S: String);
+var
+  FS: TFileStream;
+begin
+  FS := TFileStream.Create(LOG_PATH, fmOpenWrite);
+  try
+    FS.Position := Pred(FS.Size);
+    S := S + #10;
+    FS.WriteBuffer(Pointer(S)^, Length(S) + 1);
+  finally
+    FS.Free;
+  end;
+end;
+
 procedure TruncateLog;
 begin
   if Log.Count > 10000 then
@@ -51,18 +68,22 @@ end;
 
 procedure WriteLog(Status: TPartedLogStatus; Text: String);
 var
-  S: String;
+  S, S2: String;
+  Texts: TStringDynArray;
 begin
   TruncateLog;
-  S := '';
-  Text := StringReplace(Text, #10, '', [rfReplaceAll]);
-  Text := StringReplace(Text, #13, '', [rfReplaceAll]);
-  case Status of
-    lsInfo: S := '';
-    lsError: S := '[ERROR] ';
+  Texts := SplitString(Text, #10);
+  for S in Texts do
+  begin
+    case Status of
+      lsError:
+        S2 := '[ERROR] ' + S;
+      else
+        S2 := S;
+    end;
+    Log.Add(S2);
+    WriteToLogFile(S2);
   end;
-  S := S + Text;
-  Log.Add(S);
 end;
 
 procedure WriteLog(Path: String; Params: TStringDynArray);
@@ -75,23 +96,31 @@ begin
   for I in Params do
     S := S + ' ' + I;
   Log.Add(S);
+  WriteToLogFile(S);
 end;
 
 procedure WriteLogAndRaise(Text: String);
 var
-  S: String;
+  S, S2: String;
+  Texts: TStringDynArray;
 begin
   TruncateLog;
-  S := '';
-  Text := StringReplace(Text, #10, '', [rfReplaceAll]);
-  Text := StringReplace(Text, #13, '', [rfReplaceAll]);
-  S := S + '[ERROR] ' + Text;
-  Log.Add(S);
+  Texts := SplitString(Text, #10);
+  for S in Texts do
+  begin
+    S2 := '[ERROR] ' + S;
+    Log.Add(S2);
+    WriteToLogFile(S2);
+  end;
   raise ExceptionAbnormalExitCode.Create(Text);
 end;
 
 initialization
   Log := TStringList.Create;
+  CreateDir('/var/log/tparted');
+  if FileExists(LOG_PATH) then
+    DeleteFile(LOG_PATH);
+  FileClose(FileCreate(LOG_PATH));
 
 finalization
   Log.Free;

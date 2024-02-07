@@ -344,6 +344,7 @@ begin
     else
       SL.LoadFromStream(P.StdErr);
     Result.Message := SL.Text;
+    WriteLog(lsInfo, SL.Text);
   finally
     SL.Free;
     P.Free;
@@ -373,6 +374,7 @@ begin
     else
       SL.LoadFromStream(P.StdErr);
     Result.MessageArray := SLToSA(SL);
+    WriteLog(lsInfo, SL.Text);
   finally
     SL.Free;
     P.Free;
