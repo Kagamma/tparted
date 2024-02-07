@@ -115,14 +115,19 @@ begin
   raise ExceptionAbnormalExitCode.Create(Text);
 end;
 
+var
+  Lock: TFileStream;
+
 initialization
   Log := TStringList.Create;
   CreateDir('/var/log/tparted');
   if FileExists(LOG_PATH) then
     DeleteFile(LOG_PATH);
   FileClose(FileCreate(LOG_PATH));
+  Lock := TFileStream.Create('/var/log/tparted/lock', fmCreate);
 
 finalization
   Log.Free;
+  Lock.Free;
 
 end.
