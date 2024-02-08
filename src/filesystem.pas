@@ -208,6 +208,7 @@ begin
   PartAfter^.Number := Abs(PartAfter^.Number);
   //
   DoCreatePartitionOnly(PartAfter);
+  DoExec('/bin/wipefs', ['-a', PartAfter^.GetPartitionPath]);
 end;
 
 procedure TPartedFileSystem.DoDelete(const PartAfter, PartBefore: PPartedPartition);
@@ -225,6 +226,7 @@ procedure TPartedFileSystem.DoFormat(const PartAfter, PartBefore: PPartedPartiti
 begin
   WriteLog(lsInfo, 'TPartedFileSystem.DoFormat');
   QueryDeviceExists(PartAfter^.Device^.Path);
+  DoExec('/bin/wipefs', ['-a', PartAfter^.GetPartitionPath]);
 end;
 
 procedure TPartedFileSystem.DoFlag(const PartAfter, PartBefore: PPartedPartition);
