@@ -160,8 +160,8 @@ begin
   Self.FMenuSystem := NewSubMenu(UTF8Decode('~T~Parted'), hcNoContext, NewMenu(
     NewItem(UTF8Decode(S_RefreshDevices), 'F5', kbF5, cmMenuRefreshDevice, hcNoContext,
     NewLine(
-    NewItem(UTF8Decode(S_MenuFileSystemSupport), '', kbNoKey, cmMenuDisplayFileSystemSupport, hcNoContext,
     NewItem(UTF8Decode(S_MenuLogs), '', kbNoKey, cmMenuDisplayLog, hcNoContext,
+    NewItem(UTF8Decode(S_MenuFileSystemSupport), '', kbNoKey, cmMenuDisplayFileSystemSupport, hcNoContext,
     NewLine(
     NewItem(UTF8Decode(S_Quit), 'Alt-X', kbAltX, cmQuit, hcNoContext, nil))))))
   ), FMenuDevices);
