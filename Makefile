@@ -26,3 +26,6 @@ test:
 	mkdir -p ./bin
 	mkdir -p ./output
 	$(CC) -FE./bin $(CFLAGS) -FU./output -Fu./src -Fi./src ./tests/tests.lpr
+
+conv:
+	rstconv -i ./output/parted.commons.rsj -o ./bin/en_US.po
