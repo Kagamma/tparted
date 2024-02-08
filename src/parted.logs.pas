@@ -124,7 +124,7 @@ initialization
   if FileExists(LOG_PATH) then
     DeleteFile(LOG_PATH);
   FileClose(FileCreate(LOG_PATH));
-  Lock := TFileStream.Create('/var/log/tparted/lock', fmCreate);
+  Lock := TFileStream.Create('/var/lock/tparted.lock', fmCreate);
 
 finalization
   Log.Free;
