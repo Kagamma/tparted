@@ -69,8 +69,6 @@ type
     procedure ResizePartitionInMB(const Preceding, Size: Int64);
     // Guess and assign a number for this partition
     procedure AutoAssignNumber;
-    // Tell the kernel about the changes in this partition
-    procedure Probe;
   end;
   TPartedPartitionDynArray = array of TPartedPartition;
 
@@ -97,6 +95,8 @@ type
     // Merge all possible unallocated space that is closed together into big one
     procedure MergeUnallocatedSpace;
     function Clone: PPartedDevice;
+    // Tell the kernel about the changes in this device
+    procedure Probe;
   end;
   TPartedDeviceArray = array of TPartedDevice;
 
@@ -504,9 +504,9 @@ begin
   Self.Number := N;
 end;
 
-procedure TPartedPartition.Probe;
+procedure TPartedDevice.Probe;
 begin
-  fpSystem('partprobe ' + Self.GetPartitionPath);
+  fpSystem('partprobe ' + Self.Path);
 end;
 
 // --------------------------
