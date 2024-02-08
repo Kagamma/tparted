@@ -265,10 +265,7 @@ begin
   if not APart.IsMounted then
   begin
     // TODO: For some reasons ntfs filesystem makes the app freeze unless we use fpSystem()...
-    S := Format('/bin/mkdir -p "%s" > /dev/null', [PathMnt]);
-    ExecSystem(S);
-    S := Format('/bin/mount "%s" "%s" > /dev/null', [Path, PathMnt]);
-    ExecSystem(S);
+    Mount(Path, PathMnt);
   end;
   // For non-swap partitions
   if APart.FileSystem <> 'linux-swap' then
@@ -281,10 +278,7 @@ begin
   // Try to unmount the device again after we're done
   if (not APart.IsMounted) and (APart.FileSystem <> 'linux-swap') then
   begin
-    S := Format('/bin/umount "%s" > /dev/null', [Path]);
-    ExecSystem(S);
-    S := Format('/bin/rm -d "%s" > /dev/null', [PathMnt]);
-    ExecSystem(S);
+    Unmount(Path, PathMnt);
   end;
   {$else}
   APart.PartUsed := 1024 * 1024 * 8;

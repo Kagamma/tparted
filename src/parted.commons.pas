@@ -122,6 +122,10 @@ type
   TSignalMethod = procedure(SL: TStringList) of object;
 
 function GetTempMountPath(Path: String): String;
+// Mount a partition to path
+procedure Mount(Path, PathMnt: String);
+// Unmount partition
+procedure Unmount(Path, PathMnt: String);
 procedure DumpCallStack(var Report: String);
 function Match(S: String; RegexPattermArray: TStringDynArray): TStringDynArray;
 procedure ExecSystem(const S: String);
@@ -194,6 +198,18 @@ var
 function GetTempMountPath(Path: String): String;
 begin
   Result := '/tmp/tparted_' + StringReplace(Path, '/', '_', [rfReplaceAll]) + TempRandom;
+end;
+
+procedure Mount(Path, PathMnt: String);
+begin
+  ExecSystem(Format('/bin/mkdir -p "%s" > /dev/null', [PathMnt]));
+  ExecSystem(Format('/bin/mount "%s" "%s" > /dev/null', [Path, PathMnt]));
+end;
+
+procedure Unmount(Path, PathMnt: String);
+begin
+  ExecSystem(Format('/bin/umount "%s" > /dev/null', [Path]));
+  ExecSystem(Format('/bin/rm -d "%s" > /dev/null', [PathMnt]));
 end;
 
 procedure DumpCallStack(var Report: String);
