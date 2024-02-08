@@ -24,7 +24,7 @@ interface
 
 uses
   Classes, SysUtils, Types, Generics.Collections,
-  Parted.Commons, Parted.Devices, Parted.Operations, Parted.Partitions, Parted.Logs;
+  Parted.Commons, Locale, Parted.Devices, Parted.Operations, Parted.Partitions, Parted.Logs;
 
 type
   TPartedFileSystemSupport = record

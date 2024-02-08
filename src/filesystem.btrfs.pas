@@ -25,7 +25,7 @@ interface
 uses
   Classes, SysUtils, Unix,
   FileSystem,
-  Parted.Commons, Parted.Devices, Parted.Operations, Parted.Partitions, Parted.Logs;
+  Parted.Commons, Locale, Parted.Devices, Parted.Operations, Parted.Partitions, Parted.Logs;
 
 type
   TPartedFileSystemBTRFS = class(TPartedFileSystem)

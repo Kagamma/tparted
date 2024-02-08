@@ -25,7 +25,7 @@ interface
 uses
   Classes, SysUtils, StrUtils,
   FreeVision,
-  Parted.Commons, Parted.Devices, Parted.Partitions,
+  Parted.Commons, Locale, Parted.Devices, Parted.Partitions,
   UI.Commons;
 
 type

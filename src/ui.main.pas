@@ -27,7 +27,7 @@ uses
   FreeVision,
   Parted.Devices,
   Parted.Partitions,
-  Parted.Commons,
+  Parted.Commons, Locale,
   UI.Devices;
 
 const

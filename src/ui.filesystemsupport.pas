@@ -26,7 +26,7 @@ uses
   SysUtils, Classes, Types, FreeVision,
   UI.Commons,
   FileSystem,
-  Parted.Commons;
+  Parted.Commons, Locale;
 
 procedure ShowFileSystemSupportDialog;
 

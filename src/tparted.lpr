@@ -19,7 +19,7 @@ uses
   FileSystem.F2FS,
   FileSystem.Fat,
   FreeVision,
-  Parted.Commons, Parted.Devices, Parted.Partitions,
+  Parted.Commons, Locale, Parted.Devices, Parted.Partitions,
   Parted.Operations, Parted.Logs,
   UI.Main, UI.Devices, UI.Partitions, UI.Commons, UI.Partitions.Create, UI.Partitions.Resize;
 

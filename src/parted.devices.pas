@@ -23,7 +23,7 @@ unit Parted.Devices;
 interface
 
 uses
-  Classes, SysUtils, Types, Parted.Commons, StrUtils, Parted.Logs{$ifdef UNIX}, Unix{$endif};
+  Classes, SysUtils, Types, Parted.Commons, Locale, StrUtils, Parted.Logs{$ifdef UNIX}, Unix{$endif};
 
 type
   PPartedDevice = ^TPartedDevice;

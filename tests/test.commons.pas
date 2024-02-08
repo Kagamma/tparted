@@ -5,7 +5,7 @@ unit Test.Commons;
 interface
 
 uses
-  Framework, Parted.Commons, Types;
+  Framework, Parted.Commons, Locale, Types;
 
 type
   TTestCommonsMatch = class(TTestCase)

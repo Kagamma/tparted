@@ -26,7 +26,7 @@ uses
   SysUtils, Classes, FreeVision,
   UI.Commons,
   Parted.Operations,
-  Parted.Commons,
+  Parted.Commons, Locale,
   Parted.Devices,
   Parted.Partitions;
 

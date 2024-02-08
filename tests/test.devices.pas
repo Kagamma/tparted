@@ -7,7 +7,7 @@ interface
 uses
   SysUtils, Classes, Types,
   Framework,
-  Parted.Commons, Parted.Devices;
+  Parted.Commons, Locale, Parted.Devices;
 
 type
   TTestDevices = class(TTestCase)

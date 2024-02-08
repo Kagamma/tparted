@@ -25,7 +25,7 @@ interface
 uses
   SysUtils, Classes, FreeVision,
   UI.Commons,
-  Parted.Commons,
+  Parted.Commons, Locale,
   Parted.Logs;
 
 procedure ShowLogDialog;

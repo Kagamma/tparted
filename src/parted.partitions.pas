@@ -25,7 +25,7 @@ interface
 uses
   Classes, SysUtils, Types, fpjson, jsonparser,
   {$ifdef Unix}Unix,{$endif}
-  Parted.Commons, Parted.Devices, Parted.Logs;
+  Parted.Commons, Locale, Parted.Devices, Parted.Logs;
 
 const
   FlagArray: array of String = (

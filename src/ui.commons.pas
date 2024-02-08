@@ -25,7 +25,7 @@ interface
 uses
   Classes, SysUtils,
   FreeVision,
-  Parted.Commons;
+  Parted.Commons, Locale;
 
 const
   CUIButton = #10#22#12#13#14#14#14#15;

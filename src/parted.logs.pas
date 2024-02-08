@@ -44,7 +44,7 @@ procedure WriteLogAndRaise(Text: String); overload;
 implementation
 
 uses
-  Parted.Commons;
+  Parted.Commons, Locale;
 
 procedure WriteToLogFile(S: String);
 var

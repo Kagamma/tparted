@@ -28,7 +28,7 @@ uses
   FileSystem,
   Parted.Devices,
   Parted.Partitions,
-  Parted.Commons,
+  Parted.Commons, Locale,
   Parted.Operations,
   Parted.Logs,
   UI.Commons,
