@@ -30,7 +30,9 @@ uses
 type
   TPartedFileSystemFat = class(TPartedFileSystem)
   public
+    function GetSupport: TPartedFileSystemSupport; override;
     function GetFatSize(const Part: PPartedPartition): String;
+
     procedure DoCreate(const PartAfter, PartBefore: PPartedPartition); override;
     procedure DoDelete(const PartAfter, PartBefore: PPartedPartition); override;
     procedure DoFormat(const PartAfter, PartBefore: PPartedPartition); override;
@@ -40,6 +42,17 @@ type
   end;
 
 implementation
+
+function TPartedFileSystemFat.GetSupport: TPartedFileSystemSupport;
+begin
+  inherited;
+  Result.CanFormat := FileExists('/bin/mkfs.fat');
+  Result.CanLabel := FileExists('/bin/fatlabel');
+  Result.CanMove := FileExists('/bin/sfdisk');
+  Result.CanShrink := False;
+  Result.CanGrow := False;
+  Result.Dependencies := 'dosfstools';
+end;
 
 function TPartedFileSystemFat.GetFatSize(const Part: PPartedPartition): String;
 begin
@@ -94,6 +107,6 @@ begin
 end;
 
 initialization
-  RegisterFileSystem(TPartedFileSystemFat, ['fat16', 'fat32'], [16, 33], True, False, False);
+  RegisterFileSystem(TPartedFileSystemFat, ['fat16', 'fat32'], [16, 33]);
 
 end.

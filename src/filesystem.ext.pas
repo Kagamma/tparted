@@ -30,6 +30,8 @@ uses
 type
   TPartedFileSystemExt = class(TPartedFileSystem)
   public
+    function GetSupport: TPartedFileSystemSupport; override;
+
     procedure DoCreate(const PartAfter, PartBefore: PPartedPartition); override;
     procedure DoDelete(const PartAfter, PartBefore: PPartedPartition); override;
     procedure DoFormat(const PartAfter, PartBefore: PPartedPartition); override;
@@ -42,6 +44,17 @@ implementation
 
 uses
   UI.Commons;
+
+function TPartedFileSystemExt.GetSupport: TPartedFileSystemSupport;
+begin
+  inherited;
+  Result.CanFormat := FileExists('/bin/mkfs.ext2') and FileExists('/bin/mkfs.ext3') and FileExists('/bin/mkfs.ext4');
+  Result.CanLabel := FileExists('/bin/e2label');
+  Result.CanMove := FileExists('/bin/sfdisk');
+  Result.CanShrink := FileExists('/bin/resize2fs') and FileExists('/bin/e2fsck');
+  Result.CanGrow := FileExists('/bin/resize2fs') and FileExists('/bin/e2fsck');
+  Result.Dependencies := 'e2fsprogs';
+end;
 
 procedure TPartedFileSystemExt.DoCreate(const PartAfter, PartBefore: PPartedPartition);
 begin
@@ -112,6 +125,6 @@ begin
 end;
 
 initialization
-  RegisterFileSystem(TPartedFileSystemExt, ['ext2', 'ext3', 'ext4'], [1, 1, 1], True, True, True);
+  RegisterFileSystem(TPartedFileSystemExt, ['ext2', 'ext3', 'ext4'], [1, 1, 1]);
 
 end.

@@ -30,6 +30,8 @@ uses
 type
   TPartedFileSystemExFat = class(TPartedFileSystem)
   public
+    function GetSupport: TPartedFileSystemSupport; override;
+
     procedure DoCreate(const PartAfter, PartBefore: PPartedPartition); override;
     procedure DoDelete(const PartAfter, PartBefore: PPartedPartition); override;
     procedure DoFormat(const PartAfter, PartBefore: PPartedPartition); override;
@@ -39,6 +41,17 @@ type
   end;
 
 implementation
+
+function TPartedFileSystemExFat.GetSupport: TPartedFileSystemSupport;
+begin
+  inherited;
+  Result.CanFormat := FileExists('/bin/mkfs.exfat');
+  Result.CanLabel := FileExists('/bin/exfatlabel');
+  Result.CanMove := FileExists('/bin/sfdisk');
+  Result.CanShrink := False;
+  Result.CanGrow := False;
+  Result.Dependencies := 'exfatprogs';
+end;
 
 procedure TPartedFileSystemExFat.DoCreate(const PartAfter, PartBefore: PPartedPartition);
 begin
@@ -85,6 +98,6 @@ begin
 end;
 
 initialization
-  RegisterFileSystem(TPartedFileSystemExFat, ['exfat'], [1], True, False, False);
+  RegisterFileSystem(TPartedFileSystemExFat, ['exfat'], [1]);
 
 end.

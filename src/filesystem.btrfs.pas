@@ -30,6 +30,8 @@ uses
 type
   TPartedFileSystemBTRFS = class(TPartedFileSystem)
   public
+    function GetSupport: TPartedFileSystemSupport; override;
+
     procedure DoCreate(const PartAfter, PartBefore: PPartedPartition); override;
     procedure DoDelete(const PartAfter, PartBefore: PPartedPartition); override;
     procedure DoFormat(const PartAfter, PartBefore: PPartedPartition); override;
@@ -39,6 +41,17 @@ type
   end;
 
 implementation
+
+function TPartedFileSystemBTRFS.GetSupport: TPartedFileSystemSupport;
+begin
+  inherited;
+  Result.CanFormat := FileExists('/bin/mkfs.btrfs');
+  Result.CanLabel := FileExists('/bin/btrfs');
+  Result.CanMove := FileExists('/bin/sfdisk');
+  Result.CanShrink := FileExists('/bin/btrfs');
+  Result.CanGrow := FileExists('/bin/btrfs');
+  Result.Dependencies := 'btrfs-progs';
+end;
 
 procedure TPartedFileSystemBTRFS.DoCreate(const PartAfter, PartBefore: PPartedPartition);
 begin
@@ -115,6 +128,6 @@ begin
 end;
 
 initialization
-  RegisterFileSystem(TPartedFileSystemBTRFS, ['btrfs'], [256], True, True, True);
+  RegisterFileSystem(TPartedFileSystemBTRFS, ['btrfs'], [256]);
 
 end.

@@ -30,6 +30,8 @@ uses
 type
   TPartedFileSystemSwap = class(TPartedFileSystem)
   public
+    function GetSupport: TPartedFileSystemSupport; override;
+
     procedure DoCreate(const PartAfter, PartBefore: PPartedPartition); override;
     procedure DoDelete(const PartAfter, PartBefore: PPartedPartition); override;
     procedure DoFormat(const PartAfter, PartBefore: PPartedPartition); override;
@@ -39,6 +41,17 @@ type
   end;
 
 implementation
+
+function TPartedFileSystemSwap.GetSupport: TPartedFileSystemSupport;
+begin
+  inherited;
+  Result.CanFormat := FileExists('/bin/mkswap');
+  Result.CanLabel := False;
+  Result.CanMove := FileExists('/bin/sfdisk');
+  Result.CanShrink := False;
+  Result.CanGrow := False;
+  Result.Dependencies := 'util-linux';
+end;
 
 procedure TPartedFileSystemSwap.DoCreate(const PartAfter, PartBefore: PPartedPartition);
 begin
@@ -80,6 +93,6 @@ begin
 end;
 
 initialization
-  RegisterFileSystem(TPartedFileSystemSwap, ['linux-swap'], [1], True, False, False);
+  RegisterFileSystem(TPartedFileSystemSwap, ['linux-swap'], [1]);
 
 end.

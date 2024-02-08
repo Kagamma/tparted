@@ -30,6 +30,8 @@ uses
 type
   TPartedFileSystemF2FS = class(TPartedFileSystem)
   public
+    function GetSupport: TPartedFileSystemSupport; override;
+
     procedure DoCreate(const PartAfter, PartBefore: PPartedPartition); override;
     procedure DoDelete(const PartAfter, PartBefore: PPartedPartition); override;
     procedure DoFormat(const PartAfter, PartBefore: PPartedPartition); override;
@@ -39,6 +41,17 @@ type
   end;
 
 implementation
+
+function TPartedFileSystemF2FS.GetSupport: TPartedFileSystemSupport;
+begin
+  inherited;
+  Result.CanFormat := FileExists('/bin/mkfs.f2fs');
+  Result.CanLabel := FileExists('/bin/f2fslabel');
+  Result.CanMove := FileExists('/bin/sfdisk');
+  Result.CanShrink := False;
+  Result.CanGrow := FileExists('/bin/resize.f2fs') and FileExists('/bin/fsck.f2fs');
+  Result.Dependencies := 'f2fs-tools';
+end;
 
 procedure TPartedFileSystemF2FS.DoCreate(const PartAfter, PartBefore: PPartedPartition);
 begin
@@ -101,6 +114,6 @@ begin
 end;
 
 initialization
-  RegisterFileSystem(TPartedFileSystemF2FS, ['f2fs'], [1], True, False, True);
+  RegisterFileSystem(TPartedFileSystemF2FS, ['f2fs'], [1]);
 
 end.

@@ -60,7 +60,6 @@ resourcestring
   S_About = '~A~bout';
   S_Devices = '~D~evices';
   S_Quit = '~Q~uit';
-  S_Log = 'Display ~L~ogs';
   S_RefreshDevices = '~R~efresh Devices';
   S_QuitMessage = #3'You have pending operations.'#13#3'Quit TParted?';
   S_AboutMessage = #3'TParted (%s) by kagamma'#13#3'Built with Free Pascal %s'#13#13#3'This software is in beta state!';
@@ -81,6 +80,11 @@ resourcestring
   S_InputLabel = 'New label:';
   S_Partition = 'Partition';
   S_FileSystem = 'File System';
+  S_Create = 'Create';
+  S_Move = 'Move';
+  S_Shrink = 'Shrink';
+  S_Grow = 'Grow';
+  S_Dependencies = 'Dependencies';
   S_FreeSpacePreceding = 'Preceding (MB)';
   S_NewSize = 'New size (MB)';
   S_FreeSpaceFollowing = 'Following (MB)';
@@ -89,7 +93,10 @@ resourcestring
   S_Flags = 'Flags';
   S_Label = 'Label';
   S_Name = 'Name';
-  S_Logs = 'In-memory logs';
+  S_Logs = 'In-memory Logs';
+  S_MenuLogs = 'In-memory ~L~ogs';
+  S_FileSystemSupport = 'File System Support';
+  S_MenuFileSystemSupport = '~F~ile System Support';
   S_PartitionUnmounted = #3'"%s" unmounted!';
   S_PartitionUnmounting = 'Unmounting %s...';
   S_CreatePartitionTableAsk = 'Device %s has no partition table.'#13'Do you want to create a GUID Partition Table?';

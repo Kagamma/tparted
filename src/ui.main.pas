@@ -35,6 +35,7 @@ const
   cmMenuRefreshDevice = 1002;
   cmDeviceRefresh = 1003;
   cmMenuDisplayLog = 1004;
+  cmMenuDisplayFileSystemSupport = 1005;
   cmDeviceAnchor = 12000;
   cmPartitionShowInfo = 1100;
   cmPartitionCreate = 1101;
@@ -75,6 +76,7 @@ implementation
 
 uses
   UI.Commons,
+  UI.FileSystemSupport,
   UI.Logs;
 
 type
@@ -157,9 +159,11 @@ begin
 
   Self.FMenuSystem := NewSubMenu(UTF8Decode('~T~Parted'), hcNoContext, NewMenu(
     NewItem(UTF8Decode(S_RefreshDevices), 'F5', kbF5, cmMenuRefreshDevice, hcNoContext,
-    NewItem(UTF8Decode(S_Log), '', kbNoKey, cmMenuDisplayLog, hcNoContext,
     NewLine(
-    NewItem(UTF8Decode(S_Quit), 'Alt-X', kbAltX, cmQuit, hcNoContext, nil))))
+    NewItem(UTF8Decode(S_MenuFileSystemSupport), '', kbNoKey, cmMenuDisplayFileSystemSupport, hcNoContext,
+    NewItem(UTF8Decode(S_MenuLogs), '', kbNoKey, cmMenuDisplayLog, hcNoContext,
+    NewLine(
+    NewItem(UTF8Decode(S_Quit), 'Alt-X', kbAltX, cmQuit, hcNoContext, nil))))))
   ), FMenuDevices);
 
   M := NewMenu(Self.FMenuSystem);
@@ -197,6 +201,11 @@ begin
       cmMenuDisplayLog:
         begin
           ShowLogDialog;
+          Self.ClearEvent(E);
+        end;
+      cmMenuDisplayFileSystemSupport:
+        begin
+          ShowFileSystemSupportDialog;
           Self.ClearEvent(E);
         end;
       cmMenuRefreshDevice:

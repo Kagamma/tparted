@@ -25,6 +25,7 @@ interface
 uses
   SysUtils, Classes, FreeVision,
   UI.Commons,
+  FileSystem,
   Parted.Operations,
   Parted.Commons,
   Parted.Devices,
@@ -60,11 +61,14 @@ begin
     D^.GetExtent(R);
 
     // Label
-    R.Assign(3, 2, 40, 3);
-    V := New(PUIInputLine, Init(R, 30));
-    D^.Insert(V);
-    R.Assign(3, 1, 20, 2);
-    D^.Insert(New(PLabel, Init(R, UTF8Decode(S_Label), V)));
+    if SToIndex(PPart^.FileSystem, FileSystemLabelArray) >= 0 then
+    begin
+      R.Assign(3, 2, 40, 3);
+      V := New(PUIInputLine, Init(R, 30));
+      D^.Insert(V);
+      R.Assign(3, 1, 20, 2);
+      D^.Insert(New(PLabel, Init(R, UTF8Decode(S_Label), V)));
+    end;
 
     // Name
     R.Assign(3, 4, 40, 5);

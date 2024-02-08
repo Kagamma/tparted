@@ -30,6 +30,8 @@ uses
 type
   TPartedFileSystemXfs = class(TPartedFileSystem)
   public
+    function GetSupport: TPartedFileSystemSupport; override;
+
     procedure DoCreate(const PartAfter, PartBefore: PPartedPartition); override;
     procedure DoDelete(const PartAfter, PartBefore: PPartedPartition); override;
     procedure DoFormat(const PartAfter, PartBefore: PPartedPartition); override;
@@ -39,6 +41,17 @@ type
   end;
 
 implementation
+
+function TPartedFileSystemXfs.GetSupport: TPartedFileSystemSupport;
+begin
+  inherited;
+  Result.CanFormat := FileExists('/bin/mkfs.xfs');
+  Result.CanLabel := FileExists('/bin/xfs_admin');
+  Result.CanMove := FileExists('/bin/sfdisk');
+  Result.CanShrink := False;
+  Result.CanGrow := FileExists('/bin/xfs_growfs');
+  Result.Dependencies := 'xfsprogs';
+end;
 
 procedure TPartedFileSystemXfs.DoCreate(const PartAfter, PartBefore: PPartedPartition);
 begin
@@ -103,6 +116,6 @@ begin
 end;
 
 initialization
-  RegisterFileSystem(TPartedFileSystemXfs, ['xfs'], [300], True, False, True);
+  RegisterFileSystem(TPartedFileSystemXfs, ['xfs'], [300]);
 
 end.

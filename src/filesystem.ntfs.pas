@@ -30,6 +30,8 @@ uses
 type
   TPartedFileSystemNTFS = class(TPartedFileSystem)
   public
+    function GetSupport: TPartedFileSystemSupport; override;
+
     procedure DoCreate(const PartAfter, PartBefore: PPartedPartition); override;
     procedure DoDelete(const PartAfter, PartBefore: PPartedPartition); override;
     procedure DoFormat(const PartAfter, PartBefore: PPartedPartition); override;
@@ -39,6 +41,17 @@ type
   end;
 
 implementation
+
+function TPartedFileSystemNTFS.GetSupport: TPartedFileSystemSupport;
+begin
+  inherited;
+  Result.CanFormat := FileExists('/bin/mkfs.ntfs');
+  Result.CanLabel := FileExists('/bin/ntfslabel');
+  Result.CanMove := FileExists('/bin/sfdisk');
+  Result.CanShrink := FileExists('/bin/ntfsresize') and FileExists('/bin/ntfsfix');
+  Result.CanGrow := FileExists('/bin/ntfsresize') and FileExists('/bin/ntfsfix');
+  Result.Dependencies := 'ntfs-3g';
+end;
 
 procedure TPartedFileSystemNTFS.DoCreate(const PartAfter, PartBefore: PPartedPartition);
 begin
@@ -109,6 +122,6 @@ begin
 end;
 
 initialization
-  RegisterFileSystem(TPartedFileSystemNTFS, ['ntfs'], [2], True, True, True);
+  RegisterFileSystem(TPartedFileSystemNTFS, ['ntfs'], [2]);
 
 end.

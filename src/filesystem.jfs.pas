@@ -30,6 +30,8 @@ uses
 type
   TPartedFileSystemJfs = class(TPartedFileSystem)
   public
+    function GetSupport: TPartedFileSystemSupport; override;
+
     procedure DoCreate(const PartAfter, PartBefore: PPartedPartition); override;
     procedure DoDelete(const PartAfter, PartBefore: PPartedPartition); override;
     procedure DoFormat(const PartAfter, PartBefore: PPartedPartition); override;
@@ -39,6 +41,17 @@ type
   end;
 
 implementation
+
+function TPartedFileSystemJfs.GetSupport: TPartedFileSystemSupport;
+begin
+  inherited;
+  Result.CanFormat := FileExists('/bin/mkfs.jfs');
+  Result.CanLabel := FileExists('/bin/jfs_tune');
+  Result.CanMove := FileExists('/bin/sfdisk');
+  Result.CanShrink := False;
+  Result.CanGrow := FileExists('/bin/jfs_fsck');
+  Result.Dependencies := 'jfsutils';
+end;
 
 procedure TPartedFileSystemJfs.DoCreate(const PartAfter, PartBefore: PPartedPartition);
 begin
@@ -106,6 +119,6 @@ begin
 end;
 
 initialization
-  RegisterFileSystem(TPartedFileSystemJfs, ['jfs'], [16], True, False, True);
+  RegisterFileSystem(TPartedFileSystemJfs, ['jfs'], [16]);
 
 end.

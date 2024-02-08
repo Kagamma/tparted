@@ -27,8 +27,19 @@ uses
   Parted.Commons, Parted.Devices, Parted.Operations, Parted.Partitions, Parted.Logs;
 
 type
+  TPartedFileSystemSupport = record
+    CanGrow,
+    CanShrink,
+    CanMove,
+    CanLabel,
+    CanFormat: Boolean;
+    Dependencies: String;
+  end;
+
   TPartedFileSystem = class(TObject)
   public
+    function GetSupport: TPartedFileSystemSupport; virtual;
+
     procedure DoExec(const Name: String; const Params: TStringDynArray; const Delay: LongWord = 1000);
     procedure DoMoveLeft(const PartAfter, PartBefore: PPartedPartition);
     procedure DoMoveRight(const PartAfter, PartBefore: PPartedPartition);
@@ -45,8 +56,9 @@ type
 
   TPartedFileSystemMap = specialize TDictionary<String, TPartedFileSystemClass>;
   TPartedFileSystemMinSizeMap = specialize TDictionary<String, Int64>;
+  TPartedFileSystemDependenciesMap = specialize TDictionary<String, String>;
 
-procedure RegisterFileSystem(AFSClass: TPartedFileSystemClass; FileSystemTypeArray: TStringDynArray; MinSizeMap: TInt64DynArray; IsMoveable, IsShrinkable, IsGrowable: Boolean);
+procedure RegisterFileSystem(AFSClass: TPartedFileSystemClass; FileSystemTypeArray: TStringDynArray; MinSizeMap: TInt64DynArray);
 // Show a message box, and return false, if Size is invalid
 function VerifyFileSystemMinSize(FS: String; Size: Int64): Boolean;
 // Return the minimal size of file system
@@ -55,7 +67,11 @@ function GetFileSystemMinSize(FS: String): Int64;
 var
   FileSystemMap: TPartedFileSystemMap;
   FileSystemMinSizeMap: TPartedFileSystemMinSizeMap;
+  FileSystemDependenciesMap: TPartedFileSystemDependenciesMap;
+
+  FileSystemSupportArray: array of string;
   FileSystemFormattableArray: array of String;
+  FileSystemLabelArray: array of String;
   FileSystemMoveArray: array of String;
   FileSystemGrowArray: array of String;
   FileSystemShrinkArray: array of String;
@@ -96,55 +112,98 @@ begin
   end;
 end;
 
-procedure RegisterFileSystem(AFSClass: TPartedFileSystemClass; FileSystemTypeArray: TStringDynArray; MinSizeMap: TInt64DynArray; IsMoveable, IsShrinkable, IsGrowable: Boolean);
+procedure RegisterFileSystem(AFSClass: TPartedFileSystemClass; FileSystemTypeArray: TStringDynArray; MinSizeMap: TInt64DynArray);
 var
   I: LongInt;
   S: String;
   L: LongInt;
   SL: Classes.TStringList; // Ugly way to sort string...
+  FS: TPartedFileSystem;
+  Support: TPartedFileSystemSupport;
 begin
   Assert(Length(FileSystemTypeArray) = Length(MinSizeMap), 'Length must be the same!');
   SL := Classes.TStringList.Create;
+  FS := AFSClass.Create;
   try
+    Support := FS.GetSupport;
     SL.Sorted := True;
-    for S in FileSystemFormattableArray do
+    // Supported list
+    for S in FileSystemSupportArray do
       SL.Add(S);
     for I := 0 to Pred(Length(FileSystemTypeArray)) do
     begin
       S := FileSystemTypeArray[I];
-      FileSystemMap.Add(S, AFSClass);
-      FileSystemMinSizeMap.Add(S, MinSizeMap[I]);
+      FileSystemDependenciesMap.Add(S, Support.Dependencies);
       SL.Add(S);
     end;
-    SetLength(FileSystemFormattableArray, SL.Count);
+    SetLength(FileSystemSupportArray, SL.Count);
     for I := 0 to Pred(SL.Count) do
+      FileSystemSupportArray[I] := SL[I];
+    // Formattable
+    SL.Clear;
+    if Support.CanFormat then
     begin
-      FileSystemFormattableArray[I] := SL[I];
+      for S in FileSystemFormattableArray do
+        SL.Add(S);
+      for I := 0 to Pred(Length(FileSystemTypeArray)) do
+      begin
+        S := FileSystemTypeArray[I];
+        FileSystemMap.Add(S, AFSClass);
+        FileSystemMinSizeMap.Add(S, MinSizeMap[I]);
+        SL.Add(S);
+      end;
+      SetLength(FileSystemFormattableArray, SL.Count);
+      for I := 0 to Pred(SL.Count) do
+        FileSystemFormattableArray[I] := SL[I];
+    end;
+    //
+    for S in FileSystemTypeArray do
+    begin
+      if Support.CanMove then
+      begin
+        L := Length(FileSystemMoveArray) + 1;
+        SetLength(FileSystemMoveArray, L);
+        FileSystemMoveArray[Pred(L)] := S;
+      end;
+      //
+      if Support.CanShrink then
+      begin
+        L := Length(FileSystemShrinkArray) + 1;
+        SetLength(FileSystemShrinkArray, L);
+        FileSystemShrinkArray[Pred(L)] := S;
+      end;
+      //
+      if Support.CanGrow then
+      begin
+        L := Length(FileSystemGrowArray) + 1;
+        SetLength(FileSystemGrowArray, L);
+        FileSystemGrowArray[Pred(L)] := S;
+      end;
+      //
+      if Support.CanLabel then
+      begin
+        L := Length(FileSystemLabelArray) + 1;
+        SetLength(FileSystemLabelArray, L);
+        FileSystemLabelArray[Pred(L)] := S;
+      end;
     end;
   finally
+    FS.Free;
     SL.Free;
-  end;
-  if IsMoveable then
-  begin
-    L := Length(FileSystemMoveArray) + 1;
-    SetLength(FileSystemMoveArray, L);
-    FileSystemMoveArray[Pred(L)] := S;
-  end;
-  if IsShrinkable then
-  begin
-    L := Length(FileSystemShrinkArray) + 1;
-    SetLength(FileSystemShrinkArray, L);
-    FileSystemShrinkArray[Pred(L)] := S;
-  end;
-  if IsGrowable then
-  begin
-    L := Length(FileSystemGrowArray) + 1;
-    SetLength(FileSystemGrowArray, L);
-    FileSystemGrowArray[Pred(L)] := S;
   end;
 end;
 
 // -------------------------------
+
+function TPartedFileSystem.GetSupport: TPartedFileSystemSupport;
+begin
+  Result.CanFormat := False;
+  Result.CanMove := False;
+  Result.CanShrink := False;
+  Result.CanFormat := False;
+  Result.CanLabel := False;
+  Result.Dependencies := '';
+end;
 
 procedure TPartedFileSystem.DoExec(const Name: String; const Params: TStringDynArray; const Delay: LongWord = 1000);
 var
@@ -276,9 +335,11 @@ end;
 initialization
   FileSystemMap := TPartedFileSystemMap.Create;
   FileSystemMinSizeMap := TPartedFileSystemMinSizeMap.Create;
+  FileSystemDependenciesMap := TPartedFileSystemDependenciesMap.Create;
 
 finalization
   FilesystemMap.Free;
   FileSystemMinSizeMap.Free;
+  FileSystemDependenciesMap.Free;
 
 end.
