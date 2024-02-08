@@ -33,15 +33,15 @@ Currently supported filesystems:
 
 ## Dependencies
 - `parted`
-- `sfdisk` for moving partitions.
-- `dosfstools` for fat operations.
-- `exfatprogs` for exfat operations.
-- `e2fsprogs` for ext2/3/4 operations.
-- `ntfs-3g` for ntfs operations.
-- `btrfs-progs` for btrfs operations.
-- `xfsprogs` for xfs operations.
-- `jfsutils` for jfs operations.
-- `f2fs-tools` for f2fs operations.
-- `util-linux` for linux-swap operations.
+- `util-linux`
+- `sfdisk` (optional) for moving partitions.
+- `dosfstools` (optional) for fat operations.
+- `exfatprogs` (optional) for exfat operations.
+- `e2fsprogs` (optional) for ext2/3/4 operations.
+- `ntfs-3g` (optional) for ntfs operations.
+- `btrfs-progs` (optional) for btrfs operations.
+- `xfsprogs` (optional) for xfs operations.
+- `jfsutils` (optional) for jfs operations.
+- `f2fs-tools` (optional) for f2fs operations.
 
 ![image](./docs/images/1.png)
