@@ -144,8 +144,8 @@ msgid "\003You have pending operations.\015\003Quit TParted?"
 msgstr "\003保留中の操作があります。\015\003TPartedを終了しますか？"
 
 #: locale:s_aboutmessage
-msgid "\003TParted (%s) by kagamma\015\003Built with Free Pascal %s\015\015\003This software is in beta state!"
-msgstr "\003TParted（%s）by kagamma\015\003Free Pascal %sで構築されました。\015\015\003このソフトウェアはベータ版です！"
+msgid "\003TParted (%s) by kagamma\015\003Built with Free Pascal %s"
+msgstr "\003TParted（%s）by kagamma\015\003Free Pascal %sで構築されました。"
 
 #: locale:s_loadingpartitions
 msgid "Loading partitions..."

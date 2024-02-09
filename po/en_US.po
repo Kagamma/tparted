@@ -139,7 +139,7 @@ msgid "\003You have pending operations.\015\003Quit TParted?"
 msgstr ""
 
 #: locale:s_aboutmessage
-msgid "\003TParted (%s) by kagamma\015\003Built with Free Pascal %s\015\015\003This software is in beta state!"
+msgid "\003TParted (%s) by kagamma\015\003Built with Free Pascal %s"
 msgstr ""
 
 #: locale:s_loadingpartitions
