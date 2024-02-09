@@ -313,7 +313,7 @@ var
   R: TRect;
 begin
   Self.GetBounds(R);
-  R.B.X := R.A.X + UTF8TerminalLength(UTF8Encode(Self.Text)) + 1;
+  R.B.X := R.A.X + UTF8TerminalLength(UTF8Encode(Self.Text)) + 2;
   Self.SetBounds(R);
   inherited Draw;
 end;
