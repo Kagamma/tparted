@@ -345,16 +345,18 @@ constructor TUILoadingDialog.Init(const AText: String);
 var
   R: TRect;
   L: PLabel;
+  Len: LongInt;
 begin
+  Len := UTF8TerminalLength(AText);
   Desktop^.GetExtent(R);
-  R.A.X := (R.B.X div 2) - Length(AText) div 2 - 3;
-  R.B.X := (R.B.X div 2) + Length(AText) div 2 + 4;
+  R.A.X := (R.B.X div 2) - Len div 2 - 3;
+  R.B.X := (R.B.X div 2) + Len div 2 + 4;
   R.A.Y := (R.B.Y div 2) - 3;
   R.B.Y := (R.B.Y div 2) + 2;
   inherited Init(R, '');
   //
   Self.Status := AText;
-  R.Assign(2, 2, 2 + Length(AText) + 1, 3);
+  R.Assign(2, 2, 2 + Len + 1, 3);
   L := New(PLabel, Init(R, UTF8Decode(AText), nil));
   Self.Insert(L);
 end;
