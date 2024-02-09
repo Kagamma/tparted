@@ -50,6 +50,7 @@ procedure WriteToLogFile(S: String);
 var
   FS: TFileStream;
 begin
+  {$ifdef TPARTED_TEST}
   FS := TFileStream.Create(LOG_PATH, fmOpenWrite);
   try
     FS.Position := Pred(FS.Size);
@@ -58,6 +59,7 @@ begin
   finally
     FS.Free;
   end;
+  {$endif}
 end;
 
 procedure TruncateLog;
@@ -120,14 +122,18 @@ var
 
 initialization
   Log := TStringList.Create;
+  {$ifdef TPARTED_TEST}
   CreateDir('/var/log/tparted');
   if FileExists(LOG_PATH) then
     DeleteFile(LOG_PATH);
   FileClose(FileCreate(LOG_PATH));
   Lock := TFileStream.Create('/var/lock/tparted.lock', fmCreate);
+  {$endif}
 
 finalization
   Log.Free;
+  {$ifdef TPARTED_TEST}
   Lock.Free;
+  {$endif}
 
 end.

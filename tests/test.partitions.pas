@@ -44,7 +44,6 @@ var
   Device: TPartedDevice;
   Part: TPartedPartition;
 begin
-  ParseDeviceAndPartitionsFromJsonString(DeviceRawJsonString, Device);
   ParseUsedAndAvailableBlockFromString(PartUsedAndAvailString, Part);
   Assert(Part.PartUsed = 25792503808, 'Part.PartUsed = 25792503808, but ' + IntToStr(Part.PartUsed));
   Assert(Part.PartFree = 70167166976, 'Part.PartFree = 70167166976, but ' + IntToStr(Part.PartFree));

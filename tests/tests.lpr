@@ -1,6 +1,7 @@
 program tests;
 
 {$I configs.inc}
+{$define TPARTED_TEST}
 
 uses
   SysUtils, Classes, Framework,
