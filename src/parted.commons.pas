@@ -548,10 +548,9 @@ begin
   if Length(S) > Limit then
   begin
     SetLength(S, Limit);
-    S[Limit] := '.';
-    S[Limit - 1] := '.';
+    S := S + '‥';
   end;
-  Result := PadRight(S, Limit);
+  Result := PadRight(S, Limit - 1);
 end;
 
 function PadLeftLimit(S: String; Limit: LongInt): String;
@@ -559,19 +558,17 @@ begin
   if Length(S) > Limit then
   begin
     SetLength(S, Limit);
-    S[Limit] := '.';
-    S[Limit - 1] := '.';
+    S := S + '‥';
   end;
-  Result := PadLeft(S, Limit);
+  Result := PadLeft(S, Limit - 1);
 end;
 
 function PadCenterLimit(S: String; Limit: LongInt): String;
 begin
   if Length(S) > Limit then
   begin
-    SetLength(S, Limit);
-    S[Limit] := '.';
-    S[Limit - 1] := '.';
+    SetLength(S, Limit - 1);
+    S := S + '‥';
   end;
   Result := PadCenter(S, Limit);
 end;
