@@ -1,0 +1,340 @@
+#: locale:s_okbutton
+msgid "O~K~"
+msgstr ""
+
+#: locale:s_cancelbutton
+msgid "~C~ancel"
+msgstr ""
+
+#: locale:s_closebutton
+msgid "~C~lose"
+msgstr ""
+
+#: locale:s_yesbutton
+msgid "~Y~es"
+msgstr ""
+
+#: locale:s_nobutton
+msgid "~N~o"
+msgstr ""
+
+#: locale:s_warningtitle
+msgid "Warning"
+msgstr ""
+
+#: locale:s_errortitle
+msgid "Error"
+msgstr ""
+
+#: locale:s_informationtitle
+msgid "Information"
+msgstr ""
+
+#: locale:s_confirmationtitle
+msgid "Confirm"
+msgstr ""
+
+#: locale:s_partitionismounted
+msgid "\"%s\" is being mounted!\015Please unmount it first."
+msgstr ""
+
+#: locale:s_partitionisunallocated
+msgid "This space is unallocated!\015Please create a partition first."
+msgstr ""
+
+#: locale:s_partitionaskdelete
+msgid "%s\015Do you want to delete?"
+msgstr ""
+
+#: locale:s_partitionwindowtitle
+msgid "Device: %s (%s) %s"
+msgstr ""
+
+#: locale:s_devicealreadyopened
+msgid "Device \"%s\" is already opened!"
+msgstr ""
+
+#: locale:s_maxdevicewindow
+msgid "You can only open %d device windows at once."
+msgstr ""
+
+#: locale:s_deviceinfo
+msgid "P.Table: %s, Transport: %s"
+msgstr ""
+
+#: locale:s_pendingoperations
+msgid "Pending operation(s): %d"
+msgstr ""
+
+#: locale:s_infobutton
+msgid "~I~nfo"
+msgstr ""
+
+#: locale:s_createbutton
+msgid "~C~reate"
+msgstr ""
+
+#: locale:s_deletebutton
+msgid "~D~elete"
+msgstr ""
+
+#: locale:s_formatbutton
+msgid "~F~ormat"
+msgstr ""
+
+#: locale:s_resizebutton
+msgid "~R~esize"
+msgstr ""
+
+#: locale:s_unmountbutton
+msgid "Un~m~ount"
+msgstr ""
+
+#: locale:s_labelbutton
+msgid "~L~abel/Name"
+msgstr ""
+
+#: locale:s_flagbutton
+msgid "Fla~g~s"
+msgstr ""
+
+#: locale:s_undobutton
+msgid "~U~ndo"
+msgstr ""
+
+#: locale:s_emptybutton
+msgid "~E~mpty"
+msgstr ""
+
+#: locale:s_applyoperationbutton
+msgid "~A~pply Operations"
+msgstr ""
+
+#: locale:s_closemessage
+msgid "\003%s\015\003You have pending operations.\015\003Are you sure you want to close?"
+msgstr ""
+
+#: locale:s_help
+msgid "~H~elp"
+msgstr ""
+
+#: locale:s_about
+msgid "~A~bout"
+msgstr ""
+
+#: locale:s_devices
+msgid "~D~evices"
+msgstr ""
+
+#: locale:s_quit
+msgid "~Q~uit"
+msgstr ""
+
+#: locale:s_refreshdevices
+msgid "~R~efresh Devices"
+msgstr ""
+
+#: locale:s_quitmessage
+msgid "\003You have pending operations.\015\003Quit TParted?"
+msgstr ""
+
+#: locale:s_aboutmessage
+msgid "\003TParted (%s) by kagamma\015\003Built with Free Pascal %s\015\015\003This software is in beta state!"
+msgstr ""
+
+#: locale:s_loadingpartitions
+msgid "Loading partitions..."
+msgstr ""
+
+#: locale:s_partitionfilesystem
+msgid "File System: %s"
+msgstr ""
+
+#: locale:s_partitionlabel
+msgid "Label: %s"
+msgstr ""
+
+#: locale:s_partitionname
+msgid "Name: %s"
+msgstr ""
+
+#: locale:s_partitionuuid
+msgid "UUID: %s"
+msgstr ""
+
+#: locale:s_partitiontype
+msgid "Type: %s"
+msgstr ""
+
+#: locale:s_partitionsize
+msgid "Size: %s (%s)"
+msgstr ""
+
+#: locale:s_partitionused
+msgid "Used: %s (%s)"
+msgstr ""
+
+#: locale:s_partitionfree
+msgid "Free: %s (%s)"
+msgstr ""
+
+#: locale:s_partitionstart
+msgid "Start: %s (%s)"
+msgstr ""
+
+#: locale:s_partitionend
+msgid "End: %s (%s)"
+msgstr ""
+
+#: locale:s_partitionflags
+msgid "Flags: %s"
+msgstr ""
+
+#: locale:s_partitionmount
+msgid "Mount: %s"
+msgstr ""
+
+#: locale:s_inputlabeltitle
+msgid "Change %s label"
+msgstr ""
+
+#: locale:s_inputlabel
+msgid "New label:"
+msgstr ""
+
+#: locale:s_partition
+msgid "Partition"
+msgstr ""
+
+#: locale:s_filesystem
+msgid "File System"
+msgstr ""
+
+#: locale:s_create
+msgid "Create"
+msgstr ""
+
+#: locale:s_move
+msgid "Move"
+msgstr ""
+
+#: locale:s_shrink
+msgid "Shrink"
+msgstr ""
+
+#: locale:s_grow
+msgid "Grow"
+msgstr ""
+
+#: locale:s_dependencies
+msgid "Dependencies"
+msgstr ""
+
+#: locale:s_freespacepreceding
+msgid "Preceding (MB)"
+msgstr ""
+
+#: locale:s_newsize
+msgid "New size (MB)"
+msgstr ""
+
+#: locale:s_freespacefollowing
+msgid "Following (MB)"
+msgstr ""
+
+#: locale:s_size
+msgid "Size"
+msgstr ""
+
+#: locale:s_used
+msgid "Used"
+msgstr ""
+
+#: locale:s_flags
+msgid "Flags"
+msgstr ""
+
+#: locale:s_label
+msgid "Label"
+msgstr ""
+
+#: locale:s_name
+msgid "Name"
+msgstr ""
+
+#: locale:s_logs
+msgid "In-memory Logs"
+msgstr ""
+
+#: locale:s_menulogs
+msgid "In-memory ~L~ogs"
+msgstr ""
+
+#: locale:s_filesystemsupport
+msgid "File System Support"
+msgstr ""
+
+#: locale:s_menufilesystemsupport
+msgid "~F~ile System Support"
+msgstr ""
+
+#: locale:s_partitionunmounted
+msgid "\003\"%s\" unmounted!"
+msgstr ""
+
+#: locale:s_partitionunmounting
+msgid "Unmounting %s..."
+msgstr ""
+
+#: locale:s_createpartitiontableask
+msgid "Device %s has no partition table.\015Do you want to create a GUID Partition Table?"
+msgstr ""
+
+#: locale:s_processexitcode
+msgid "\"%s\" exited with exit code %d: %s"
+msgstr ""
+
+#: locale:s_formatsdialogtitle
+msgid "Format %s"
+msgstr ""
+
+#: locale:s_flagsdialogtitle
+msgid "Edit %s flags"
+msgstr ""
+
+#: locale:s_createdialogtitle
+msgid "Create new partition"
+msgstr ""
+
+#: locale:s_resizedialogtitle
+msgid "Resize %s"
+msgstr ""
+
+#: locale:s_minpossiblespace
+msgid "Min.Possible (MB)\015%d"
+msgstr ""
+
+#: locale:s_maxpossiblespace
+msgid "Max.Possible (MB)\015%d"
+msgstr ""
+
+#: locale:s_creatinggpt
+msgid "Creating GUID Partition Table..."
+msgstr ""
+
+#: locale:s_maximumpartitionreached
+msgid "Maximum number of partitions reached!"
+msgstr ""
+
+#: locale:s_operationadvise
+msgid "Are you sure you want to apply the pending operations to %s? Editing partitions has the potential to cause LOSS of DATA."
+msgstr ""
+
+#: locale:s_executing
+msgid "Performing %d/%d operations..."
+msgstr ""
+
+#: locale:s_verifyminsize
+msgid "%s requires a minimal size of %dMB!"
+msgstr ""
+

@@ -31,6 +31,10 @@ Currently supported filesystems:
 - Run `make build` to build the app. The binary is located in `./bin` directory.
 - Run `make install` to install the app to `/usr/bin`
 
+#### Translation
+- The app is capable of loading translation files in `.mo` format. Simply translate the default `en_US.po` file to your language of choice, convert it to the `.mo` format via `msgfmt` tool, then place the converted file into the `./bin/locale` directory.
+- The app depends on the `LANG` environment variable to determine the language. For example, the app will try to load `ja_JP.mo` or `ja.mo` if `LANG=ja_JP.UTF-8`.
+
 ## Dependencies
 - `parted`
 - `util-linux`

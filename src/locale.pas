@@ -93,4 +93,29 @@ resourcestring
 
 implementation
 
+uses
+  SysUtils, Classes, GetText, Dos;
+
+var
+  Lang: String;
+  Lang4,
+  Lang2: String;
+
+initialization
+  Lang := GetEnv('LANG');
+  if Lang <> '' then
+  begin
+    Lang4 := ExtractFileName(Lang);
+    Lang4 := StringReplace(Lang4, ExtractFileExt(Lang4), '', []);
+    if Length(Lang4) > 2 then
+      Lang2 := Copy(Lang4, 1, 2);
+    Lang4 := './locale/' + Lang4 + '.mo';
+    Lang2 := './locale/' + Lang2 + '.mo';
+    if FileExists(Lang4) then
+      TranslateResourceStrings(Lang4)
+    else
+    if FileExists(Lang2) then
+      TranslateResourceStrings(Lang2);
+  end;
+
 end.
