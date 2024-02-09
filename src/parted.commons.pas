@@ -110,7 +110,7 @@ function PadCenterLimit(S: String; Limit: LongInt): String;
 implementation
 
 uses
-  Math, FreeVision, UI.Commons, Parted.Logs;
+  Math, FreeVision, UI.Commons, Parted.Logs, Lazarus.UTF8;
 
 var
   TempRandom: String;
@@ -544,33 +544,63 @@ begin
 end;
 
 function PadRightLimit(S: String; Limit: LongInt): String;
+var
+  L, I: LongInt;
+  SR: String;
 begin
-  if Length(S) > Limit then
+  L := UTF8TerminalLength(S);
+  if L > Limit then
   begin
-    SetLength(S, Limit);
-    S := S + '‥';
-  end;
-  Result := PadRight(S, Limit - 1);
+    SR := '';
+    I := 0;
+    while UTF8TerminalLength(SR) < Limit - 1 do
+    begin
+      Inc(I);
+      SR := SR + UTF8Copy(S, I, 1);
+    end;
+  end else
+    SR := S;
+  Result := UTF8PadRight(SR, Limit);
 end;
 
 function PadLeftLimit(S: String; Limit: LongInt): String;
+var
+  L, I: LongInt;
+  SR: String;
 begin
-  if Length(S) > Limit then
+  L := UTF8TerminalLength(S);
+  if L > Limit then
   begin
-    SetLength(S, Limit);
-    S := S + '‥';
-  end;
-  Result := PadLeft(S, Limit - 1);
+    SR := '';
+    I := 0;
+    while UTF8TerminalLength(SR) < Limit - 1 do
+    begin
+      Inc(I);
+      SR := SR + UTF8Copy(S, I, 1);
+    end;
+  end else
+    SR := S;
+  Result := UTF8PadLeft(SR, Limit);
 end;
 
 function PadCenterLimit(S: String; Limit: LongInt): String;
+var
+  L, I: LongInt;
+  SR: String;
 begin
-  if Length(S) > Limit then
+  L := UTF8TerminalLength(S);
+  if L > Limit then
   begin
-    SetLength(S, Limit - 1);
-    S := S + '‥';
-  end;
-  Result := PadCenter(S, Limit);
+    SR := '';
+    I := 0;
+    while UTF8TerminalLength(SR) < Limit - 1 do
+    begin
+      Inc(I);
+      SR := SR + UTF8Copy(S, I, 1);
+    end;
+  end else
+    SR := S;
+  Result := UTF8PadCenter(SR, Limit);
 end;
 
 initialization
@@ -579,4 +609,3 @@ initialization
   DefaultFormatSettings.DecimalSeparator := '.';
 
 end.
-

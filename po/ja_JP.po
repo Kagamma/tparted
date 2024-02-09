@@ -1,0 +1,344 @@
+msgid ""
+msgstr ""
+"Language: ja\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+#: locale:s_okbutton
+msgid "O~K~"
+msgstr "O~K~"
+
+#: locale:s_cancelbutton
+msgid "~C~ancel"
+msgstr "キャンセル"
+
+#: locale:s_closebutton
+msgid "~C~lose"
+msgstr "閉じる"
+
+#: locale:s_yesbutton
+msgid "~Y~es"
+msgstr "はい"
+
+#: locale:s_nobutton
+msgid "~N~o"
+msgstr "いいえ"
+
+#: locale:s_warningtitle
+msgid "Warning"
+msgstr "警告"
+
+#: locale:s_errortitle
+msgid "Error"
+msgstr "エラー"
+
+#: locale:s_informationtitle
+msgid "Information"
+msgstr "情報"
+
+#: locale:s_confirmationtitle
+msgid "Confirm"
+msgstr "確認"
+
+#: locale:s_partitionismounted
+msgid "\"%s\" is being mounted!\015Please unmount it first."
+msgstr "\"%s\" はマウントされています！\015まずアンマウントしてください。"
+
+#: locale:s_partitionisunallocated
+msgid "This space is unallocated!\015Please create a partition first."
+msgstr "このスペースは割り当てられていません！\015まずパーティションを作成してください。"
+
+#: locale:s_partitionaskdelete
+msgid "%s\015Do you want to delete?"
+msgstr "%s\015削除しますか？"
+
+#: locale:s_partitionwindowtitle
+msgid "Device: %s (%s) %s"
+msgstr "デバイス：%s（%s）%s"
+
+#: locale:s_devicealreadyopened
+msgid "Device \"%s\" is already opened!"
+msgstr "デバイス「%s」はすでに開かれています！"
+
+#: locale:s_maxdevicewindow
+msgid "You can only open %d device windows at once."
+msgstr "一度に開けるデバイスウィンドウは%d個だけです。"
+
+#: locale:s_deviceinfo
+msgid "P.Table: %s, Transport: %s"
+msgstr "パーティションテーブル：%s、トランスポート：%s"
+
+#: locale:s_pendingoperations
+msgid "Pending operation(s): %d"
+msgstr "保留中の操作：%d"
+
+#: locale:s_infobutton
+msgid "~I~nfo"
+msgstr "情報"
+
+#: locale:s_createbutton
+msgid "~C~reate"
+msgstr "作成"
+
+#: locale:s_deletebutton
+msgid "~D~elete"
+msgstr "削除"
+
+#: locale:s_formatbutton
+msgid "~F~ormat"
+msgstr "フォーマット"
+
+#: locale:s_resizebutton
+msgid "~R~esize"
+msgstr "サイズ変更"
+
+#: locale:s_unmountbutton
+msgid "Un~m~ount"
+msgstr "アンマウント"
+
+#: locale:s_labelbutton
+msgid "~L~abel/Name"
+msgstr "ラベル/名前"
+
+#: locale:s_flagbutton
+msgid "Fla~g~s"
+msgstr "フラグ"
+
+#: locale:s_undobutton
+msgid "~U~ndo"
+msgstr "取り消し"
+
+#: locale:s_emptybutton
+msgid "~E~mpty"
+msgstr "空"
+
+#: locale:s_applyoperationbutton
+msgid "~A~pply Operations"
+msgstr "操作を適用"
+
+#: locale:s_closemessage
+msgid "\003%s\015\003You have pending operations.\015\003Are you sure you want to close?"
+msgstr "\003%s\015\003保留中の操作があります。\015\003閉じてもよろしいですか？"
+
+#: locale:s_help
+msgid "~H~elp"
+msgstr "ヘルプ"
+
+#: locale:s_about
+msgid "~A~bout"
+msgstr "情報"
+
+#: locale:s_devices
+msgid "~D~evices"
+msgstr "デバイス"
+
+#: locale:s_quit
+msgid "~Q~uit"
+msgstr "終了"
+
+#: locale:s_refreshdevices
+msgid "~R~efresh Devices"
+msgstr "デバイスを更新"
+
+#: locale:s_quitmessage
+msgid "\003You have pending operations.\015\003Quit TParted?"
+msgstr "\003保留中の操作があります。\015\003TPartedを終了しますか？"
+
+#: locale:s_aboutmessage
+msgid "\003TParted (%s) by kagamma\015\003Built with Free Pascal %s\015\015\003This software is in beta state!"
+msgstr "\003TParted（%s）by kagamma\015\003Free Pascal %sで構築されました。\015\015\003このソフトウェアはベータ版です！"
+
+#: locale:s_loadingpartitions
+msgid "Loading partitions..."
+msgstr "パーティションを読み込んでいます..."
+
+#: locale:s_partitionfilesystem
+msgid "File System: %s"
+msgstr "ファイルシステム：%s"
+
+#: locale:s_partitionlabel
+msgid "Label: %s"
+msgstr "ラベル：%s"
+
+#: locale:s_partitionname
+msgid "Name: %s"
+msgstr "名前：%s"
+
+#: locale:s_partitionuuid
+msgid "UUID: %s"
+msgstr "UUID：%s"
+
+#: locale:s_partitiontype
+msgid "Type: %s"
+msgstr "タイプ：%s"
+
+#: locale:s_partitionsize
+msgid "Size: %s (%s)"
+msgstr "サイズ：%s（%s）"
+
+#: locale:s_partitionused
+msgid "Used: %s (%s)"
+msgstr "使用量：%s（%s）"
+
+#: locale:s_partitionfree
+msgid "Free: %s (%s)"
+msgstr "空き：%s（%s）"
+
+#: locale:s_partitionstart
+msgid "Start: %s (%s)"
+msgstr "開始：%s（%s）"
+
+#: locale:s_partitionend
+msgid "End: %s (%s)"
+msgstr "終了：%s（%s）"
+
+#: locale:s_partitionflags
+msgid "Flags: %s"
+msgstr "フラグ：%s"
+
+#: locale:s_partitionmount
+msgid "Mount: %s"
+msgstr "マウント：%s"
+
+#: locale:s_inputlabeltitle
+msgid "Change %s label"
+msgstr "%sのラベルを変更"
+
+#: locale:s_inputlabel
+msgid "New label:"
+msgstr "新しいラベル："
+
+#: locale:s_partition
+msgid "Partition"
+msgstr "パーティション"
+
+#: locale:s_filesystem
+msgid "File System"
+msgstr "ファイルシステム"
+
+#: locale:s_create
+msgid "Create"
+msgstr "作成"
+
+#: locale:s_move
+msgid "Move"
+msgstr "移動"
+
+#: locale:s_shrink
+msgid "Shrink"
+msgstr "縮小"
+
+#: locale:s_grow
+msgid "Grow"
+msgstr "拡大"
+
+#: locale:s_dependencies
+msgid "Dependencies"
+msgstr "依存関係"
+
+#: locale:s_freespacepreceding
+msgid "Preceding (MB)"
+msgstr "先行する（MB）"
+
+#: locale:s_newsize
+msgid "New size (MB)"
+msgstr "新しいサイズ（MB）"
+
+#: locale:s_freespacefollowing
+msgid "Following (MB)"
+msgstr "後続する（MB）"
+
+#: locale:s_size
+msgid "Size"
+msgstr "サイズ"
+
+#: locale:s_used
+msgid "Used"
+msgstr "使用量"
+
+#: locale:s_flags
+msgid "Flags"
+msgstr "フラグ"
+
+#: locale:s_label
+msgid "Label"
+msgstr "ラベル"
+
+#: locale:s_name
+msgid "Name"
+msgstr "名前"
+
+#: locale:s_logs
+msgid "In-memory Logs"
+msgstr "インメモリログ"
+
+#: locale:s_menulogs
+msgid "In-memory ~L~ogs"
+msgstr "インメモリログ"
+
+#: locale:s_filesystemsupport
+msgid "File System Support"
+msgstr "ファイルシステムのサポート"
+
+#: locale:s_menufilesystemsupport
+msgid "~F~ile System Support"
+msgstr "ファイルシステムのサポート"
+
+#: locale:s_partitionunmounted
+msgid "\003\"%s\" unmounted!"
+msgstr "\003「%s」がアンマウントされました！"
+
+#: locale:s_partitionunmounting
+msgid "Unmounting %s..."
+msgstr "%s をアンマウントしています..."
+
+#: locale:s_createpartitiontableask
+msgid "Device %s has no partition table.\015Do you want to create a GUID Partition Table?"
+msgstr "デバイス %s にパーティションテーブルがありません。\015GUIDパーティションテーブルを作成しますか？"
+
+#: locale:s_processexitcode
+msgid "\"%s\" exited with exit code %d: %s"
+msgstr "\"%s\" は終了コード %d で終了しました：%s"
+
+#: locale:s_formatsdialogtitle
+msgid "Format %s"
+msgstr "%s のフォーマット"
+
+#: locale:s_flagsdialogtitle
+msgid "Edit %s flags"
+msgstr "%s のフラグを編集"
+
+#: locale:s_createdialogtitle
+msgid "Create new partition"
+msgstr "新しいパーティションの作成"
+
+#: locale:s_resizedialogtitle
+msgid "Resize %s"
+msgstr "%s のサイズ変更"
+
+#: locale:s_minpossiblespace
+msgid "Min.Possible (MB)\015%d"
+msgstr "最小可能（MB）\015%d"
+
+#: locale:s_maxpossiblespace
+msgid "Max.Possible (MB)\015%d"
+msgstr "最大可能（MB）\015%d"
+
+#: locale:s_creatinggpt
+msgid "Creating GUID Partition Table..."
+msgstr "GUIDパーティションテーブルを作成中..."
+
+#: locale:s_maximumpartitionreached
+msgid "Maximum number of partitions reached!"
+msgstr "最大パーティション数に達しました！"
+
+#: locale:s_operationadvise
+msgid "Are you sure you want to apply the pending operations to %s? Editing partitions has the potential to cause LOSS of DATA."
+msgstr "%s への保留中の操作を適用してもよろしいですか？ パーティションの編集はデータの損失の原因となる可能性があります。"
+
+#: locale:s_executing
+msgid "Performing %d/%d operations..."
+msgstr "%d/%d の操作を実行中..."
+
+#: locale:s_verifyminsize
+msgid "%s requires a minimal size of %dMB!"
+msgstr "%s には最小サイズが%dMB必要です！"

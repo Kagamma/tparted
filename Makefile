@@ -30,3 +30,4 @@ test:
 conv:
 	mkdir -p ./po
 	rstconv -i ./output/locale.rsj -o ./po/en_US.po
+	msgfmt -f ./po/ja_JP.po -o ./bin/locale/ja_JP.mo

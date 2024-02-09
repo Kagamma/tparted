@@ -144,6 +144,7 @@ var
 implementation
 
 uses
+  Lazarus.UTF8,
   Math;
 
 const
@@ -312,7 +313,8 @@ var
   R: TRect;
 begin
   Self.GetBounds(R);
-  R.B.X := R.A.X + Length(Self.Text) + 1;
+  R.B.X := R.A.X + UTF8TerminalLength(UTF8Encode(Self.Text)) + 1;
+  Self.SetBounds(R);
   inherited Draw;
 end;
 
