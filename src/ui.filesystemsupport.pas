@@ -98,7 +98,7 @@ begin
     PadCenterLimit(S_Label, 8),
     PadRightLimit(S_Dependencies, 20)
   ]);
-  D^.Insert(New(PStaticText, Init(R, Str)));
+  D^.Insert(New(PStaticText, Init(R, UTF8Decode(Str))));
 
   Desktop^.ExecView(D);
 
