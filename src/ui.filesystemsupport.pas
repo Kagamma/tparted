@@ -89,8 +89,8 @@ begin
   // Header
   Dec(R.A.Y);
   R.B.Y := R.A.Y + 1;
-  Str := Format(' %s│%s│%s│%s│%s│%s│%s', [
-    PadRightLimit(S_FileSystem, 12),
+  Str := Format('%s│%s│%s│%s│%s│%s│%s', [
+    PadCenterLimit(S_FileSystem, 13),
     PadCenterLimit(S_Create, 8),
     PadCenterLimit(S_Move, 8),
     PadCenterLimit(S_Shrink, 8),
