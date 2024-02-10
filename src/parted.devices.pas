@@ -186,7 +186,7 @@ var
   ExecResult: TExecResult;
 begin
   Result := False;
-  // Do no try to unmount if this is a swap partition
+  // Do not try to unmount if this is a swap partition
   if Self.FileSystem = 'linux-swap' then
   begin
     ExecResult := ExecS('bin/umount', [Self.GetPartitionPath]);
@@ -263,7 +263,7 @@ var
   NewNextPart: PPartedPartition = nil;
   Tmp: PPartedPartition;
 begin
-  // Create a new unallocated space at the left in case there's none, and preceding is > 0
+  // Create a new unallocated space on the left in case there's none, and preceding is > 0
   if (Preceding > 0) and (Self.Prev <> nil) and (Self.Prev^.Number <> 0) then
   begin
     New(Tmp);
