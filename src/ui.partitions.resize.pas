@@ -119,7 +119,7 @@ begin
   MX := R.B.X div 2;
   MY := R.B.Y div 2;
   R.Assign(MX - HW, MY - 8, MX + HW, MY + 7);
-  D := New(PDialog, Init(R, UTF8Decode(Format(S_ResizeDialogTitle, [PPart^.GetPartitionPath]))));
+  D := New(PDialog, Init(R, Format(S_ResizeDialogTitle, [PPart^.GetPartitionPath]).ToUnicode));
   try
     D^.GetExtent(R);
 
@@ -132,7 +132,7 @@ begin
       Preceding^.OnMax := @PrecedingMax;
       D^.Insert(Preceding);
       R.Assign(5, 2, 30, 3);
-      D^.Insert(New(PLabel, Init(R, UTF8Decode(S_FreeSpacePreceding), Preceding)));
+      D^.Insert(New(PLabel, Init(R, S_FreeSpacePreceding.ToUnicode, Preceding)));
     end;
 
     // New size
@@ -145,24 +145,24 @@ begin
       Size^.OnMax := @SizeMax;
       D^.Insert(Size);
       R.Assign(5, 4, 30, 5);
-      D^.Insert(New(PLabel, Init(R, UTF8Decode(S_NewSize), Size)));
+      D^.Insert(New(PLabel, Init(R, S_NewSize.ToUnicode, Size)));
     end;
 
     // Total size
     R.Assign(6, 6, 30, 8);
-    D^.Insert(New(PStaticText, Init(R, UTF8Decode(Format(S_MaxPossibleSpace, [BToMBFloor(PPart^.GetPossibleExpandSize)])))));
+    D^.Insert(New(PStaticText, Init(R, Format(S_MaxPossibleSpace, [BToMBFloor(PPart^.GetPossibleExpandSize)]).ToUnicode)));
 
     // Min possible size
     R.Assign(6, 8, 30, 10);
-    D^.Insert(New(PStaticText, Init(R, UTF8Decode(Format(S_MinPossibleSpace, [BToMBFloor(PPart^.PartUsed)])))));
+    D^.Insert(New(PStaticText, Init(R, Format(S_MinPossibleSpace, [BToMBFloor(PPart^.PartUsed)]).ToUnicode)));
 
     // Ok-Button
     R.Assign(11, 12, 23, 14);
-    D^.Insert(New(PUIButton, Init(R, UTF8Decode(S_OkButton), cmOK, bfDefault)));
+    D^.Insert(New(PUIButton, Init(R, S_OkButton.ToUnicode, cmOK, bfDefault)));
 
     // Cancel-Button
     R.Assign(25, 12, 37, 14);
-    D^.Insert(New(PUIButton, Init(R, UTF8Decode(S_CancelButton), cmCancel, bfDefault)));
+    D^.Insert(New(PUIButton, Init(R, S_CancelButton.ToUnicode, cmCancel, bfDefault)));
 
     D^.FocusNext(False);
 

@@ -45,8 +45,8 @@ var
   Part: TPartedPartition;
 begin
   ParseUsedAndAvailableBlockFromString(PartUsedAndAvailString, Part);
-  Assert(Part.PartUsed = 25792503808, 'Part.PartUsed = 25792503808, but ' + IntToStr(Part.PartUsed));
-  Assert(Part.PartFree = 70167166976, 'Part.PartFree = 70167166976, but ' + IntToStr(Part.PartFree));
+  Assert(Part.PartUsed = 25792503808, 'Part.PartUsed = 25792503808, but ' + Part.PartUsed.ToString);
+  Assert(Part.PartFree = 70167166976, 'Part.PartFree = 70167166976, but ' + Part.PartFree.ToString);
   ParseMountStatusFromJsonString(MountStatusJsonString, Part);
   Assert(Part.MountPoint = '/home', 'Part.MountPoint = /home');
 end;

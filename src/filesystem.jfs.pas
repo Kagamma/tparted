@@ -98,7 +98,7 @@ var
   procedure Grow;
   begin
     DoExec('/bin/jfs_fsck', ['-f', Path]);
-    DoExec('/bin/parted', [PartAfter^.Device^.Path, 'resizepart', IntToStr(PartAfter^.Number), IntToStr(PartAfter^.PartEnd) + 'B']);
+    DoExec('/bin/parted', [PartAfter^.Device^.Path, 'resizepart', PartAfter^.Number.ToString, PartAfter^.PartEnd.ToString + 'B']);
     ExecSystem(Format('/bin/mkdir -p "%s" > /dev/null', [PathMnt]));
     ExecSystem(Format('/bin/mount -v -t jfs "%s" "%s" > /dev/null', [Path, PathMnt]));
     ExecSystem(Format('/bin/mount -v -t jfs -o remount,resize "%s" "%s" > /dev/null', [Path, PathMnt]));

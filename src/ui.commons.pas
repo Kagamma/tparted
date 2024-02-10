@@ -173,7 +173,7 @@ BEGIN
      For I := 0 To 3 Do
        If (AOptions AND ($0100 SHL I) <> 0) Then Begin
          R.Assign(0, 0, 10, 2);                       { Assign screen area }
-         Control := New(PButton, Init(R, UTF8Decode(ButtonName[I]),
+         Control := New(PButton, Init(R, ButtonName[I].ToUnicode,
            Commands[i], bfNormal));                   { Create button }
          Inc(X, Control^.Size.X + 2);                 { Adjust position }
          ButtonList[ButtonCount] := Control;          { Add to button list }
@@ -199,8 +199,8 @@ FUNCTION MsgBoxRect(Var R: TRect; Const Msg: Sw_String; Params: Pointer;
 var
   Dialog: PDialog;
 BEGIN
-  Dialog := New (PDialog, Init (R, UTF8Decode(MsgBoxTitles [AOptions
-    AND $3])));                                       { Create dialog }
+  Dialog := New (PDialog, Init (R, MsgBoxTitles [AOptions
+    AND $3].ToUnicode));                             { Create dialog }
   with Dialog^ do
     R.Assign(3, 2, Size.X - 2, Size.Y - 3);          { Assign area for text }
   MsgBoxRect := MsgBoxRectDlg (Dialog, R, Msg, Params, AOptions);
@@ -216,7 +216,7 @@ BEGIN
        (Desktop^.Size.Y - R.B.Y) DIV 2) Else          { Calculate position }
      R.Move((Application^.Size.X - R.B.X) DIV 2,
        (Application^.Size.Y - R.B.Y) DIV 2);          { Calculate position }
-   MsgBox := MsgBoxRect(R, UTF8Decode(Msg), Params,
+   MsgBox := MsgBoxRect(R, Msg.ToUnicode, Params,
      AOptions);                                       { Create message box }
 END;
 
@@ -242,7 +242,7 @@ end;
 
 constructor TUIWindow.Init(var Bounds: TRect; ATitle: String; ANumber: LongInt);
 begin
-  inherited Init(Bounds, UTF8Decode(ATitle), ANumber);
+  inherited Init(Bounds, ATitle.ToUnicode, ANumber);
   Self.Palette := wpBlueWindow;
   Self.Options := Self.Options or ofVersion20;
   Self.GrowMode := 0;
@@ -272,6 +272,7 @@ end;
 
 function TUnicodeStringPtrCollection.GetItem(var S: TStream): Pointer;
 begin
+  Result := nil;
   PUnicodeString(Result)^ := S.ReadUnicodeString;
 end;
 
@@ -299,7 +300,7 @@ end;
 
 constructor TUILabel.Init(var Bounds: TRect; const AText: String; ALink: PView; APalette: RawByteString = CLabel);
 begin
-  inherited Init(Bounds, UTF8Decode(AText), ALink);
+  inherited Init(Bounds, AText.ToUnicode, ALink);
   Self.Palette := APalette;
 end;
 
@@ -313,7 +314,7 @@ var
   R: TRect;
 begin
   Self.GetBounds(R);
-  R.B.X := R.A.X + UTF8TerminalLength(UTF8Encode(Self.Text)) + 2;
+  R.B.X := R.A.X + UTF8TerminalLength(Self.Text.ToUTF8) + 2;
   Self.SetBounds(R);
   inherited Draw;
 end;
@@ -357,7 +358,7 @@ begin
   //
   Self.Status := AText;
   R.Assign(2, 2, 2 + Len + 1, 3);
-  L := New(PLabel, Init(R, UTF8Decode(AText), nil));
+  L := New(PLabel, Init(R, AText.ToUnicode, nil));
   Self.Insert(L);
 end;
 
@@ -388,7 +389,7 @@ procedure TUIInputNumber.Validate;
 var
   V, V0: Int64;
 begin
-  V := StrToInt64(Self.Data);
+  V := Self.Data.ToUTF8.ToInt64;
   // Real-time validation
   if Self.OnMax <> nil then
   begin
@@ -396,17 +397,17 @@ begin
     V := Self.OnMax(V);
     if V <> V0 then
     begin
-      Self.Data := IntToStr(V);
+      Self.Data := V.ToString.ToUnicode;
     end;
   end;
-  V := StrToInt64(Self.Data);
+  V := Self.Data.ToUTF8.ToInt64;
   if Self.OnMin <> nil then
   begin
     V0 := V;
     V := Self.OnMin(V);
     if V <> V0 then
     begin
-      Self.Data := IntToStr(V);
+      Self.Data := V.ToString.ToUnicode;
     end;
   end;
 end;
@@ -421,7 +422,7 @@ begin
   C := Self.CurPos;
   inherited HandleEvent(E);
   // Make sure the text is valid number
-  if not TryStrToInt64(Self.Data, V) then
+  if not TryStrToInt64(Self.Data.ToUTF8, V) then
   begin
     if Self.Data = '' then
       Self.Data := '0'
@@ -442,12 +443,12 @@ end;
 
 function TUIInputNumber.GetValue: Int64;
 begin
-  Result := StrToInt64(Self.Data);
+  Result := Self.Data.ToUTF8.ToInt64;
 end;
 
 procedure TUIInputNumber.SetData(var Rec);
 begin
-  Self.Data := IntToStr(Int64(Rec));
+  Self.Data := Int64(Rec).ToString.ToUnicode;
 end;
 
 procedure TUIInputNumber.GetData(var Rec);

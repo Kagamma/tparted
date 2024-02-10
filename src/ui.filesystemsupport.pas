@@ -53,7 +53,7 @@ var
   I: LongInt;
 begin
   R.Assign(1, 1, 79, 22);
-  D := New(PDialog, Init(R, UTF8Decode(S_FileSystemSupport)));
+  D := New(PDialog, Init(R, S_FileSystemSupport.ToUnicode));
 
   // Scrollbar
   D^.GetExtent(R);
@@ -98,7 +98,7 @@ begin
     PadCenterLimit(S_Label, 8),
     PadRightLimit(S_Dependencies, 20)
   ]);
-  D^.Insert(New(PStaticText, Init(R, UTF8Decode(Str))));
+  D^.Insert(New(PStaticText, Init(R, Str.ToUnicode)));
 
   Desktop^.ExecView(D);
 

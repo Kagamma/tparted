@@ -56,16 +56,16 @@ begin
   MX := R.B.X div 2;
   MY := R.B.Y div 2;
   R.Assign(MX - HW, MY - 11, MX + HW, MY + 11);
-  D := New(PDialog, Init(R, UTF8Decode(Format(S_FlagsDialogTitle, [PPart^.GetPartitionPath]))));
+  D := New(PDialog, Init(R, Format(S_FlagsDialogTitle, [PPart^.GetPartitionPath]).ToUnicode));
   try
     D^.GetExtent(R);
 
     // Flags
-    CItemRoot := NewSItem(FlagArray[0], nil);
+    CItemRoot := NewSItem(FlagArray[0].ToUnicode, nil);
     CItem := CItemRoot;
     for I := 1 to High(FlagArray) do
     begin
-      CItem^.Next := NewSItem(FlagArray[I], nil);
+      CItem^.Next := NewSItem(FlagArray[I].ToUnicode, nil);
       CItem := CItem^.Next;
     end;
     R.Assign(HW - HW + 3, 2, HW + 5, 2 + Length(FlagArray));
@@ -73,11 +73,11 @@ begin
 
     // Ok-Button
     R.Assign(HW + HW - 14, 17, HW + HW - 2, 19);
-    D^.Insert(New(PUIButton, Init(R, UTF8Decode(S_OkButton), cmOK, bfDefault)));
+    D^.Insert(New(PUIButton, Init(R, S_OkButton.ToUnicode, cmOK, bfDefault)));
 
     // Cancel-Button
     R.Assign(HW + HW - 14, 19, HW + HW - 2, 21);
-    D^.Insert(New(PUIButton, Init(R, UTF8Decode(S_CancelButton), cmCancel, bfDefault)));
+    D^.Insert(New(PUIButton, Init(R, S_CancelButton.ToUnicode, cmCancel, bfDefault)));
 
     D^.FocusNext(False);
 

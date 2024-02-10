@@ -56,7 +56,7 @@ begin
   MX := R.B.X div 2;
   MY := R.B.Y div 2;
   R.Assign(MX - HW, MY - 5, MX + HW, MY + 4);
-  D := New(PDialog, Init(R, UTF8Decode(Format(S_InputLabelTitle, [PPart^.GetPartitionPath]))));
+  D := New(PDialog, Init(R, Format(S_InputLabelTitle, [PPart^.GetPartitionPath]).ToUnicode));
   try
     D^.GetExtent(R);
 
@@ -67,7 +67,7 @@ begin
       V := New(PUIInputLine, Init(R, 30));
       D^.Insert(V);
       R.Assign(3, 1, 20, 2);
-      D^.Insert(New(PLabel, Init(R, UTF8Decode(S_Label), V)));
+      D^.Insert(New(PLabel, Init(R, S_Label.ToUnicode, V)));
     end;
 
     // Name
@@ -75,15 +75,15 @@ begin
     V := New(PUIInputLine, Init(R, 30));
     D^.Insert(V);
     R.Assign(3, 3, 20, 4);
-    D^.Insert(New(PLabel, Init(R, UTF8Decode(S_Name), V)));
+    D^.Insert(New(PLabel, Init(R, S_Name.ToUnicode, V)));
 
     // Ok-Button
     R.Assign(15, 6, 27, 8);
-    D^.Insert(New(PUIButton, Init(R, UTF8Decode(S_OkButton), cmOK, bfDefault)));
+    D^.Insert(New(PUIButton, Init(R, S_OkButton.ToUnicode, cmOK, bfDefault)));
 
     // Cancel-Button
     R.Assign(28, 6, 40, 8);
-    D^.Insert(New(PUIButton, Init(R, UTF8Decode(S_CancelButton), cmCancel, bfDefault)));
+    D^.Insert(New(PUIButton, Init(R, S_CancelButton.ToUnicode, cmCancel, bfDefault)));
 
     D^.FocusNext(False);
 

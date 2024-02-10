@@ -228,28 +228,28 @@ begin
   R.A.X := R.B.X - 13;
   R.A.Y := 2;
   R.B.Y := R.A.Y + 2;
-  Self.ButtonPartitionArray[0] := New(PUIButton, Init(R, UTF8Decode(S_InfoButton), cmPartitionShowInfo, bfDefault));
+  Self.ButtonPartitionArray[0] := New(PUIButton, Init(R, S_InfoButton.ToUnicode, cmPartitionShowInfo, bfDefault));
   Inc(R.A.Y, 2);
   Inc(R.B.Y, 2);
-  Self.ButtonPartitionArray[1] := New(PUIButton, Init(R, UTF8Decode(S_CreateButton), cmPartitionCreate, bfDefault));
+  Self.ButtonPartitionArray[1] := New(PUIButton, Init(R, S_CreateButton.ToUnicode, cmPartitionCreate, bfDefault));
   Inc(R.A.Y, 2);
   Inc(R.B.Y, 2);
-  Self.ButtonPartitionArray[2] := New(PUIButton, Init(R, UTF8Decode(S_DeleteButton), cmPartitionDelete, bfDefault));
+  Self.ButtonPartitionArray[2] := New(PUIButton, Init(R, S_DeleteButton.ToUnicode, cmPartitionDelete, bfDefault));
   Inc(R.A.Y, 2);
   Inc(R.B.Y, 2);
-  Self.ButtonPartitionArray[3] := New(PUIButton, Init(R, UTF8Decode(S_FormatButton), cmPartitionFormat, bfDefault));
+  Self.ButtonPartitionArray[3] := New(PUIButton, Init(R, S_FormatButton.ToUnicode, cmPartitionFormat, bfDefault));
   Inc(R.A.Y, 2);
   Inc(R.B.Y, 2);
-  Self.ButtonPartitionArray[4] := New(PUIButton, Init(R, UTF8Decode(S_ResizeButton), cmPartitionResize, bfDefault));
+  Self.ButtonPartitionArray[4] := New(PUIButton, Init(R, S_ResizeButton.ToUnicode, cmPartitionResize, bfDefault));
   Inc(R.A.Y, 2);
   Inc(R.B.Y, 2);
-  Self.ButtonPartitionArray[5] := New(PUIButton, Init(R, UTF8Decode(S_LabelButton), cmPartitionLabel, bfDefault));
+  Self.ButtonPartitionArray[5] := New(PUIButton, Init(R, S_LabelButton.ToUnicode, cmPartitionLabel, bfDefault));
   Inc(R.A.Y, 2);
   Inc(R.B.Y, 2);
-  Self.ButtonPartitionArray[6] := New(PUIButton, Init(R, UTF8Decode(S_FlagButton), cmPartitionFlag, bfDefault));
+  Self.ButtonPartitionArray[6] := New(PUIButton, Init(R, S_FlagButton.ToUnicode, cmPartitionFlag, bfDefault));
   Inc(R.A.Y, 2);
   Inc(R.B.Y, 2);
-  Self.ButtonPartitionArray[7] := New(PUIButton, Init(R, UTF8Decode(S_UnmountButton), cmPartitionUnmount, bfDefault));
+  Self.ButtonPartitionArray[7] := New(PUIButton, Init(R, S_UnmountButton.ToUnicode, cmPartitionUnmount, bfDefault));
   for I := 0 to High(Self.ButtonPartitionArray) do
     Self.Insert(Self.ButtonPartitionArray[I]);
 
@@ -258,13 +258,13 @@ begin
   R.A.Y := R.B.Y - 3;
   R.B.X := R.A.X + 13;
   R.B.Y := R.B.Y - 1;
-  Self.ButtonOperationArray[0] := New(PUIButton, Init(R, UTF8Decode(S_UndoButton), cmOperationUndo, bfDefault));
+  Self.ButtonOperationArray[0] := New(PUIButton, Init(R, S_UndoButton.ToUnicode, cmOperationUndo, bfDefault));
   Inc(R.A.X, 14);
   Inc(R.B.X, 14);
-  Self.ButtonOperationArray[1] := New(PUIButton, Init(R, UTF8Decode(S_EmptyButton), cmOperationClear, bfDefault));
+  Self.ButtonOperationArray[1] := New(PUIButton, Init(R, S_EmptyButton.ToUnicode, cmOperationClear, bfDefault));
   Inc(R.A.X, 14);
   Inc(R.B.X, 21);
-  Self.ButtonOperationArray[2] := New(PUIButton, Init(R, UTF8Decode(S_ApplyOperationButton), cmOperationApply, bfDefault));
+  Self.ButtonOperationArray[2] := New(PUIButton, Init(R, S_ApplyOperationButton.ToUnicode, cmOperationApply, bfDefault));
   for I := 0 to High(ButtonOperationArray) do
     Self.Insert(Self.ButtonOperationArray[I]);
 
@@ -400,8 +400,8 @@ procedure TUIDevice.HandleEvent(var E: TEvent);
     FillChar(Data^, SizeOf(TPartedOpDataLabel), 0);
     with Data^ do
     begin
-      LabelName := UTF8Decode(PPart^.LabelName);
-      Name := UTF8Decode(PPart^.Name);
+      LabelName := PPart^.LabelName.ToUnicode;
+      Name := PPart^.Name.ToUnicode;
     end;
     if ShowLabelNameDialog(PPart, Data) then
     begin
@@ -630,7 +630,7 @@ begin
   Self.ListPartition^.Device := PDevice;
   Self.ListPartition^.RefreshList; // Redraw partition list
   // Redraw pending operation text
-  Self.LabelPendingOperations^.Text := UTF8Decode(Format(S_PendingOperations, [Self.OpList.GetOpCount]));
+  Self.LabelPendingOperations^.Text := Format(S_PendingOperations, [Self.OpList.GetOpCount]).ToUnicode;
   Self.LabelPendingOperations^.DrawView;
 end;
 

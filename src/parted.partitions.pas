@@ -161,8 +161,8 @@ var
   Ext4ReservedSpace: QWord;
 begin
   MatchResult := Match(AText, ['([^\s]+)', '([^\s]+)', '([^\s]+)', '([^\s]+)']);
-  APart.PartUsed := StrToQWord(MatchResult[2]);
-  APart.PartFree := StrToQWord(MatchResult[3]);
+  APart.PartUsed := MatchResult[2].ToInt64;
+  APart.PartFree := MatchResult[3].ToInt64;
   {if APart.FileSystem = 'ext4' then // Manually calculate the 5% reserved space for ext4 TODO: Can we get this info via tune2fs?
   begin
     Ext4ReservedSpace := APart.PartSize div 100 * 5;

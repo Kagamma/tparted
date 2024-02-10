@@ -97,7 +97,7 @@ var
 
   procedure Grow;
   begin
-    DoExec('/bin/parted', [PartAfter^.Device^.Path, 'resizepart', IntToStr(PartAfter^.Number), IntToStr(PartAfter^.PartEnd) + 'B']);
+    DoExec('/bin/parted', [PartAfter^.Device^.Path, 'resizepart', PartAfter^.Number.ToString, PartAfter^.PartEnd.ToString + 'B']);
     Mount(Path, PathMnt);
     DoExec('/bin/xfs_growfs', [PathMnt]);
     Unmount(Path, PathMnt);

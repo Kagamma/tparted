@@ -223,15 +223,15 @@ begin
   if S = 'exfat' then // TODO: parted does not support exfat?
     S := 'fat32';
   // Create a new partition
-  DoExec('/bin/parted', [Part^.Device^.Path, 'mkpart', Part^.Kind, S, IntToStr(Part^.PartStart) + 'B', IntToStr(Part^.PartEnd) + 'B']);
+  DoExec('/bin/parted', [Part^.Device^.Path, 'mkpart', Part^.Kind, S, Part^.PartStart.ToString + 'B', Part^.PartEnd.ToString + 'B']);
   // Loop through list of flags and set it
   for S in Part^.Flags do
   begin
-    DoExec('/bin/parted', [Part^.Device^.Path, 'set', IntToStr(Part^.Number), S, 'on'], 16);
+    DoExec('/bin/parted', [Part^.Device^.Path, 'set', Part^.Number.ToString, S, 'on'], 16);
   end;
   // Set partition name
   if (Part^.Name <> '') and (Part^.Name <> 'primary') then
-    DoExec('/bin/parted', [Part^.Device^.Path, 'name', IntToStr(Part^.Number), Part^.Name]);
+    DoExec('/bin/parted', [Part^.Device^.Path, 'name', Part^.Number.ToString, Part^.Name]);
 end;
 
 procedure TPartedFileSystem.DoMoveLeft(const PartAfter, PartBefore: PPartedPartition);
@@ -278,7 +278,7 @@ begin
   if PartBefore^.Number <= 0 then
     WriteLogAndRaise(Format('Wrong number %d while trying to delete partition %s' , [PartBefore^.Number, PartBefore^.GetPartitionPath]));
   // Remove partition from partition table
-  DoExec('/bin/parted', [PartBefore^.Device^.Path, 'rm', IntToStr(PartBefore^.Number)]);
+  DoExec('/bin/parted', [PartBefore^.Device^.Path, 'rm', PartBefore^.Number.ToString]);
 end;
 
 procedure TPartedFileSystem.DoFormat(const PartAfter, PartBefore: PPartedPartition);
@@ -305,7 +305,7 @@ begin
     else
       State := '';
     if State <> '' then
-      DoExec('/bin/parted', [PartAfter^.Device^.Path, 'set', IntToStr(PartAfter^.Number), S, State], 16);
+      DoExec('/bin/parted', [PartAfter^.Device^.Path, 'set', PartAfter^.Number.ToString, S, State], 16);
   end;
 end;
 
@@ -314,7 +314,7 @@ begin
   WriteLog(lsInfo, 'TPartedFileSystem.DoLabelName');
   QueryDeviceExists(PartAfter^.Device^.Path);
   if (PartAfter^.Name <> PartBefore^.Name) and (PartAfter^.Name <> '') then
-    DoExec('/bin/parted', [PartAfter^.Device^.Path, 'name', IntToStr(PartAfter^.Number), PartAfter^.Name]);
+    DoExec('/bin/parted', [PartAfter^.Device^.Path, 'name', PartAfter^.Number.ToString, PartAfter^.Name]);
 end;
 
 procedure TPartedFileSystem.DoResize(const PartAfter, PartBefore: PPartedPartition);

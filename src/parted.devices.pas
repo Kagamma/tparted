@@ -165,10 +165,10 @@ begin
     Result := Self.Device^.Path; // SATA
   //
   if Self.Number > 0 then
-    Result := Result + IntToStr(Self.Number)
+    Result := Result + Self.Number.ToString
   else
   if Self.Number < 0 then
-    Result := '?' + IntToStr(-Self.Number)
+    Result := '?' + (-Self.Number).ToString
 end;
 
 function TPartedPartition.ContainsFlag(AFlag: String): Boolean;

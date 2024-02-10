@@ -3,6 +3,7 @@
 {$macro on}
 {$modeswitch advancedrecords}
 {$modeswitch nestedprocvars}
+{$modeswitch typehelpers}
 {$define TPARTED_UNICODE}
 
 {$ifndef UNIX}

@@ -98,7 +98,7 @@ var
   procedure Grow;
   begin
     DoExec('/bin/fsck.f2fs', ['-f', '-a', Path]);
-    DoExec('/bin/parted', [PartAfter^.Device^.Path, 'resizepart', IntToStr(PartAfter^.Number), IntToStr(PartAfter^.PartEnd) + 'B']);
+    DoExec('/bin/parted', [PartAfter^.Device^.Path, 'resizepart', PartAfter^.Number.ToString, PartAfter^.PartEnd.ToString + 'B']);
     DoExec('/bin/resize.f2fs', [Path]);
   end;
 

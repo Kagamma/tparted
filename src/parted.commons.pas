@@ -41,6 +41,14 @@ type
 
   TSignalMethod = procedure(SL: TStringList) of object;
 
+  TPartedStringHelper = type helper(TStringHelper) for String
+    function ToUnicode: UnicodeString;
+  end;
+
+  TPartedUnicodeStringHelper = type helper for UnicodeString
+    function ToUTF8: String;
+  end;
+
 function GetTempMountPath(Path: String): String;
 // Mount a partition to path
 procedure Mount(Path, PathMnt: String);
@@ -114,6 +122,16 @@ uses
 
 var
   TempRandom: String;
+
+function TPartedStringHelper.ToUnicode: UnicodeString;
+begin
+  Result := UTF8Decode(Self);
+end;
+
+function TPartedUnicodeStringHelper.ToUTF8: String;
+begin
+  Result := UTF8Encode(Self);
+end;
 
 function GetTempMountPath(Path: String): String;
 begin
@@ -428,7 +446,7 @@ begin
     Result := '---';
   end else
   begin
-    S := IntToStr(V);
+    S := V.ToString;
     J := 1;
     for I := Pred(Length(S)) downto 1 do
     begin
@@ -443,13 +461,13 @@ end;
 function ExtractQWordFromSize(S: String): QWord;
 begin
   Delete(S, Length(S), 1);
-  Result := StrToQWord(S);
+  Result := S.ToInt64;
 end;
 
 function GetUnicodeStr(const S: String): PUnicodeString;
 begin
   New(Result);
-  Result^ := UTF8Decode(S);
+  Result^ := S.ToUnicode;
 end;
 
 function TextAttr(const FG, BG, Blink: Byte): Char; inline;
@@ -605,7 +623,7 @@ end;
 
 initialization
   Randomize;
-  TempRandom := IntToStr(Random($FFFFFFFF));
+  TempRandom := Random($FFFFFFFF).ToString;
   DefaultFormatSettings.DecimalSeparator := '.';
 
 end.

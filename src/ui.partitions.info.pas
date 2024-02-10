@@ -50,7 +50,7 @@ begin
   MX := R.B.X div 2;
   MY := R.B.Y div 2;
   R.Assign(MX - HW, MY - 10, MX + HW, MY + 9);
-  D := New(PDialog, Init(R, UTF8Decode(PPart^.GetPartitionPathForDisplay)));
+  D := New(PDialog, Init(R, PPart^.GetPartitionPathForDisplay.ToUnicode));
   try
     D^.GetExtent(R);
 
@@ -67,10 +67,10 @@ begin
       Format(S_PartitionFlags, [SAToS(PPart^.Flags, ',')]) + #13 +
       Format(S_PartitionMount, [PPart^.MountPoint]);
     R.Assign(3, 2, R.B.X - 1, 14);
-    D^.Insert(New(PStaticText, Init(R, UTF8Decode(S))));
+    D^.Insert(New(PStaticText, Init(R, S.ToUnicode)));
 
     R.Assign(HW - 7, R.A.Y + 14, HW + 7, R.A.Y + 16);
-    D^.Insert(New(PButton, Init(R, UTF8Decode(S_CloseButton), cmCancel, bfDefault)));
+    D^.Insert(New(PButton, Init(R, S_CloseButton.ToUnicode, cmCancel, bfDefault)));
     Desktop^.ExecView(D);
   finally
     Dispose(D, Done);

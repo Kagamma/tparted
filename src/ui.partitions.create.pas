@@ -102,16 +102,16 @@ begin
   MX := R.B.X div 2;
   MY := R.B.Y div 2;
   R.Assign(MX - HW, MY - 11, MX + HW, MY + 11);
-  D := New(PDialog, Init(R, UTF8Decode(S_CreateDialogTitle)));
+  D := New(PDialog, Init(R, S_CreateDialogTitle.ToUnicode));
   try
     D^.GetExtent(R);
 
     // Flags
-    CItemRoot := NewSItem(FlagArray[0], nil);
+    CItemRoot := NewSItem(FlagArray[0].ToUnicode, nil);
     CItem := CItemRoot;
     for I := 1 to High(FlagArray) do
     begin
-      CItem^.Next := NewSItem(FlagArray[I], nil);
+      CItem^.Next := NewSItem(FlagArray[I].ToUnicode, nil);
       CItem := CItem^.Next;
     end;
     R.Assign(3, 2, 25, 2 + Length(FlagArray));
@@ -119,14 +119,14 @@ begin
     D^.Insert(V);
     // Flags's label
     R.Assign(3, 1, 25, 2);
-    D^.Insert(New(PLabel, Init(R, UTF8Decode(S_Flags), V)));
+    D^.Insert(New(PLabel, Init(R, S_Flags.ToUnicode, V)));
 
     // FileSystem
-    CItemRoot := NewSItem(FileSystemFormattableArray[0], nil);
+    CItemRoot := NewSItem(FileSystemFormattableArray[0].ToUnicode, nil);
     CItem := CItemRoot;
     for I := 1 to High(FileSystemFormattableArray) do
     begin
-      CItem^.Next := NewSItem(FileSystemFormattableArray[I], nil);
+      CItem^.Next := NewSItem(FileSystemFormattableArray[I].ToUnicode, nil);
       CItem := CItem^.Next;
     end;
     R.Assign(26, 2, 45, 2 + Length(FlagArray));
@@ -134,7 +134,7 @@ begin
     D^.Insert(V);
     // FileSystem's label
     R.Assign(26, 1, 45, 2);
-    D^.Insert(New(PLabel, Init(R, UTF8Decode(S_FileSystem), V)));
+    D^.Insert(New(PLabel, Init(R, S_FileSystem.ToUnicode, V)));
 
     // Free space preceding
     R.Assign(46, 2, 65, 3);
@@ -143,7 +143,7 @@ begin
     Preceding^.OnMax := @PrecedingMax;
     D^.Insert(Preceding);
     R.Assign(46, 1, 65, 2);
-    D^.Insert(New(PLabel, Init(R, UTF8Decode(S_FreeSpacePreceding), Preceding)));
+    D^.Insert(New(PLabel, Init(R, S_FreeSpacePreceding.ToUnicode, Preceding)));
 
     // New size
     R.Assign(46, 4, 65, 5);
@@ -152,33 +152,33 @@ begin
     Size^.OnMax := @SizeMax;
     D^.Insert(Size);
     R.Assign(46, 3, 65, 4);
-    D^.Insert(New(PLabel, Init(R, UTF8Decode(S_NewSize), Size)));
+    D^.Insert(New(PLabel, Init(R, S_NewSize.ToUnicode, Size)));
 
     // Total size
     R.Assign(47, 5, 65, 7);
-    D^.Insert(New(PStaticText, Init(R, UTF8Decode(Format(S_MaxPossibleSpace, [BToMBFloor(PPart^.PartSizeZero)])))));
+    D^.Insert(New(PStaticText, Init(R, Format(S_MaxPossibleSpace, [BToMBFloor(PPart^.PartSizeZero)]).ToUnicode)));
 
     // Label
     R.Assign(46, 9, 65, 10);
     V := New(PUIInputLine, Init(R, 16));
     D^.Insert(V);
     R.Assign(46, 8, 65, 9);
-    D^.Insert(New(PLabel, Init(R, UTF8Decode(S_Label), V)));
+    D^.Insert(New(PLabel, Init(R, S_Label.ToUnicode, V)));
 
     // Name
     R.Assign(46, 11, 65, 12);
     V := New(PUIInputLine, Init(R, 16));
     D^.Insert(V);
     R.Assign(46, 10, 65, 11);
-    D^.Insert(New(PLabel, Init(R, UTF8Decode(S_Name), V)));
+    D^.Insert(New(PLabel, Init(R, S_Name.ToUnicode, V)));
 
     // Ok-Button
     R.Assign(HW + HW - 14, 17, HW + HW - 2, 19);
-    D^.Insert(New(PUIButton, Init(R, UTF8Decode(S_OkButton), cmOK, bfDefault)));
+    D^.Insert(New(PUIButton, Init(R, S_OkButton.ToUnicode, cmOK, bfDefault)));
 
     // Cancel-Button
     R.Assign(HW + HW - 14, 19, HW + HW - 2, 21);
-    D^.Insert(New(PUIButton, Init(R, UTF8Decode(S_CancelButton), cmCancel, bfDefault)));
+    D^.Insert(New(PUIButton, Init(R, S_CancelButton.ToUnicode, cmCancel, bfDefault)));
 
     D^.FocusNext(False);
 

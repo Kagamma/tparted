@@ -44,7 +44,7 @@ begin
   Desktop^.GetExtent(R);
   R.Grow(-1, -1);
 
-  D := New(PDialog, Init(R, UTF8Decode(S_Logs)));
+  D := New(PDialog, Init(R, S_Logs.ToUnicode));
 
   // Scrollbar
   D^.GetExtent(R);

@@ -97,7 +97,7 @@ var
 
   procedure Grow;
   begin
-    DoExec('/bin/parted', [PartAfter^.Device^.Path, 'resizepart', IntToStr(PartAfter^.Number), IntToStr(PartAfter^.PartEnd) + 'B']);
+    DoExec('/bin/parted', [PartAfter^.Device^.Path, 'resizepart', PartAfter^.Number.ToString, PartAfter^.PartEnd.ToString + 'B']);
     Mount(Path, PathMnt);
     DoExec('/bin/btrfs', ['filesystem', 'resize', 'max', PathMnt]);
     Unmount(Path, PathMnt);
@@ -106,7 +106,7 @@ var
   procedure Shrink;
   begin
     Mount(Path, PathMnt);
-    DoExec('/bin/btrfs', ['filesystem', 'resize', IntToStr(BToKBFloor(PartAfter^.PartSize)) + 'K', PathMnt]);
+    DoExec('/bin/btrfs', ['filesystem', 'resize', BToKBFloor(PartAfter^.PartSize).ToString + 'K', PathMnt]);
     Unmount(Path, PathMnt);
     DoExec('/bin/sh', ['-c', Format('echo "Yes" | parted %s ---pretend-input-tty resizepart %d %dB', [PartAfter^.Device^.Path, PartAfter^.Number, PartAfter^.PartEnd])]);
   end;

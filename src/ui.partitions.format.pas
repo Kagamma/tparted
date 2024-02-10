@@ -63,16 +63,16 @@ begin
   MX := R.B.X div 2;
   MY := R.B.Y div 2;
   R.Assign(MX - HW, MY - 9, MX + HW, MY + 7);
-  D := New(PDialog, Init(R, UTF8Decode(Format(S_FormatsDialogTitle, [PPart^.GetPartitionPath]))));
+  D := New(PDialog, Init(R, Format(S_FormatsDialogTitle, [PPart^.GetPartitionPath]).ToUnicode));
   try
     D^.GetExtent(R);
 
     // File System
-    CItemRoot := NewSItem(FileSystemFormattableArray[0], nil);
+    CItemRoot := NewSItem(FileSystemFormattableArray[0].ToUnicode, nil);
     CItem := CItemRoot;
     for I := 1 to High(FileSystemFormattableArray) do
     begin
-      CItem^.Next := NewSItem(FileSystemFormattableArray[I], nil);
+      CItem^.Next := NewSItem(FileSystemFormattableArray[I].ToUnicode, nil);
       CItem := CItem^.Next;
     end;
     R.Assign(HW - HW + 3, 2, HW + 3, 14);
@@ -80,11 +80,11 @@ begin
 
     // Ok-Button
     R.Assign(HW + HW - 14, 11, HW + HW - 2, 13);
-    D^.Insert(New(PUIButton, Init(R, UTF8Decode(S_OkButton), cmOK, bfDefault)));
+    D^.Insert(New(PUIButton, Init(R, S_OkButton.ToUnicode, cmOK, bfDefault)));
 
     // Cancel-Button
     R.Assign(HW + HW - 14, 13, HW + HW - 2, 15);
-    D^.Insert(New(PUIButton, Init(R, UTF8Decode(S_CancelButton), cmCancel, bfDefault)));
+    D^.Insert(New(PUIButton, Init(R, S_CancelButton.ToUnicode, cmCancel, bfDefault)));
 
     D^.FocusNext(False);
 

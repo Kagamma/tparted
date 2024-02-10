@@ -98,7 +98,7 @@ procedure TPartedFileSystemExt.DoResize(const PartAfter, PartBefore: PPartedPart
 
   procedure Grow;
   begin
-    DoExec('/bin/parted', [PartAfter^.Device^.Path, 'resizepart', IntToStr(PartAfter^.Number), IntToStr(PartAfter^.PartEnd) + 'B']);
+    DoExec('/bin/parted', [PartAfter^.Device^.Path, 'resizepart', PartAfter^.Number.ToString, PartAfter^.PartEnd.ToString + 'B']);
     DoExec('/bin/e2fsck', ['-f', '-y', '-v', '-C', '0', PartAfter^.GetPartitionPath]);
     DoExec('/bin/resize2fs', ['-fp', PartAfter^.GetPartitionPath]);
   end;
@@ -106,7 +106,7 @@ procedure TPartedFileSystemExt.DoResize(const PartAfter, PartBefore: PPartedPart
   procedure Shrink;
   begin
     DoExec('/bin/e2fsck', ['-f', '-y', '-v', '-C', '0', PartAfter^.GetPartitionPath]);
-    DoExec('/bin/resize2fs', ['-fp', PartAfter^.GetPartitionPath, IntToStr(BToKBFloor(PartAfter^.PartSize)) + 'K']);
+    DoExec('/bin/resize2fs', ['-fp', PartAfter^.GetPartitionPath, BToKBFloor(PartAfter^.PartSize).ToString + 'K']);
     DoExec('/bin/sh', ['-c', Format('echo "Yes" | parted %s ---pretend-input-tty resizepart %d %dB', [PartAfter^.Device^.Path, PartAfter^.Number, PartAfter^.PartEnd])]);
   end;
 

@@ -47,7 +47,7 @@ type
   PPartedOpDataCreate = ^TPartedOpDataCreate;
   TPartedOpDataCreate = packed record
     Flags: LongWord;
-    FileSystem: LongWord;
+    FileSystem: LongInt;
     Preceding,
     Size: Int64;
     LabelName: UnicodeString;
@@ -73,7 +73,7 @@ type
   // The record used by okFormat operation
   PPartedOpDataFormat = ^TPartedOpDataFormat;
   TPartedOpDataFormat = packed record
-    FileSystem: LongWord;
+    FileSystem: LongInt;
     AffectedPart: TPartedPartition;
   end;
 
@@ -190,8 +190,8 @@ var
     AffectedPartNew^.SplitPartitionInMB(PData^.Preceding, PData^.Size);
     AffectedPartNew^.Flags := FlagToSA(PData^.Flags, FlagArray);
     AffectedPartNew^.FileSystem := FileSystemFormattableArray[PData^.FileSystem];
-    AffectedPartNew^.Name := UTF8Encode(PData^.Name);
-    AffectedPartNew^.LabelName := UTF8Encode(PData^.LabelName);
+    AffectedPartNew^.Name := PData^.Name.ToUTF8;
+    AffectedPartNew^.LabelName := PData^.LabelName.ToUTF8;
     AffectedPartNew^.Kind := 'primary';
     AffectedPartNew^.AutoAssignNumber;
     AffectedPartNew^.Number := -AffectedPartNew^.Number;
@@ -223,8 +223,8 @@ var
     PData: PPartedOpDataLabel;
   begin
     PData := AData;
-    AffectedPartNew^.Name := UTF8Encode(PData^.Name);
-    AffectedPartNew^.LabelName := UTF8Encode(PData^.LabelName);
+    AffectedPartNew^.Name := PData^.Name.ToUTF8;
+    AffectedPartNew^.LabelName := PData^.LabelName.ToUTF8;
   end;
 
   procedure HandleFormat;
@@ -399,6 +399,8 @@ begin
               FS.Free;
             end;
           end;
+        else
+          raise Exception.Create('Operator not handled! This should never happen!');
       end;
     end;
   finally

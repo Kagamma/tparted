@@ -142,14 +142,14 @@ begin
   // Request for array of devices
   Self.FDeviceArray := QueryDeviceArray;
 
-  Self.FMenuHelp := NewSubMenu(UTF8Decode(S_Help), hcNoContext, NewMenu(
-    NewItem(UTF8Decode(S_About), '', kbNoKey, cmMenuAbout, hcNoContext, nil)
+  Self.FMenuHelp := NewSubMenu(S_Help.ToUnicode, hcNoContext, NewMenu(
+    NewItem(S_About.ToUnicode, '', kbNoKey, cmMenuAbout, hcNoContext, nil)
   ), nil);
 
-  Self.FMenuWindow := NewSubMenu(UTF8Decode(S_MenuWindow), hcNoContext, NewMenu(
-    NewItem(UTF8Decode(S_MenuPreviousWindow), 'Shift-F7', kbShiftF7, cmPrev, hcNoContext,
-    NewItem(UTF8Decode(S_MenuNextWindow), 'F7', kbF7, cmNext, hcNoContext,
-    NewItem(UTF8Decode(S_MenuMaximize), 'F8', kbF8, cmZoom, hcNoContext, nil)))
+  Self.FMenuWindow := NewSubMenu(S_MenuWindow.ToUnicode, hcNoContext, NewMenu(
+    NewItem(S_MenuPreviousWindow.ToUnicode, 'Shift-F7', kbShiftF7, cmPrev, hcNoContext,
+    NewItem(S_MenuNextWindow.ToUnicode, 'F7', kbF7, cmNext, hcNoContext,
+    NewItem(S_MenuMaximize.ToUnicode, 'F8', kbF8, cmZoom, hcNoContext, nil)))
   ), Self.FMenuHelp);
 
   // Construct device menu
@@ -157,20 +157,20 @@ begin
   for I := Pred(Length(Self.FDeviceArray)) downto 0 do
   begin
     FMenuItemRootDevice := NewItem(
-      UTF8Decode(Format('%s (%s) %s', [Self.FDeviceArray[I].Path, Self.FDeviceArray[I].SizeApprox, Self.FDeviceArray[I].Name])),
+      Format('%s (%s) %s', [Self.FDeviceArray[I].Path, Self.FDeviceArray[I].SizeApprox, Self.FDeviceArray[I].Name]).ToUnicode,
       '', kbNoKey, cmDeviceAnchor + I, hcNoContext, FMenuItemRootDevice
     );
   end;
 
-  Self.FMenuDevices := NewSubMenu(UTF8Decode(S_Devices), hcNoContext, NewMenu(Self.FMenuItemRootDevice), Self.FMenuWindow);
+  Self.FMenuDevices := NewSubMenu(S_Devices.ToUnicode, hcNoContext, NewMenu(Self.FMenuItemRootDevice), Self.FMenuWindow);
 
-  Self.FMenuSystem := NewSubMenu(UTF8Decode('~T~Parted'), hcNoContext, NewMenu(
-    NewItem(UTF8Decode(S_RefreshDevices), 'F5', kbF5, cmMenuRefreshDevice, hcNoContext,
+  Self.FMenuSystem := NewSubMenu('~T~Parted'.ToUnicode, hcNoContext, NewMenu(
+    NewItem(S_RefreshDevices.ToUnicode, 'F5', kbF5, cmMenuRefreshDevice, hcNoContext,
     NewLine(
-    NewItem(UTF8Decode(S_MenuLogs), '', kbNoKey, cmMenuDisplayLog, hcNoContext,
-    NewItem(UTF8Decode(S_MenuFileSystemSupport), '', kbNoKey, cmMenuDisplayFileSystemSupport, hcNoContext,
+    NewItem(S_MenuLogs.ToUnicode, '', kbNoKey, cmMenuDisplayLog, hcNoContext,
+    NewItem(S_MenuFileSystemSupport.ToUnicode, '', kbNoKey, cmMenuDisplayFileSystemSupport, hcNoContext,
     NewLine(
-    NewItem(UTF8Decode(S_Quit), 'Alt-X', kbAltX, cmQuit, hcNoContext, nil))))))
+    NewItem(S_Quit.ToUnicode, 'Alt-X', kbAltX, cmQuit, hcNoContext, nil))))))
   ), FMenuDevices);
 
   M := NewMenu(Self.FMenuSystem);
