@@ -242,7 +242,6 @@ var
   begin
     PData := AData;
     AffectedPartNew^.ResizePartitionInMB(PData^.Preceding, PData^.Size);
-    AffectedPartNew^.Device^.MergeUnallocatedSpace;
   end;
 
 begin

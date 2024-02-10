@@ -329,6 +329,7 @@ begin
     end;
   end;
   Self.PartSize := Self.PartEnd - Self.PartStart + 1;
+  Self.Device^.MergeUnallocatedSpace;
 end;
 
 // --------------------------
