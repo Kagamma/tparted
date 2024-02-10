@@ -338,3 +338,19 @@ msgstr ""
 msgid "%s requires a minimal size of %dMB!"
 msgstr ""
 
+#: locale:s_menuwindow
+msgid "~W~indow"
+msgstr ""
+
+#: locale:s_menupreviouswindow
+msgid "~P~revious Window"
+msgstr ""
+
+#: locale:s_menunextwindow
+msgid "~N~ext Window"
+msgstr ""
+
+#: locale:s_menumaximize
+msgid "~M~aximize"
+msgstr ""
+

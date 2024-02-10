@@ -54,6 +54,7 @@ type
   TUIMain = object(TApplication)
   private
     FMenuHelp,
+    FMenuWindow,
     FMenuDevices,
     FMenuSystem: PMenuItem;
     FMenuItemRootDevice: PMenuItem;
@@ -145,6 +146,12 @@ begin
     NewItem(UTF8Decode(S_About), '', kbNoKey, cmMenuAbout, hcNoContext, nil)
   ), nil);
 
+  Self.FMenuWindow := NewSubMenu(UTF8Decode(S_MenuWindow), hcNoContext, NewMenu(
+    NewItem(UTF8Decode(S_MenuPreviousWindow), 'Shift-F7', kbShiftF7, cmPrev, hcNoContext,
+    NewItem(UTF8Decode(S_MenuNextWindow), 'F7', kbF7, cmNext, hcNoContext,
+    NewItem(UTF8Decode(S_MenuMaximize), 'F8', kbF8, cmZoom, hcNoContext, nil)))
+  ), Self.FMenuHelp);
+
   // Construct device menu
   Self.FMenuItemRootDevice := nil;
   for I := Pred(Length(Self.FDeviceArray)) downto 0 do
@@ -155,7 +162,7 @@ begin
     );
   end;
 
-  Self.FMenuDevices := NewSubMenu(UTF8Decode(S_Devices), hcNoContext, NewMenu(Self.FMenuItemRootDevice), Self.FMenuHelp);
+  Self.FMenuDevices := NewSubMenu(UTF8Decode(S_Devices), hcNoContext, NewMenu(Self.FMenuItemRootDevice), Self.FMenuWindow);
 
   Self.FMenuSystem := NewSubMenu(UTF8Decode('~T~Parted'), hcNoContext, NewMenu(
     NewItem(UTF8Decode(S_RefreshDevices), 'F5', kbF5, cmMenuRefreshDevice, hcNoContext,

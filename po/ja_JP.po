@@ -342,3 +342,19 @@ msgstr "%d/%d の操作を実行中..."
 #: locale:s_verifyminsize
 msgid "%s requires a minimal size of %dMB!"
 msgstr "%s には最小サイズが%dMB必要です！"
+
+#: locale:s_menuwindow
+msgid "~W~indow"
+msgstr "ウィンドウ"
+
+#: locale:s_menupreviouswindow
+msgid "~P~revious Window"
+msgstr "前のウィンドウ"
+
+#: locale:s_menunextwindow
+msgid "~N~ext Window"
+msgstr "次のウィンドウ"
+
+#: locale:s_menumaximize
+msgid "~M~aximize"
+msgstr "最大化"
