@@ -17,6 +17,9 @@
 *.ocx
 *.ppu
 *.bak
+*.ini
+*.cfg
+*.dsk
 
 output
 bin

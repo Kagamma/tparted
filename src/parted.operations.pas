@@ -170,7 +170,7 @@ var
   var
     I: LongInt;
   begin
-    for I := 0 to NewOp.Device^.GetPartitionCount - 1 do
+    for I := 0 to Pred(NewOp.Device^.GetPartitionCount) do
     begin
       if NewOp.Device^.GetPartitionAt(I)^.OpID = AffectedPartOld^.OpID then
       begin
