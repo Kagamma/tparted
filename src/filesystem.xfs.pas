@@ -49,7 +49,7 @@ begin
   Result.CanLabel := FileExists('/bin/xfs_admin');
   Result.CanMove := FileExists('/bin/sfdisk');
   Result.CanShrink := False;
-  Result.CanGrow := FileExists('/bin/xfs_growfs');
+  Result.CanGrow := FileExists('/bin/xfs_growfs') and FileExists('/bin/xfs_repair');
   Result.Dependencies := 'xfsprogs';
 end;
 
@@ -97,6 +97,7 @@ var
 
   procedure Grow;
   begin
+    DoExec('/bin/xfs_repair', ['-v', PartAfter^.GetPartitionPath]);
     DoExec('/bin/parted', [PartAfter^.Device^.Path, 'resizepart', PartAfter^.Number.ToString, PartAfter^.PartEnd.ToString + 'B']);
     Mount(Path, PathMnt);
     DoExec('/bin/xfs_growfs', [PathMnt]);
