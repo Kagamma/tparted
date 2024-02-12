@@ -98,8 +98,8 @@ procedure TPartedFileSystemExt.DoResize(const PartAfter, PartBefore: PPartedPart
 
   procedure Grow;
   begin
-    DoExec('/bin/parted', [PartAfter^.Device^.Path, 'resizepart', PartAfter^.Number.ToString, PartAfter^.PartEnd.ToString + 'B']);
     DoExec('/bin/e2fsck', ['-f', '-y', '-v', '-C', '0', PartAfter^.GetPartitionPath]);
+    DoExec('/bin/parted', [PartAfter^.Device^.Path, 'resizepart', PartAfter^.Number.ToString, PartAfter^.PartEnd.ToString + 'B']);
     DoExec('/bin/resize2fs', ['-fp', PartAfter^.GetPartitionPath]);
   end;
 

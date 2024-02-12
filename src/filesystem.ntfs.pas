@@ -95,8 +95,8 @@ procedure TPartedFileSystemNTFS.DoResize(const PartAfter, PartBefore: PPartedPar
 
   procedure Grow;
   begin
-    DoExec('/bin/parted', [PartAfter^.Device^.Path, 'resizepart', PartAfter^.Number.ToString, PartAfter^.PartEnd.ToString + 'B']);
     DoExec('/bin/ntfsresize', ['-f', PartAfter^.GetPartitionPath]);
+    DoExec('/bin/parted', [PartAfter^.Device^.Path, 'resizepart', PartAfter^.Number.ToString, PartAfter^.PartEnd.ToString + 'B']);
     DoExec('/bin/ntfsfix', ['-b', '-d', PartAfter^.GetPartitionPath]);
   end;
 

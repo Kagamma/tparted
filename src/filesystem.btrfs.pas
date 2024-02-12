@@ -97,8 +97,8 @@ var
 
   procedure Grow;
   begin
-    DoExec('/bin/parted', [PartAfter^.Device^.Path, 'resizepart', PartAfter^.Number.ToString, PartAfter^.PartEnd.ToString + 'B']);
     DoExec('/bin/btrfs', ['check', PartAfter^.GetPartitionPath]);
+    DoExec('/bin/parted', [PartAfter^.Device^.Path, 'resizepart', PartAfter^.Number.ToString, PartAfter^.PartEnd.ToString + 'B']);
     Mount(Path, PathMnt);
     DoExec('/bin/btrfs', ['filesystem', 'resize', 'max', PathMnt]);
     Unmount(Path, PathMnt);
