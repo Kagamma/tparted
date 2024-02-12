@@ -134,6 +134,7 @@ finalization
   Log.Free;
   {$ifdef TPARTED_TEST}
   Lock.Free;
+  DeleteFile('/var/lock/tparted.lock');
   {$endif}
 
 end.
