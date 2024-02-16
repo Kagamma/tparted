@@ -71,6 +71,7 @@ resourcestring
   S_Flags = 'Flags';
   S_Label = 'Label';
   S_Name = 'Name';
+  S_Mount = 'Mount';
   S_Logs = 'In-memory Logs';
   S_MenuLogs = 'In-memory ~L~ogs';
   S_FileSystemSupport = 'File System Support';

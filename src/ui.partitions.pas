@@ -96,13 +96,14 @@ begin
   Dec(R.A.Y);
   Inc(R.B.X);
   R.B.Y := R.A.Y + 1;
-  S := Format('%s│%s│%s│%s│%s│%s', [
+  S := Format('%s│%s│%s│%s│%s│%s│%s', [
     PadCenterLimit(S_Partition, 15),
     PadCenterLimit(S_FileSystem, 15),
     PadCenterLimit(S_Size, 7),
     PadCenterLimit(S_Used, 7),
     PadRightLimit(S_Flags, 20),
-    PadRightLimit(S_Label, 20)
+    PadRightLimit(S_Label, 20),
+    PadRightLimit(S_Mount, 20)
   ]);
   Self.ListHeader := New(PUILabel, Init(R, S, @Self, #7#7#19#7));
   Self.Insert(Self.ListHeader);
@@ -156,13 +157,14 @@ begin
   while PPart <> nil do
   begin
     // Prepare partition string
-    S := Format('%s│%s│%s│%s│%s│%s', [
+    S := Format('%s│%s│%s│%s│%s│%s│%s', [
       PadRightLimit(PPart^.GetPartitionPathForDisplay, 15),
       PadRightLimit(PPart^.FileSystem, 15),
       PadLeftLimit(SizeString(PPart^.PartSize), 7),
       PadLeftLimit(SizeString(PPart^.PartUsed), 7),
       PadRightLimit(SAToS(PPart^.Flags, ','), 20),
-      PadRightLimit(PPart^.LabelName, 20)
+      PadRightLimit(PPart^.LabelName, 20),
+      PadRightLimit(PPart^.MountPoint, 20)
     ]);
     Self.ListCollection^.Insert(GetUnicodeStr(S));
     PPart := PPart^.Next;
