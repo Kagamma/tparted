@@ -103,7 +103,7 @@ begin
     PadCenterLimit(S_Used, 7),
     PadRightLimit(S_Flags, 20),
     PadRightLimit(S_Label, 20),
-    PadRightLimit(S_Mount, 20)
+    PadRightLimit(S_Mount, 40)
   ]);
   Self.ListHeader := New(PUILabel, Init(R, S, @Self, #7#7#19#7));
   Self.Insert(Self.ListHeader);
@@ -164,7 +164,7 @@ begin
       PadLeftLimit(SizeString(PPart^.PartUsed), 7),
       PadRightLimit(SAToS(PPart^.Flags, ','), 20),
       PadRightLimit(PPart^.LabelName, 20),
-      PadRightLimit(PPart^.MountPoint, 20)
+      PadRightLimit(PPart^.MountPoint, 40)
     ]);
     Self.ListCollection^.Insert(GetUnicodeStr(S));
     PPart := PPart^.Next;
