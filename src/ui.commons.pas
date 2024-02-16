@@ -313,9 +313,9 @@ procedure TUILabel.Draw;
 var
   R: TRect;
 begin
-  Self.GetBounds(R);
-  R.B.X := R.A.X + UTF8TerminalLength(Self.Text.ToUTF8) + 2;
-  Self.SetBounds(R);
+  //Self.GetBounds(R);
+  //R.B.X := R.A.X + UTF8TerminalLength(Self.Text.ToUTF8) + 2;
+  //Self.SetBounds(R);
   inherited Draw;
 end;
 
