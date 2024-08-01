@@ -27,6 +27,11 @@ var
   Report: String;
 
 begin
+  if GetEnvironmentVariable('SUDO_UID') = '' then
+  begin
+    Writeln(StdErr, 'This program requires admin rights to work properly.');
+    Halt(1);
+  end;
   UIMain.Init;
   try
     try
