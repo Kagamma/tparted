@@ -279,39 +279,47 @@ begin
   Sleep(100);
 end;
 
-function FindProgram(const Prog: String): String;
-begin.
+function FindProgramViaEnv(const Prog: String): String;
+var
+  Paths: TStringArray;
+  S, Path: String;
+begin
   if PathDict.ContainsKey(Prog) then
   begin
     Exit(PathDict[Prog]);
   end;
-  // Try to perform a search for it by using "which"
-  RunCommand('which', [Prog], Result, [poStderrToOutPut]);
-  if (Result = '') or (not FileExists(Result)) then
+  Paths := SplitString(GetEnvironmentVariable('PATH'), ':');
+  // Try to perform a search for it by look through paths...
+  for S in Paths do
+  begin
+    Path := S + '/' + Prog;
+    if FileExists(Path) then
+    begin
+      PathDict.Add(Prog, Path);
+      Exit(Path);
+    end;
+  end;
+  Result := '';
+end;
+
+function FindProgram(const Prog: String): String;
+begin
+  Result := FindProgramViaEnv(Prog);
+  if Result = '' then
   begin
     // Still not found? Raise exception!
     raise Exception.Create('Cannot find executable file: ' + Prog);
   end;
-  PathDict.Add(Prog, Result);
 end;
 
 function ProgramExists(const Prog: String): Boolean;
-var
-  Output: String;
 begin
-  Result := True;.
-  if PathDict.ContainsKey(Prog) then
-  begin
-    Exit(True);
-  end;
-  // Try to perform a search for it by using "which"
-  RunCommand('which', [Prog], Output, [poStderrToOutPut]);
-  if (Output = '') or (not FileExists(Output)) then
+  if FindProgramViaEnv(Prog) = '' then
   begin
     Result := False;
   end else
   begin
-    PathDict.Add(Prog, Output);
+    Result := True;
   end;
 end;
 

@@ -144,9 +144,6 @@
       </Debugging>
     </Linking>
     <Other>
-      <ConfigFile>
-        <WriteConfigFilePath Value="$(ProjOutDir)/fpclaz.cfg"/>
-      </ConfigFile>
       <OtherDefines Count="1">
         <Define0 Value="DEBUG"/>
       </OtherDefines>

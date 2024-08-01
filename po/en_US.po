@@ -262,6 +262,10 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
+#: locale:s_mount
+msgid "Mount"
+msgstr ""
+
 #: locale:s_logs
 msgid "In-memory Logs"
 msgstr ""
