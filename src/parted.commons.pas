@@ -24,9 +24,11 @@ interface
 
 uses
   {$ifdef Unix}Unix,{$endif}
-  SysUtils, Classes, Process, Types, StrUtils, RegExpr, Locale;
+  SysUtils, Classes, Generics.Collections, Process, Types, StrUtils, RegExpr, Locale;
 
 type
+  TPartedPathDict = specialize TDictionary<String, String>;
+
   TExecResult = record
     ExitCode: LongInt;
     Message: String;
@@ -123,6 +125,7 @@ uses
 
 var
   TempRandom: String;
+  PathDict: TPartedPathDict; // Stores file paths in dictionary
 
 function TPartedStringHelper.ToUnicode: UnicodeString;
 begin
@@ -277,9 +280,11 @@ begin
 end;
 
 function FindProgram(const Prog: String): String;
-var
-  Output: String;
 begin.
+  if PathDict.ContainsKey(Prog) then
+  begin
+    Exit(PathDict[Prog]);
+  end;
   // Try to perform a search for it by using "which"
   RunCommand('which', [Prog], Result, [poStderrToOutPut]);
   if (Result = '') or (not FileExists(Result)) then
@@ -287,18 +292,26 @@ begin.
     // Still not found? Raise exception!
     raise Exception.Create('Cannot find executable file: ' + Prog);
   end;
+  PathDict.Add(Prog, Result);
 end;
 
 function ProgramExists(const Prog: String): Boolean;
 var
   Output: String;
 begin
-  Result := True;
+  Result := True;.
+  if PathDict.ContainsKey(Prog) then
+  begin
+    Exit(True);
+  end;
   // Try to perform a search for it by using "which"
   RunCommand('which', [Prog], Output, [poStderrToOutPut]);
   if (Output = '') or (not FileExists(Output)) then
   begin
     Result := False;
+  end else
+  begin
+    PathDict.Add(Prog, Output);
   end;
 end;
 
@@ -655,5 +668,9 @@ initialization
   Randomize;
   TempRandom := Random($FFFFFFFF).ToString;
   DefaultFormatSettings.DecimalSeparator := '.';
+  PathDict := TPartedPathDict.Create;
+
+finalization
+  PathDict.Free;
 
 end.
