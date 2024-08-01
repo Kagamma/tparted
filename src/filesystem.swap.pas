@@ -45,9 +45,9 @@ implementation
 function TPartedFileSystemSwap.GetSupport: TPartedFileSystemSupport;
 begin
   inherited;
-  Result.CanFormat := FileExists('/bin/mkswap');
+  Result.CanFormat := ProgramExists('mkswap');
   Result.CanLabel := False;
-  Result.CanMove := FileExists('/bin/sfdisk');
+  Result.CanMove := ProgramExists('sfdisk');
   Result.CanShrink := False;
   Result.CanGrow := False;
   Result.Dependencies := 'util-linux';
@@ -58,7 +58,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemSwap.DoCreate');
   // Format the new partition
-  DoExec('/bin/mkswap', [PartAfter^.GetPartitionPath]);
+  DoExec('mkswap', [PartAfter^.GetPartitionPath]);
 end;
 
 procedure TPartedFileSystemSwap.DoDelete(const PartAfter, PartBefore: PPartedPartition);
@@ -72,7 +72,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemSwap.DoFormat');
   // Format the partition
-  DoExec('/bin/mkswap', [PartAfter^.GetPartitionPath]);
+  DoExec('mkswap', [PartAfter^.GetPartitionPath]);
 end;
 
 procedure TPartedFileSystemSwap.DoFlag(const PartAfter, PartBefore: PPartedPartition);

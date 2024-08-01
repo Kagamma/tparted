@@ -46,9 +46,9 @@ implementation
 function TPartedFileSystemFat.GetSupport: TPartedFileSystemSupport;
 begin
   inherited;
-  Result.CanFormat := FileExists('/bin/mkfs.fat');
-  Result.CanLabel := FileExists('/bin/fatlabel');
-  Result.CanMove := FileExists('/bin/sfdisk');
+  Result.CanFormat := ProgramExists('mkfs.fat');
+  Result.CanLabel := ProgramExists('fatlabel');
+  Result.CanMove := ProgramExists('sfdisk');
   Result.CanShrink := False;
   Result.CanGrow := False;
   Result.Dependencies := 'dosfstools';
@@ -67,10 +67,10 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemFat.DoCreate');
   // Format the new partition
-  DoExec('/bin/mkfs.fat', ['-F', Self.GetFatSize(PartAfter), PartAfter^.GetPartitionPath]);
+  DoExec('mkfs.fat', ['-F', Self.GetFatSize(PartAfter), PartAfter^.GetPartitionPath]);
   // Change label if needed
   if PartAfter^.LabelName <> '' then
-    DoExec('/bin/fatlabel', [PartAfter^.GetPartitionPath, PartAfter^.LabelName]);
+    DoExec('fatlabel', [PartAfter^.GetPartitionPath, PartAfter^.LabelName]);
 end;
 
 procedure TPartedFileSystemFat.DoDelete(const PartAfter, PartBefore: PPartedPartition);
@@ -84,7 +84,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemFat.DoFormat');
   // Format the partition
-  DoExec('/bin/mkfs.fat', ['-F', Self.GetFatSize(PartAfter), PartAfter^.GetPartitionPath]);
+  DoExec('mkfs.fat', ['-F', Self.GetFatSize(PartAfter), PartAfter^.GetPartitionPath]);
 end;
 
 procedure TPartedFileSystemFat.DoFlag(const PartAfter, PartBefore: PPartedPartition);
@@ -97,7 +97,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemFat.DoLabelName');
   if PartAfter^.LabelName <> PartBefore^.LabelName then
-    DoExec('/bin/fatlabel', [PartAfter^.GetPartitionPath, PartAfter^.LabelName]);
+    DoExec('fatlabel', [PartAfter^.GetPartitionPath, PartAfter^.LabelName]);
 end;
 
 procedure TPartedFileSystemFat.DoResize(const PartAfter, PartBefore: PPartedPartition);

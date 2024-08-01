@@ -213,7 +213,7 @@ begin
   Result.ExitCode := -1;
   {$ifndef TPARTED_TEST}
   // Performs "parted -j /dev/Xxx unit B list" for details about a device and its partitions
-  Result := ExecS('/bin/parted', ['-j', APath, 'unit', 'B', 'print', 'free']);
+  Result := ExecS('parted', ['-j', APath, 'unit', 'B', 'print', 'free']);
   if Result.ExitCode <> 0 then
     WriteLogAndRaise(Format(S_ProcessExitCode, ['parted -j ' + APath + ' unit B print free', Result.ExitCode, Result.Message]));
   ParseDeviceAndPartitionsFromJsonString(Result.Message, ADevice);
@@ -232,14 +232,14 @@ begin
   Path := APart.GetPartitionPath;
   if APart.FileSystem <> 'linux-swap' then
   begin
-    Result := ExecS('/bin/findmnt', ['-J', '-n', Path]);
+    Result := ExecS('findmnt', ['-J', '-n', Path]);
     if (Result.ExitCode = 0){ and (Result.Message <> '') }then
       ParseMountStatusFromJsonString(Result.Message, APart);
     // We can safely ignore abnormal exit code, since they are treated as unmount
   end else
   begin
     // For swap, we test by running "swapon -s" and look for partition path
-    Result := ExecS('/bin/swapon', ['-s']);
+    Result := ExecS('swapon', ['-s']);
     if Pos(Path, Result.Message) > 0 then
       APart.IsMounted := True;
   end;
@@ -270,7 +270,7 @@ begin
   // For non-swap partitions
   if APart.FileSystem <> 'linux-swap' then
   begin
-    Result := ExecSA('/bin/df', ['-B1', Path]);
+    Result := ExecSA('df', ['-B1', Path]);
     if Result.ExitCode <> 0 then
       WriteLogAndRaise(Format(S_ProcessExitCode, ['df -B1  ' + Path, Result.ExitCode, SAToS(Result.MessageArray)]));
     ParseUsedAndAvailableBlockFromString(Result.MessageArray[1], APart);
@@ -296,7 +296,7 @@ begin
   if (APart.Number <= 0) or (APart.FileSystem =  'linux-swap') then
     Exit;
   Path := APart.GetPartitionPath;
-  Result := ExecS('/bin/blkid', ['-s', 'LABEL', '-o', 'value', Path]);
+  Result := ExecS('blkid', ['-s', 'LABEL', '-o', 'value', Path]);
   if Result.ExitCode <> 0 then
     WriteLogAndRaise(Format(S_ProcessExitCode, ['blkid -s LABEL -o value ' + Path, Result.ExitCode, Result.Message]));
   APart.LabelName := Trim(Result.Message);
@@ -315,7 +315,7 @@ begin
   if APart.Number <= 0 then
     Exit;
   Path := APart.GetPartitionPath;
-  Result := ExecS('/bin/blkid', ['-s', 'TYPE', '-o', 'value', Path]);
+  Result := ExecS('blkid', ['-s', 'TYPE', '-o', 'value', Path]);
   if Result.ExitCode <> 0 then
     WriteLogAndRaise(Format(S_ProcessExitCode, ['blkid -s TYPE -o value ' + Path, Result.ExitCode, Result.Message]));
   APart.FileSystem := Trim(Result.Message);
@@ -335,7 +335,7 @@ begin
   if (APart.Number <= 0) or (not APart.IsMounted) then
     Exit;
   Path := APart.GetPartitionPath;
-  Result := ExecS('/bin/umount', [Path]);
+  Result := ExecS('umount', [Path]);
   if Result.ExitCode <> 0 then
     WriteLogAndRaise(Format(S_ProcessExitCode, ['umount ' + Path, Result.ExitCode, Result.Message]));
   // Update mount status

@@ -45,11 +45,11 @@ implementation
 function TPartedFileSystemJfs.GetSupport: TPartedFileSystemSupport;
 begin
   inherited;
-  Result.CanFormat := FileExists('/bin/mkfs.jfs');
-  Result.CanLabel := FileExists('/bin/jfs_tune');
-  Result.CanMove := FileExists('/bin/sfdisk');
+  Result.CanFormat := ProgramExists('mkfs.jfs');
+  Result.CanLabel := ProgramExists('jfs_tune');
+  Result.CanMove := ProgramExists('sfdisk');
   Result.CanShrink := False;
-  Result.CanGrow := FileExists('/bin/jfs_fsck');
+  Result.CanGrow := ProgramExists('jfs_fsck');
   Result.Dependencies := 'jfsutils';
 end;
 
@@ -58,10 +58,10 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemJfs.DoCreate');
   // Format the new partition
-  DoExec('/bin/mkfs.jfs', ['-q', PartAfter^.GetPartitionPath]);
+  DoExec('mkfs.jfs', ['-q', PartAfter^.GetPartitionPath]);
   // Change label if needed
   if PartAfter^.LabelName <> '' then
-    DoExec('/bin/jfs_tune', ['-L', PartAfter^.LabelName, PartAfter^.GetPartitionPath]);
+    DoExec('jfs_tune', ['-L', PartAfter^.LabelName, PartAfter^.GetPartitionPath]);
 end;
 
 procedure TPartedFileSystemJfs.DoDelete(const PartAfter, PartBefore: PPartedPartition);
@@ -75,7 +75,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemJfs.DoFormat');
   // Format the partition
-  DoExec('/bin/mkfs.jfs', ['-q', PartAfter^.GetPartitionPath]);
+  DoExec('mkfs.jfs', ['-q', PartAfter^.GetPartitionPath]);
 end;
 
 procedure TPartedFileSystemJfs.DoFlag(const PartAfter, PartBefore: PPartedPartition);
@@ -88,7 +88,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemJfs.DoLabelName');
   if PartAfter^.LabelName <> '' then
-    DoExec('/bin/jfs_tune', ['-L', PartAfter^.LabelName, PartAfter^.GetPartitionPath]);
+    DoExec('jfs_tune', ['-L', PartAfter^.LabelName, PartAfter^.GetPartitionPath]);
 end;
 
 procedure TPartedFileSystemJfs.DoResize(const PartAfter, PartBefore: PPartedPartition);
@@ -97,13 +97,13 @@ var
 
   procedure Grow;
   begin
-    DoExec('/bin/jfs_fsck', ['-f', Path]);
-    DoExec('/bin/parted', [PartAfter^.Device^.Path, 'resizepart', PartAfter^.Number.ToString, PartAfter^.PartEnd.ToString + 'B']);
-    ExecSystem(Format('/bin/mkdir -p "%s" > /dev/null', [PathMnt]));
-    ExecSystem(Format('/bin/mount -v -t jfs "%s" "%s" > /dev/null', [Path, PathMnt]));
-    ExecSystem(Format('/bin/mount -v -t jfs -o remount,resize "%s" "%s" > /dev/null', [Path, PathMnt]));
-    ExecSystem(Format('/bin/umount -v "%s" > /dev/null', [Path]));
-    ExecSystem(Format('/bin/rm -d "%s" > /dev/null', [PathMnt]));
+    DoExec('jfs_fsck', ['-f', Path]);
+    DoExec('parted', [PartAfter^.Device^.Path, 'resizepart', PartAfter^.Number.ToString, PartAfter^.PartEnd.ToString + 'B']);
+    ExecSystem(Format('mkdir -p "%s" > /dev/null', [PathMnt]));
+    ExecSystem(Format('mount -v -t jfs "%s" "%s" > /dev/null', [Path, PathMnt]));
+    ExecSystem(Format('mount -v -t jfs -o remount,resize "%s" "%s" > /dev/null', [Path, PathMnt]));
+    ExecSystem(Format('umount -v "%s" > /dev/null', [Path]));
+    ExecSystem(Format('rm -d "%s" > /dev/null', [PathMnt]));
   end;
 
 begin

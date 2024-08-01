@@ -45,11 +45,11 @@ implementation
 function TPartedFileSystemBTRFS.GetSupport: TPartedFileSystemSupport;
 begin
   inherited;
-  Result.CanFormat := FileExists('/bin/mkfs.btrfs');
-  Result.CanLabel := FileExists('/bin/btrfs');
-  Result.CanMove := FileExists('/bin/sfdisk');
-  Result.CanShrink := FileExists('/bin/btrfs');
-  Result.CanGrow := FileExists('/bin/btrfs');
+  Result.CanFormat := ProgramExists('mkfs.btrfs');
+  Result.CanLabel := ProgramExists('btrfs');
+  Result.CanMove := ProgramExists('sfdisk');
+  Result.CanShrink := ProgramExists('btrfs');
+  Result.CanGrow := ProgramExists('btrfs');
   Result.Dependencies := 'btrfs-progs';
 end;
 
@@ -58,10 +58,10 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemBTRFS.DoCreate');
   // Format the new partition
-  DoExec('/bin/mkfs.btrfs', ['-f', PartAfter^.GetPartitionPath]);
+  DoExec('mkfs.btrfs', ['-f', PartAfter^.GetPartitionPath]);
   // Change label if needed
   if PartAfter^.LabelName <> '' then
-    DoExec('/bin/btrfs', ['filesystem', 'label', PartAfter^.GetPartitionPath, PartAfter^.LabelName]);
+    DoExec('btrfs', ['filesystem', 'label', PartAfter^.GetPartitionPath, PartAfter^.LabelName]);
 end;
 
 procedure TPartedFileSystemBTRFS.DoDelete(const PartAfter, PartBefore: PPartedPartition);
@@ -75,7 +75,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemBTRFS.DoFormat');
   // Format the partition
-  DoExec('/bin/mkfs.btrfs', ['-f', PartAfter^.GetPartitionPath]);
+  DoExec('mkfs.btrfs', ['-f', PartAfter^.GetPartitionPath]);
 end;
 
 procedure TPartedFileSystemBTRFS.DoFlag(const PartAfter, PartBefore: PPartedPartition);
@@ -88,7 +88,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemBTRFS.DoLabelName');
   if PartAfter^.LabelName <> '' then
-    DoExec('/bin/btrfs', ['filesystem', 'label', PartAfter^.GetPartitionPath, PartAfter^.LabelName]);
+    DoExec('btrfs', ['filesystem', 'label', PartAfter^.GetPartitionPath, PartAfter^.LabelName]);
 end;
 
 procedure TPartedFileSystemBTRFS.DoResize(const PartAfter, PartBefore: PPartedPartition);
@@ -97,20 +97,20 @@ var
 
   procedure Grow;
   begin
-    DoExec('/bin/btrfs', ['check', PartAfter^.GetPartitionPath]);
-    DoExec('/bin/parted', [PartAfter^.Device^.Path, 'resizepart', PartAfter^.Number.ToString, PartAfter^.PartEnd.ToString + 'B']);
+    DoExec('btrfs', ['check', PartAfter^.GetPartitionPath]);
+    DoExec('parted', [PartAfter^.Device^.Path, 'resizepart', PartAfter^.Number.ToString, PartAfter^.PartEnd.ToString + 'B']);
     Mount(Path, PathMnt);
-    DoExec('/bin/btrfs', ['filesystem', 'resize', 'max', PathMnt]);
+    DoExec('btrfs', ['filesystem', 'resize', 'max', PathMnt]);
     Unmount(Path, PathMnt);
   end;
 
   procedure Shrink;
   begin
-    DoExec('/bin/btrfs', ['check', PartAfter^.GetPartitionPath]);
+    DoExec('btrfs', ['check', PartAfter^.GetPartitionPath]);
     Mount(Path, PathMnt);
-    DoExec('/bin/btrfs', ['filesystem', 'resize', BToKBFloor(PartAfter^.PartSize).ToString + 'K', PathMnt]);
+    DoExec('btrfs', ['filesystem', 'resize', BToKBFloor(PartAfter^.PartSize).ToString + 'K', PathMnt]);
     Unmount(Path, PathMnt);
-    DoExec('/bin/sh', ['-c', Format('echo "Yes" | parted %s ---pretend-input-tty resizepart %d %dB', [PartAfter^.Device^.Path, PartAfter^.Number, PartAfter^.PartEnd])]);
+    DoExec('sh', ['-c', Format('echo "Yes" | parted %s ---pretend-input-tty resizepart %d %dB', [PartAfter^.Device^.Path, PartAfter^.Number, PartAfter^.PartEnd])]);
   end;
 
 begin

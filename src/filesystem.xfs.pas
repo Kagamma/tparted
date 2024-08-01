@@ -45,11 +45,11 @@ implementation
 function TPartedFileSystemXfs.GetSupport: TPartedFileSystemSupport;
 begin
   inherited;
-  Result.CanFormat := FileExists('/bin/mkfs.xfs');
-  Result.CanLabel := FileExists('/bin/xfs_admin');
-  Result.CanMove := FileExists('/bin/sfdisk');
+  Result.CanFormat := ProgramExists('mkfs.xfs');
+  Result.CanLabel := ProgramExists('xfs_admin');
+  Result.CanMove := ProgramExists('sfdisk');
   Result.CanShrink := False;
-  Result.CanGrow := FileExists('/bin/xfs_growfs') and FileExists('/bin/xfs_repair');
+  Result.CanGrow := ProgramExists('xfs_growfs') and ProgramExists('xfs_repair');
   Result.Dependencies := 'xfsprogs';
 end;
 
@@ -58,10 +58,10 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemXfs.DoCreate');
   // Format the new partition
-  DoExec('/bin/mkfs.xfs', ['-f', PartAfter^.GetPartitionPath]);
+  DoExec('mkfs.xfs', ['-f', PartAfter^.GetPartitionPath]);
   // Change label if needed
   if PartAfter^.LabelName <> '' then
-    DoExec('/bin/xfs_admin', ['-L', PartAfter^.LabelName, PartAfter^.GetPartitionPath]);
+    DoExec('xfs_admin', ['-L', PartAfter^.LabelName, PartAfter^.GetPartitionPath]);
 end;
 
 procedure TPartedFileSystemXfs.DoDelete(const PartAfter, PartBefore: PPartedPartition);
@@ -75,7 +75,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemXfs.DoFormat');
   // Format the partition
-  DoExec('/bin/mkfs.xfs', ['-f', PartAfter^.GetPartitionPath]);
+  DoExec('mkfs.xfs', ['-f', PartAfter^.GetPartitionPath]);
 end;
 
 procedure TPartedFileSystemXfs.DoFlag(const PartAfter, PartBefore: PPartedPartition);
@@ -88,7 +88,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemXfs.DoLabelName');
   if PartAfter^.LabelName <> '' then
-    DoExec('/bin/xfs_admin', ['-L', PartAfter^.LabelName, PartAfter^.GetPartitionPath]);
+    DoExec('xfs_admin', ['-L', PartAfter^.LabelName, PartAfter^.GetPartitionPath]);
 end;
 
 procedure TPartedFileSystemXfs.DoResize(const PartAfter, PartBefore: PPartedPartition);
@@ -97,10 +97,10 @@ var
 
   procedure Grow;
   begin
-    DoExec('/bin/xfs_repair', ['-v', PartAfter^.GetPartitionPath]);
-    DoExec('/bin/parted', [PartAfter^.Device^.Path, 'resizepart', PartAfter^.Number.ToString, PartAfter^.PartEnd.ToString + 'B']);
+    DoExec('xfs_repair', ['-v', PartAfter^.GetPartitionPath]);
+    DoExec('parted', [PartAfter^.Device^.Path, 'resizepart', PartAfter^.Number.ToString, PartAfter^.PartEnd.ToString + 'B']);
     Mount(Path, PathMnt);
-    DoExec('/bin/xfs_growfs', [PathMnt]);
+    DoExec('xfs_growfs', [PathMnt]);
     Unmount(Path, PathMnt);
   end;
 

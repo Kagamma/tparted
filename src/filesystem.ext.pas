@@ -48,11 +48,11 @@ uses
 function TPartedFileSystemExt.GetSupport: TPartedFileSystemSupport;
 begin
   inherited;
-  Result.CanFormat := FileExists('/bin/mkfs.ext2') and FileExists('/bin/mkfs.ext3') and FileExists('/bin/mkfs.ext4');
-  Result.CanLabel := FileExists('/bin/e2label');
-  Result.CanMove := FileExists('/bin/sfdisk');
-  Result.CanShrink := FileExists('/bin/resize2fs') and FileExists('/bin/e2fsck');
-  Result.CanGrow := FileExists('/bin/resize2fs') and FileExists('/bin/e2fsck');
+  Result.CanFormat := ProgramExists('mkfs.ext2') and ProgramExists('mkfs.ext3') and ProgramExists('mkfs.ext4');
+  Result.CanLabel := ProgramExists('e2label');
+  Result.CanMove := ProgramExists('sfdisk');
+  Result.CanShrink := ProgramExists('resize2fs') and ProgramExists('e2fsck');
+  Result.CanGrow := ProgramExists('resize2fs') and ProgramExists('e2fsck');
   Result.Dependencies := 'e2fsprogs';
 end;
 
@@ -61,10 +61,10 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemExt.DoCreate');
   // Format the new partition
-  DoExec('/bin/mkfs.' + PartAfter^.FileSystem, [PartAfter^.GetPartitionPath]);
+  DoExec('mkfs.' + PartAfter^.FileSystem, [PartAfter^.GetPartitionPath]);
   // Change label if needed
   if PartAfter^.LabelName <> '' then
-    DoExec('/bin/e2label', [PartAfter^.GetPartitionPath, PartAfter^.LabelName]);
+    DoExec('e2label', [PartAfter^.GetPartitionPath, PartAfter^.LabelName]);
 end;
 
 procedure TPartedFileSystemExt.DoDelete(const PartAfter, PartBefore: PPartedPartition);
@@ -78,7 +78,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemExt.DoFormat');
   // Format the partition
-  DoExec('/bin/mkfs.' + PartAfter^.FileSystem, [PartAfter^.GetPartitionPath]);
+  DoExec('mkfs.' + PartAfter^.FileSystem, [PartAfter^.GetPartitionPath]);
 end;
 
 procedure TPartedFileSystemExt.DoFlag(const PartAfter, PartBefore: PPartedPartition);
@@ -91,23 +91,23 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemExt.DoLabelName');
   if PartAfter^.LabelName <> PartBefore^.LabelName then
-    DoExec('/bin/e2label', [PartAfter^.GetPartitionPath, PartAfter^.LabelName]);
+    DoExec('e2label', [PartAfter^.GetPartitionPath, PartAfter^.LabelName]);
 end;
 
 procedure TPartedFileSystemExt.DoResize(const PartAfter, PartBefore: PPartedPartition);
 
   procedure Grow;
   begin
-    DoExec('/bin/e2fsck', ['-f', '-y', '-v', '-C', '0', PartAfter^.GetPartitionPath]);
-    DoExec('/bin/parted', [PartAfter^.Device^.Path, 'resizepart', PartAfter^.Number.ToString, PartAfter^.PartEnd.ToString + 'B']);
-    DoExec('/bin/resize2fs', ['-fp', PartAfter^.GetPartitionPath]);
+    DoExec('e2fsck', ['-f', '-y', '-v', '-C', '0', PartAfter^.GetPartitionPath]);
+    DoExec('parted', [PartAfter^.Device^.Path, 'resizepart', PartAfter^.Number.ToString, PartAfter^.PartEnd.ToString + 'B']);
+    DoExec('resize2fs', ['-fp', PartAfter^.GetPartitionPath]);
   end;
 
   procedure Shrink;
   begin
-    DoExec('/bin/e2fsck', ['-f', '-y', '-v', '-C', '0', PartAfter^.GetPartitionPath]);
-    DoExec('/bin/resize2fs', ['-fp', PartAfter^.GetPartitionPath, BToKBFloor(PartAfter^.PartSize).ToString + 'K']);
-    DoExec('/bin/sh', ['-c', Format('echo "Yes" | parted %s ---pretend-input-tty resizepart %d %dB', [PartAfter^.Device^.Path, PartAfter^.Number, PartAfter^.PartEnd])]);
+    DoExec('e2fsck', ['-f', '-y', '-v', '-C', '0', PartAfter^.GetPartitionPath]);
+    DoExec('resize2fs', ['-fp', PartAfter^.GetPartitionPath, BToKBFloor(PartAfter^.PartSize).ToString + 'K']);
+    DoExec('sh', ['-c', Format('echo "Yes" | parted %s ---pretend-input-tty resizepart %d %dB', [PartAfter^.Device^.Path, PartAfter^.Number, PartAfter^.PartEnd])]);
   end;
 
 begin

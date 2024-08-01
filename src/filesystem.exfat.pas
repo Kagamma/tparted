@@ -45,9 +45,9 @@ implementation
 function TPartedFileSystemExFat.GetSupport: TPartedFileSystemSupport;
 begin
   inherited;
-  Result.CanFormat := FileExists('/bin/mkfs.exfat');
-  Result.CanLabel := FileExists('/bin/exfatlabel');
-  Result.CanMove := FileExists('/bin/sfdisk');
+  Result.CanFormat := ProgramExists('mkfs.exfat');
+  Result.CanLabel := ProgramExists('exfatlabel');
+  Result.CanMove := ProgramExists('sfdisk');
   Result.CanShrink := False;
   Result.CanGrow := False;
   Result.Dependencies := 'exfatprogs';
@@ -58,10 +58,10 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemExFat.DoCreate');
   // Format the new partition
-  DoExec('/bin/mkfs.exfat', [PartAfter^.GetPartitionPath]);
+  DoExec('mkfs.exfat', [PartAfter^.GetPartitionPath]);
   // Change label if needed
   if PartAfter^.LabelName <> '' then
-    DoExec('/bin/exfatlabel', [PartAfter^.GetPartitionPath, PartAfter^.LabelName]);
+    DoExec('exfatlabel', [PartAfter^.GetPartitionPath, PartAfter^.LabelName]);
 end;
 
 procedure TPartedFileSystemExFat.DoDelete(const PartAfter, PartBefore: PPartedPartition);
@@ -75,7 +75,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemExFat.DoFormat');
   // Format the partition
-  DoExec('/bin/mkfs.exfat', [PartAfter^.GetPartitionPath]);
+  DoExec('mkfs.exfat', [PartAfter^.GetPartitionPath]);
 end;
 
 procedure TPartedFileSystemExFat.DoFlag(const PartAfter, PartBefore: PPartedPartition);
@@ -88,7 +88,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemExFat.DoLabelName');
   if PartAfter^.LabelName <> PartBefore^.LabelName then
-    DoExec('/bin/exfatlabel', [PartAfter^.GetPartitionPath, PartAfter^.LabelName]);
+    DoExec('exfatlabel', [PartAfter^.GetPartitionPath, PartAfter^.LabelName]);
 end;
 
 procedure TPartedFileSystemExFat.DoResize(const PartAfter, PartBefore: PPartedPartition);

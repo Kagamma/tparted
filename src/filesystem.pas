@@ -223,15 +223,15 @@ begin
   if S = 'exfat' then // TODO: parted does not support exfat?
     S := 'fat32';
   // Create a new partition
-  DoExec('/bin/parted', [Part^.Device^.Path, 'mkpart', Part^.Kind, S, Part^.PartStart.ToString + 'B', Part^.PartEnd.ToString + 'B']);
+  DoExec('parted', [Part^.Device^.Path, 'mkpart', Part^.Kind, S, Part^.PartStart.ToString + 'B', Part^.PartEnd.ToString + 'B']);
   // Loop through list of flags and set it
   for S in Part^.Flags do
   begin
-    DoExec('/bin/parted', [Part^.Device^.Path, 'set', Part^.Number.ToString, S, 'on'], 16);
+    DoExec('parted', [Part^.Device^.Path, 'set', Part^.Number.ToString, S, 'on'], 16);
   end;
   // Set partition name
   if (Part^.Name <> '') and (Part^.Name <> 'primary') then
-    DoExec('/bin/parted', [Part^.Device^.Path, 'name', Part^.Number.ToString, Part^.Name]);
+    DoExec('parted', [Part^.Device^.Path, 'name', Part^.Number.ToString, Part^.Name]);
 end;
 
 procedure TPartedFileSystem.DoMoveLeft(const PartAfter, PartBefore: PPartedPartition);
@@ -242,7 +242,7 @@ begin
   TempPart.PartEnd := PartBefore^.PartEnd;
   TempPart.PartSize := TempPart.PartEnd - TempPart.PartStart + 1;
   // Move partition, the command with
-  DoExec('/bin/sh', ['-c', Format('echo "-%dM," | sfdisk --move-data %s -N %d', [BToMBFloor(PartBefore^.PartStart - TempPart.PartStart + 1), PartAfter^.Device^.Path, PartAfter^.Number])]);
+  DoExec('sh', ['-c', Format('echo "-%dM," | sfdisk --move-data %s -N %d', [BToMBFloor(PartBefore^.PartStart - TempPart.PartStart + 1), PartAfter^.Device^.Path, PartAfter^.Number])]);
   // Calculate the shift part to determine if we need to shrink or grow later
   PartBefore^.PartEnd := PartBefore^.PartEnd - (PartBefore^.PartStart - TempPart.PartStart);
 end;
@@ -255,7 +255,7 @@ begin
   TempPart.PartStart := PartBefore^.PartStart;
   TempPart.PartSize := TempPart.PartEnd - TempPart.PartStart + 1;
   // Move partition, the command with
-  DoExec('/bin/sh', ['-c', Format('echo "+%dM," | sfdisk --move-data %s -N %d', [BToMBFloor(PartAfter^.PartStart - TempPart.PartStart + 1), PartAfter^.Device^.Path, PartAfter^.Number])]);
+  DoExec('sh', ['-c', Format('echo "+%dM," | sfdisk --move-data %s -N %d', [BToMBFloor(PartAfter^.PartStart - TempPart.PartStart + 1), PartAfter^.Device^.Path, PartAfter^.Number])]);
   // Calculate the shift part to determine if we need to shrink or grow later
   PartBefore^.PartEnd := PartBefore^.PartEnd + (PartAfter^.PartStart - TempPart.PartStart);
 end;
@@ -267,7 +267,7 @@ begin
   PartAfter^.Number := Abs(PartAfter^.Number);
   //
   DoCreatePartitionOnly(PartAfter);
-  DoExec('/bin/wipefs', ['-a', PartAfter^.GetPartitionPath]);
+  DoExec('wipefs', ['-a', PartAfter^.GetPartitionPath]);
 end;
 
 procedure TPartedFileSystem.DoDelete(const PartAfter, PartBefore: PPartedPartition);
@@ -278,14 +278,14 @@ begin
   if PartBefore^.Number <= 0 then
     WriteLogAndRaise(Format('Wrong number %d while trying to delete partition %s' , [PartBefore^.Number, PartBefore^.GetPartitionPath]));
   // Remove partition from partition table
-  DoExec('/bin/parted', [PartBefore^.Device^.Path, 'rm', PartBefore^.Number.ToString]);
+  DoExec('parted', [PartBefore^.Device^.Path, 'rm', PartBefore^.Number.ToString]);
 end;
 
 procedure TPartedFileSystem.DoFormat(const PartAfter, PartBefore: PPartedPartition);
 begin
   WriteLog(lsInfo, 'TPartedFileSystem.DoFormat');
   QueryDeviceExists(PartAfter^.Device^.Path);
-  DoExec('/bin/wipefs', ['-a', PartAfter^.GetPartitionPath]);
+  DoExec('wipefs', ['-a', PartAfter^.GetPartitionPath]);
 end;
 
 procedure TPartedFileSystem.DoFlag(const PartAfter, PartBefore: PPartedPartition);
@@ -305,7 +305,7 @@ begin
     else
       State := '';
     if State <> '' then
-      DoExec('/bin/parted', [PartAfter^.Device^.Path, 'set', PartAfter^.Number.ToString, S, State], 16);
+      DoExec('parted', [PartAfter^.Device^.Path, 'set', PartAfter^.Number.ToString, S, State], 16);
   end;
 end;
 
@@ -314,7 +314,7 @@ begin
   WriteLog(lsInfo, 'TPartedFileSystem.DoLabelName');
   QueryDeviceExists(PartAfter^.Device^.Path);
   if (PartAfter^.Name <> PartBefore^.Name) and (PartAfter^.Name <> '') then
-    DoExec('/bin/parted', [PartAfter^.Device^.Path, 'name', PartAfter^.Number.ToString, PartAfter^.Name]);
+    DoExec('parted', [PartAfter^.Device^.Path, 'name', PartAfter^.Number.ToString, PartAfter^.Name]);
 end;
 
 procedure TPartedFileSystem.DoResize(const PartAfter, PartBefore: PPartedPartition);

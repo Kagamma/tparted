@@ -552,7 +552,7 @@ begin
   {$ifndef TPARTED_TEST}
   ExecResult.ExitCode := -1;
   // Performs "parted -l -m" for general info about devices
-  ExecResult := ExecSA('/bin/parted', ['-l', '-m']);
+  ExecResult := ExecSA('parted', ['-l', '-m']);
   Result := ParseDevicesFromStringArray(ExecResult.MessageArray);
   if ExecResult.ExitCode <> 0 then
     WriteLogAndRaise(Format(S_ProcessExitCode, ['parted -l -m', ExecResult.ExitCode, SAToS(ExecResult.MessageArray)]));
@@ -566,7 +566,7 @@ function QueryDeviceExists(const APath: String): TExecResult;
 begin
   {$ifndef TPARTED_TEST}
   Result.ExitCode := -1;
-  Result := ExecS('/bin/blkid', [APath]);
+  Result := ExecS('blkid', [APath]);
   {$else}
   Result.ExitCode := 0;
   {$endif}
@@ -578,7 +578,7 @@ function QueryCreateGPT(const APath: String): TExecResult;
 begin
   Result.ExitCode := -1;
   {$ifndef TPARTED_TEST}
-  Result := ExecS('/bin/parted', [APath, 'mklabel', 'GPT']);
+  Result := ExecS('parted', [APath, 'mklabel', 'GPT']);
   if Result.ExitCode <> 0 then
     WriteLogAndRaise(Format(S_ProcessExitCode, ['parted ' + APath + ' mklabel GPT', Result.ExitCode, Result.Message]));
   {$endif}

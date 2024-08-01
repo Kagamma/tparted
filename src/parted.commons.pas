@@ -56,10 +56,11 @@ procedure Mount(Path, PathMnt: String);
 procedure Unmount(Path, PathMnt: String);
 procedure DumpCallStack(var Report: String);
 function Match(S: String; RegexPattermArray: TStringDynArray): TStringDynArray;
+function ProgramExists(const Prog: String): Boolean;
 procedure ExecSystem(const S: String);
-function ExecS(const Prog: String; const Params: TStringDynArray): TExecResult;
-function ExecSA(const Prog: String; const Params: TStringDynArray): TExecResultDA;
-function ExecAsync(const Prog: String; const Params: TStringDynArray; const ASignal: TSignalMethod): TExecResult;
+function ExecS(Prog: String; const Params: TStringDynArray): TExecResult;
+function ExecSA(Prog: String; const Params: TStringDynArray): TExecResultDA;
+function ExecAsync(Prog: String; const Params: TStringDynArray; const ASignal: TSignalMethod): TExecResult;
 
 // Converts TStringList to TStringDynArray
 function SLToSA(const SL: Classes.TStringList): TStringDynArray;
@@ -140,14 +141,14 @@ end;
 
 procedure Mount(Path, PathMnt: String);
 begin
-  ExecSystem(Format('/bin/mkdir -p "%s" > /dev/null', [PathMnt]));
-  ExecSystem(Format('/bin/mount "%s" "%s" > /dev/null', [Path, PathMnt]));
+  ExecSystem(Format('mkdir -p "%s" > /dev/null', [PathMnt]));
+  ExecSystem(Format('mount "%s" "%s" > /dev/null', [Path, PathMnt]));
 end;
 
 procedure Unmount(Path, PathMnt: String);
 begin
-  ExecSystem(Format('/bin/umount "%s" > /dev/null', [Path]));
-  ExecSystem(Format('/bin/rm -d "%s" > /dev/null', [PathMnt]));
+  ExecSystem(Format('umount "%s" > /dev/null', [Path]));
+  ExecSystem(Format('rm -d "%s" > /dev/null', [PathMnt]));
 end;
 
 procedure DumpCallStack(var Report: String);
@@ -275,7 +276,33 @@ begin
   Sleep(100);
 end;
 
-function ExecS(const Prog: String; const Params: TStringDynArray): TExecResult;
+function FindProgram(const Prog: String): String;
+var
+  Output: String;
+begin.
+  // Try to perform a search for it by using "which"
+  RunCommand('which', [Prog], Result, [poStderrToOutPut]);
+  if (Result = '') or (not FileExists(Result)) then
+  begin
+    // Still not found? Raise exception!
+    raise Exception.Create('Cannot find executable file: ' + Prog);
+  end;
+end;
+
+function ProgramExists(const Prog: String): Boolean;
+var
+  Output: String;
+begin
+  Result := True;
+  // Try to perform a search for it by using "which"
+  RunCommand('which', [Prog], Output, [poStderrToOutPut]);
+  if (Output = '') or (not FileExists(Output)) then
+  begin
+    Result := False;
+  end;
+end;
+
+function ExecS(Prog: String; const Params: TStringDynArray): TExecResult;
 var
   I: LongInt;
   P: TProcess;
@@ -283,6 +310,7 @@ var
   SL: Classes.TStringList;
 begin
   WriteLog(Prog, Params);
+  Prog := FindProgram(Prog);
   Result.ExitCode := -1;
   P := TProcess.Create(nil);
   SL := Classes.TStringList.Create;
@@ -305,7 +333,7 @@ begin
   end;
 end;
 
-function ExecSA(const Prog: String; const Params: TStringDynArray): TExecResultDA;
+function ExecSA(Prog: String; const Params: TStringDynArray): TExecResultDA;
 var
   I: LongInt;
   P: TProcess;
@@ -313,6 +341,7 @@ var
   SL: Classes.TStringList;
 begin
   WriteLog(Prog, Params);
+  Prog := FindProgram(Prog);
   Result.ExitCode := -1;
   P := TProcess.Create(nil);
   SL := Classes.TStringList.Create;
@@ -335,7 +364,7 @@ begin
   end;
 end;
 
-function ExecAsync(const Prog: String; const Params: TStringDynArray; const ASignal: TSignalMethod): TExecResult;
+function ExecAsync(Prog: String; const Params: TStringDynArray; const ASignal: TSignalMethod): TExecResult;
 var
   I: LongInt;
   P: TProcess;
@@ -356,6 +385,7 @@ var
 
 begin
   WriteLog(Prog, Params);
+  Prog := FindProgram(Prog);
   Result.ExitCode := -1;
   P := TProcess.Create(nil);
   SL := Classes.TStringList.Create;

@@ -45,11 +45,11 @@ implementation
 function TPartedFileSystemNTFS.GetSupport: TPartedFileSystemSupport;
 begin
   inherited;
-  Result.CanFormat := FileExists('/bin/mkfs.ntfs');
-  Result.CanLabel := FileExists('/bin/ntfslabel');
-  Result.CanMove := FileExists('/bin/sfdisk');
-  Result.CanShrink := FileExists('/bin/ntfsresize') and FileExists('/bin/ntfsfix');
-  Result.CanGrow := FileExists('/bin/ntfsresize') and FileExists('/bin/ntfsfix');
+  Result.CanFormat := ProgramExists('mkfs.ntfs');
+  Result.CanLabel := ProgramExists('ntfslabel');
+  Result.CanMove := ProgramExists('sfdisk');
+  Result.CanShrink := ProgramExists('ntfsresize') and ProgramExists('ntfsfix');
+  Result.CanGrow := ProgramExists('ntfsresize') and ProgramExists('ntfsfix');
   Result.Dependencies := 'ntfs-3g';
 end;
 
@@ -58,10 +58,10 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemNTFS.DoCreate');
   // Format the new partition
-  DoExec('/bin/mkfs.ntfs', ['-f', PartAfter^.GetPartitionPath]);
+  DoExec('mkfs.ntfs', ['-f', PartAfter^.GetPartitionPath]);
   // Change label if needed
   if PartAfter^.LabelName <> '' then
-    DoExec('/bin/ntfslabel', [PartAfter^.GetPartitionPath, PartAfter^.LabelName]);
+    DoExec('ntfslabel', [PartAfter^.GetPartitionPath, PartAfter^.LabelName]);
 end;
 
 procedure TPartedFileSystemNTFS.DoDelete(const PartAfter, PartBefore: PPartedPartition);
@@ -75,7 +75,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemNTFS.DoFormat');
   // Format the partition
-  DoExec('/bin/mkfs.ntfs', ['-f', PartAfter^.GetPartitionPath]);
+  DoExec('mkfs.ntfs', ['-f', PartAfter^.GetPartitionPath]);
 end;
 
 procedure TPartedFileSystemNTFS.DoFlag(const PartAfter, PartBefore: PPartedPartition);
@@ -88,23 +88,23 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemNTFS.DoLabelName');
   if PartAfter^.LabelName <> PartBefore^.LabelName then
-    DoExec('/bin/ntfslabel', [PartAfter^.GetPartitionPath, PartAfter^.LabelName]);
+    DoExec('ntfslabel', [PartAfter^.GetPartitionPath, PartAfter^.LabelName]);
 end;
 
 procedure TPartedFileSystemNTFS.DoResize(const PartAfter, PartBefore: PPartedPartition);
 
   procedure Grow;
   begin
-    DoExec('/bin/ntfsresize', ['-f', PartAfter^.GetPartitionPath]);
-    DoExec('/bin/parted', [PartAfter^.Device^.Path, 'resizepart', PartAfter^.Number.ToString, PartAfter^.PartEnd.ToString + 'B']);
-    DoExec('/bin/ntfsfix', ['-b', '-d', PartAfter^.GetPartitionPath]);
+    DoExec('ntfsresize', ['-f', PartAfter^.GetPartitionPath]);
+    DoExec('parted', [PartAfter^.Device^.Path, 'resizepart', PartAfter^.Number.ToString, PartAfter^.PartEnd.ToString + 'B']);
+    DoExec('ntfsfix', ['-b', '-d', PartAfter^.GetPartitionPath]);
   end;
 
   procedure Shrink;
   begin
-    DoExec('/bin/ntfsresize', ['-f', '-s', PartAfter^.PartSize.ToString, PartAfter^.GetPartitionPath]);
-    DoExec('/bin/ntfsfix', ['-b', '-d', PartAfter^.GetPartitionPath]);
-    DoExec('/bin/sh', ['-c', Format('echo "Yes" | parted %s ---pretend-input-tty resizepart %d %dB', [PartAfter^.Device^.Path, PartAfter^.Number, PartAfter^.PartEnd])]);
+    DoExec('ntfsresize', ['-f', '-s', PartAfter^.PartSize.ToString, PartAfter^.GetPartitionPath]);
+    DoExec('ntfsfix', ['-b', '-d', PartAfter^.GetPartitionPath]);
+    DoExec('sh', ['-c', Format('echo "Yes" | parted %s ---pretend-input-tty resizepart %d %dB', [PartAfter^.Device^.Path, PartAfter^.Number, PartAfter^.PartEnd])]);
   end;
 
 begin

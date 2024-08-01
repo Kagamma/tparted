@@ -45,11 +45,11 @@ implementation
 function TPartedFileSystemF2FS.GetSupport: TPartedFileSystemSupport;
 begin
   inherited;
-  Result.CanFormat := FileExists('/bin/mkfs.f2fs');
-  Result.CanLabel := FileExists('/bin/f2fslabel');
-  Result.CanMove := FileExists('/bin/sfdisk');
+  Result.CanFormat := ProgramExists('mkfs.f2fs');
+  Result.CanLabel := ProgramExists('f2fslabel');
+  Result.CanMove := ProgramExists('sfdisk');
   Result.CanShrink := False;
-  Result.CanGrow := FileExists('/bin/resize.f2fs') and FileExists('/bin/fsck.f2fs');
+  Result.CanGrow := ProgramExists('resize.f2fs') and ProgramExists('fsck.f2fs');
   Result.Dependencies := 'f2fs-tools';
 end;
 
@@ -59,9 +59,9 @@ begin
   WriteLog(lsInfo, 'TPartedFileSystemF2FS.DoCreate');
   // Format the new partition
   if PartAfter^.LabelName <> '' then
-    DoExec('/bin/mkfs.f2fs', ['-f', '-l', PartAfter^.LabelName, PartAfter^.GetPartitionPath])
+    DoExec('mkfs.f2fs', ['-f', '-l', PartAfter^.LabelName, PartAfter^.GetPartitionPath])
   else
-    DoExec('/bin/mkfs.f2fs', ['-f', PartAfter^.GetPartitionPath]);
+    DoExec('mkfs.f2fs', ['-f', PartAfter^.GetPartitionPath]);
 end;
 
 procedure TPartedFileSystemF2FS.DoDelete(const PartAfter, PartBefore: PPartedPartition);
@@ -75,7 +75,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemF2FS.DoFormat');
   // Format the partition
-  DoExec('/bin/mkfs.f2fs', ['-f', PartAfter^.GetPartitionPath]);
+  DoExec('mkfs.f2fs', ['-f', PartAfter^.GetPartitionPath]);
 end;
 
 procedure TPartedFileSystemF2FS.DoFlag(const PartAfter, PartBefore: PPartedPartition);
@@ -88,7 +88,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemF2FS.DoLabelName');
   if PartAfter^.LabelName <> '' then
-    DoExec('/bin/f2fslabel', [PartAfter^.GetPartitionPath, PartAfter^.LabelName]);
+    DoExec('f2fslabel', [PartAfter^.GetPartitionPath, PartAfter^.LabelName]);
 end;
 
 procedure TPartedFileSystemF2FS.DoResize(const PartAfter, PartBefore: PPartedPartition);
@@ -97,9 +97,9 @@ var
 
   procedure Grow;
   begin
-    DoExec('/bin/fsck.f2fs', ['-f', '-a', Path]);
-    DoExec('/bin/parted', [PartAfter^.Device^.Path, 'resizepart', PartAfter^.Number.ToString, PartAfter^.PartEnd.ToString + 'B']);
-    DoExec('/bin/resize.f2fs', [Path]);
+    DoExec('fsck.f2fs', ['-f', '-a', Path]);
+    DoExec('parted', [PartAfter^.Device^.Path, 'resizepart', PartAfter^.Number.ToString, PartAfter^.PartEnd.ToString + 'B']);
+    DoExec('resize.f2fs', [Path]);
   end;
 
 begin
