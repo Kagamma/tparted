@@ -234,7 +234,6 @@ begin
           if not IsDeviceWindowOpened(LDevice^) then
           begin
             try
-              QueryDeviceExists(Path);
               QueryDeviceAndPartitions(Path, LDevice^);
               if LDevice^.Table = 'unknown' then // This device has no partition table, wanna create it?
               begin
@@ -246,6 +245,10 @@ begin
                   // Query for device again
                   QueryDeviceAndPartitions(Path, LDevice^);
                   LoadingStop;
+                end else
+                begin
+                  Self.ClearEvent(E);
+                  Exit;
                 end;
               end;
               LoadingStart(S_LoadingPartitions);

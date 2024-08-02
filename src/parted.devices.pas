@@ -103,6 +103,7 @@ type
 // Parse for device info from "parted -l -m" string
 function ParseDevicesFromStringArray(const SA: TStringDynArray): TPartedDeviceArray;
 function QueryDeviceArray: TPartedDeviceArray;
+// This is for checking device and partitions
 function QueryDeviceExists(const APath: String): TExecResult;
 function QueryCreateGPT(const APath: String): TExecResult;
 
