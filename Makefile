@@ -18,9 +18,13 @@ clean:
 
 install:
 	sudo cp ./bin/tparted /usr/bin/tparted
+	sudo rm -rf /opt/tparted
+	sudo mkdir /opt/tparted
+	sudo cp -rf ./bin/locale /opt/tparted
 
 uninstall:
 	sudo rm /usr/bin/tparted
+	sudo rm -rf /opt/tparted
 
 test:
 	mkdir -p ./bin
