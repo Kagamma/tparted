@@ -27,7 +27,7 @@ Currently supported filesystems:
 - See `Releases` section.
 
 #### Archlinux User Repository (AUR)
-- Run `git clone https://aur.archlinux.org/tparted-bin.git`, then enter `tparted-bin` directory and run `makepkg si`
+- Run `git clone https://aur.archlinux.org/tparted-bin.git`, then enter `tparted-bin` directory and run `makepkg -si`
 - Alternatively you can use an AUR helper, like `paru -S tparted-bin` or `yay -S tparted-bin`
 
 #### Building from source
