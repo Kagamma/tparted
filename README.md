@@ -26,6 +26,10 @@ Currently supported filesystems:
 #### Pre-built binary
 - See `Releases` section.
 
+#### Archlinux User Repository (AUR)
+- Run `git clone https://aur.archlinux.org/tparted-bin.git`, then enter `tparted-bin` directory and run `makepkg si`
+- Alternatively you can use an AUR helper, like `paru -S tparted-bin` or `yay -S tparted-bin`
+
 #### Building from source
 - Since the app requires Unicode version of Free Vision, you need to have Free Pascal 3.1.1 or later installed on the system.
 - Run `make build` to build the app. The binary is located in `./bin` directory.
