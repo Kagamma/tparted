@@ -114,8 +114,15 @@ initialization
     Lang4 := StringReplace(Lang4, ExtractFileExt(Lang4), '', []);
     if Length(Lang4) > 2 then
       Lang2 := Copy(Lang4, 1, 2);
-    Lang4 := './locale/' + Lang4 + '.mo';
-    Lang2 := './locale/' + Lang2 + '.mo';
+    if DirectoryExists('/opt/tparted') then
+    begin
+      Lang4 := '/opt/tparted/locale/' + Lang4 + '.mo';
+      Lang2 := '/opt/tparted/locale/' + Lang2 + '.mo';
+    end else
+    begin
+      Lang4 := './locale/' + Lang4 + '.mo';
+      Lang2 := './locale/' + Lang2 + '.mo';
+    end;
     if FileExists(Lang4) then
       TranslateResourceStrings(Lang4)
     else
