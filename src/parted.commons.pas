@@ -23,7 +23,7 @@ unit Parted.Commons;
 interface
 
 uses
-  {$ifdef Unix}Unix,{$endif}
+  {$ifdef Unix}Unix, BaseUnix, {$endif}
   SysUtils, Classes, Generics.Collections, Process, Types, StrUtils, RegExpr, Locale;
 
 type
@@ -293,7 +293,7 @@ begin
   for S in Paths do
   begin
     Path := S + '/' + Prog;
-    if FileExists(Path) then
+    if fpAccess(Path, X_OK) = 0 then
     begin
       PathDict.Add(Prog, Path);
       Exit(Path);
