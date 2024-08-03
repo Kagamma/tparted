@@ -525,16 +525,20 @@ begin
   begin
     if NextIsDeviceInfo then
     begin
-      SetLength(Result, DeviceCount + 1);
       LSA := SplitString(S, ':');
-      // The first and second result is device and it's approx size
-      Result[DeviceCount].Init;
-      Result[DeviceCount].Path := LSA[0];
-      Result[DeviceCount].SizeApprox := LSA[1];
-      // The 6th one is device's name
-      Result[DeviceCount].Name := LSA[6];
+      // Naive way to ignore optical drives
+      if Pos('/sr', LSA[0]) = 0 then
+      begin
+        SetLength(Result, DeviceCount + 1);
+        // The first and second result is device and it's approx size
+        Result[DeviceCount].Init;
+        Result[DeviceCount].Path := LSA[0];
+        Result[DeviceCount].SizeApprox := LSA[1];
+        // The 6th one is device's name
+        Result[DeviceCount].Name := LSA[6];
+        Inc(DeviceCount);
+      end;
       NextIsDeviceInfo := False;
-      Inc(DeviceCount);
       Continue;
     end;
     if S = 'BYT;' then
