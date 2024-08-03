@@ -13,6 +13,7 @@ type
   TTestPartitions = class(TTestCase)
   public
     DeviceRawJsonString: String;
+    DeviceRawJsonStringNoGUID: String;
     PartUsedAndAvailString: String;
     MountStatusJsonString: String;
     procedure Setup; override;
@@ -29,11 +30,14 @@ begin
   try
     SL.LoadFromFile('../testdata/parted_output_json.txt');
     DeviceRawJsonString := SL.Text;
+    SL.LoadFromFile('../testdata/parted_output_json_no_guid.txt');
+    DeviceRawJsonStringNoGUID := SL.Text;
     SL.LoadFromFile('../testdata/findmnt_output_json.txt');
     MountStatusJsonString := SL.Text;
     SL.Clear;
     SL.LoadFromFile('../testdata/df_output_human.txt');
     PartUsedAndAvailString := SL[1];
+    //
   finally
     SL.Free;
   end;
@@ -41,9 +45,11 @@ end;
 
 procedure TTestPartitions.Run;
 var
-  Device: TPartedDevice;
+  DeviceNoGUID, Device: TPartedDevice;
   Part: TPartedPartition;
 begin
+  DeviceNoGUID.PartitionRoot := nil;
+  ParseDeviceAndPartitionsFromJsonString(DeviceRawJsonStringNoGUID, DeviceNoGUID);
   ParseUsedAndAvailableBlockFromString(PartUsedAndAvailString, Part);
   Assert(Part.PartUsed = 25792503808, 'Part.PartUsed = 25792503808, but ' + Part.PartUsed.ToString);
   Assert(Part.PartFree = 70167166976, 'Part.PartFree = 70167166976, but ' + Part.PartFree.ToString);

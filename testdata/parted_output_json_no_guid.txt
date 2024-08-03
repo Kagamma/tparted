@@ -1,0 +1,21 @@
+{
+   "disk": {
+      "path": "/dev/sdc",
+      "size": "4294967296B",
+      "model": "QEMU QEMU HARDDISK",
+      "transport": "scsi",
+      "logical-sector-size": 512,
+      "physical-sector-size": 512,
+      "label": "gpt",
+      "max-partitions": 128,
+      "partitions": [
+         {
+            "number": 0,
+            "start": "17408B",
+            "end": "4294950399B",
+            "size": "4294932992B",
+            "type": "free"
+         }
+      ]
+   }
+}
