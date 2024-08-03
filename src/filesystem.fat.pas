@@ -45,7 +45,7 @@ implementation
 
 function TPartedFileSystemFat.GetSupport: TPartedFileSystemSupport;
 begin
-  inherited;
+  Result := inherited;
   Result.CanFormat := ProgramExists('mkfs.fat');
   Result.CanLabel := ProgramExists('fatlabel');
   Result.CanMove := ProgramExists('sfdisk');

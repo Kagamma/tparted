@@ -44,7 +44,7 @@ implementation
 
 function TPartedFileSystemSwap.GetSupport: TPartedFileSystemSupport;
 begin
-  inherited;
+  Result := inherited;
   Result.CanFormat := ProgramExists('mkswap');
   Result.CanLabel := False;
   Result.CanMove := ProgramExists('sfdisk');

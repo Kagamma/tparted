@@ -44,7 +44,7 @@ implementation
 
 function TPartedFileSystemXfs.GetSupport: TPartedFileSystemSupport;
 begin
-  inherited;
+  Result := inherited;
   Result.CanFormat := ProgramExists('mkfs.xfs');
   Result.CanLabel := ProgramExists('xfs_admin');
   Result.CanMove := ProgramExists('sfdisk');

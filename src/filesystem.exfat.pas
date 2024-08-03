@@ -44,7 +44,7 @@ implementation
 
 function TPartedFileSystemExFat.GetSupport: TPartedFileSystemSupport;
 begin
-  inherited;
+  Result := inherited;
   Result.CanFormat := ProgramExists('mkfs.exfat');
   Result.CanLabel := ProgramExists('exfatlabel');
   Result.CanMove := ProgramExists('sfdisk');

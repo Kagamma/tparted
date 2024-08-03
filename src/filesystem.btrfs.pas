@@ -44,7 +44,7 @@ implementation
 
 function TPartedFileSystemBTRFS.GetSupport: TPartedFileSystemSupport;
 begin
-  inherited;
+  Result := inherited;
   Result.CanFormat := ProgramExists('mkfs.btrfs');
   Result.CanLabel := ProgramExists('btrfs');
   Result.CanMove := ProgramExists('sfdisk');

@@ -44,7 +44,7 @@ implementation
 
 function TPartedFileSystemJfs.GetSupport: TPartedFileSystemSupport;
 begin
-  inherited;
+  Result := inherited;
   Result.CanFormat := ProgramExists('mkfs.jfs');
   Result.CanLabel := ProgramExists('jfs_tune');
   Result.CanMove := ProgramExists('sfdisk');

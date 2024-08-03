@@ -44,7 +44,7 @@ implementation
 
 function TPartedFileSystemF2FS.GetSupport: TPartedFileSystemSupport;
 begin
-  inherited;
+  Result := inherited;
   Result.CanFormat := ProgramExists('mkfs.f2fs');
   Result.CanLabel := ProgramExists('f2fslabel');
   Result.CanMove := ProgramExists('sfdisk');

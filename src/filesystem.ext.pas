@@ -40,6 +40,21 @@ type
     procedure DoResize(const PartAfter, PartBefore: PPartedPartition); override;
   end;
 
+  TPartedFileSystemExt2 = class(TPartedFileSystemExt)
+  public
+    function GetSupport: TPartedFileSystemSupport; override;
+  end;
+
+  TPartedFileSystemExt3 = class(TPartedFileSystemExt)
+  public
+    function GetSupport: TPartedFileSystemSupport; override;
+  end;
+
+  TPartedFileSystemExt4 = class(TPartedFileSystemExt)
+  public
+    function GetSupport: TPartedFileSystemSupport; override;
+  end;
+
 implementation
 
 uses
@@ -48,7 +63,7 @@ uses
 function TPartedFileSystemExt.GetSupport: TPartedFileSystemSupport;
 begin
   inherited;
-  Result.CanFormat := ProgramExists('mkfs.ext2') and ProgramExists('mkfs.ext3') and ProgramExists('mkfs.ext4');
+  Result.CanFormat := False;
   Result.CanLabel := ProgramExists('e2label');
   Result.CanMove := ProgramExists('sfdisk');
   Result.CanShrink := ProgramExists('resize2fs') and ProgramExists('e2fsck');
@@ -124,7 +139,27 @@ begin
   end;
 end;
 
+function TPartedFileSystemExt2.GetSupport: TPartedFileSystemSupport;
+begin
+  Result := inherited;
+  Result.CanFormat := ProgramExists('mkfs.ext2');
+end;
+
+function TPartedFileSystemExt3.GetSupport: TPartedFileSystemSupport;
+begin
+  Result := inherited;
+  Result.CanFormat := ProgramExists('mkfs.ext3');
+end;
+
+function TPartedFileSystemExt4.GetSupport: TPartedFileSystemSupport;
+begin
+  Result := inherited;
+  Result.CanFormat := ProgramExists('mkfs.ext4');
+end;
+
 initialization
-  RegisterFileSystem(TPartedFileSystemExt, ['ext2', 'ext3', 'ext4'], [1, 1, 1]);
+  RegisterFileSystem(TPartedFileSystemExt2, ['ext2'], [1]);
+  RegisterFileSystem(TPartedFileSystemExt2, ['ext3'], [1]);
+  RegisterFileSystem(TPartedFileSystemExt3, ['ext4'], [1]);
 
 end.
