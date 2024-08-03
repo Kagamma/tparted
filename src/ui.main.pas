@@ -260,6 +260,7 @@ begin
               on E: Exception do
               begin
                 LoadingStop;
+                WriteLog(lsError, E.Message);
                 MsgBox(E.Message, nil, mfOKButton);
                 LDevice^.Done; // An exception here is dangerous - set partitions to empty to avoid further damage
               end;

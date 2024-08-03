@@ -490,6 +490,7 @@ procedure TUIDevice.HandleEvent(var E: TEvent);
     except
       on E: Exception do
       begin
+        WriteLog(lsError, E.Message);
         MsgBox(E.Message, nil, mfOKButton);
         Self.OpList.GetCurrentDevice^.Done;
       end;
@@ -504,7 +505,10 @@ procedure TUIDevice.HandleEvent(var E: TEvent);
       Self.OpList.Execute;
     except
       on E: Exception do
+      begin
+        WriteLog(lsError, E.Message);
         MsgBox(E.Message, nil, mfError + mfOKButton);
+      end;
     end;
     DoApplyRefreshDevice;
   end;

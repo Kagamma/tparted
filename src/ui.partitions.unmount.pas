@@ -48,6 +48,7 @@ begin
       on E: Exception do
       begin
         LoadingStop;
+        WriteLog(lsError, E.Message);
         MsgBox(E.Message, nil, mfError + mfOKButton);
       end;
     end;

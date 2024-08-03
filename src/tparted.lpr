@@ -41,9 +41,9 @@ begin
       begin
         // All exceptions need to be handled!
         // If it makes to this message box, then stop the app immediately!
-        MsgBox(E.Message, nil, mfError + mfOKButton);
         DumpCallStack(Report);
         WriteLog(lsError, Report);
+        MsgBox(E.Message, nil, mfError + mfOKButton);
       end;
     end;
   finally
