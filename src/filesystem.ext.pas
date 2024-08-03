@@ -159,7 +159,7 @@ end;
 
 initialization
   RegisterFileSystem(TPartedFileSystemExt2, ['ext2'], [1]);
-  RegisterFileSystem(TPartedFileSystemExt2, ['ext3'], [1]);
-  RegisterFileSystem(TPartedFileSystemExt3, ['ext4'], [1]);
+  RegisterFileSystem(TPartedFileSystemExt3, ['ext3'], [1]);
+  RegisterFileSystem(TPartedFileSystemExt4, ['ext4'], [1]);
 
 end.
