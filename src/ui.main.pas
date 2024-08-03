@@ -76,6 +76,7 @@ var
 implementation
 
 uses
+  Parted.Logs,
   UI.Commons,
   UI.FileSystemSupport,
   UI.Logs;
