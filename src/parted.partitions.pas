@@ -101,8 +101,13 @@ begin
       PPart^.PartSize := ADevice.Size;
       Exit;
     end else
-    if ADevice.Table = 'gpt' then
-      ADevice.UUID := DiskJson.Strings['uuid'];
+    // Reading UUID is optional
+    try
+      if ADevice.Table = 'gpt' then
+        ADevice.UUID := DiskJson.Strings['uuid'];
+    except
+      on E: Exception do;
+    end;
     ADevice.MaxPartitions := DiskJson.Integers['max-partitions'];
 
     PartArrayJson := DiskJson.Arrays['partitions'];

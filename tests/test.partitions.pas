@@ -55,6 +55,7 @@ begin
   Assert(Part.PartFree = 70167166976, 'Part.PartFree = 70167166976, but ' + Part.PartFree.ToString);
   ParseMountStatusFromJsonString(MountStatusJsonString, Part);
   Assert(Part.MountPoint = '/home', 'Part.MountPoint = /home');
+  DeviceNoGUID.Done;
 end;
 
 initialization
