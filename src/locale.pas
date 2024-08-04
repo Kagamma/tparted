@@ -91,6 +91,7 @@ resourcestring
   S_OperationAdvise = 'Are you sure you want to apply the pending operations to %s? Editing partitions has the potential to cause LOSS of DATA.';
   S_Executing = 'Performing %d/%d operations...';
   S_VerifyMinSize = '%s requires a minimal size of %dMB!';
+  S_VerifyMaxSize = '%s cannot larger than %dMB!';
   S_MenuWindow = '~W~indow';
   S_MenuPreviousWindow = '~P~revious Window';
   S_MenuNextWindow = '~N~ext Window';

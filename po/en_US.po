@@ -342,6 +342,10 @@ msgstr ""
 msgid "%s requires a minimal size of %dMB!"
 msgstr ""
 
+#: locale:s_verifymaxsize
+msgid "%s cannot larger than %dMB!"
+msgstr ""
+
 #: locale:s_menuwindow
 msgid "~W~indow"
 msgstr ""

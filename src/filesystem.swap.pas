@@ -93,6 +93,6 @@ begin
 end;
 
 initialization
-  RegisterFileSystem(TPartedFileSystemSwap, ['linux-swap'], [1]);
+  RegisterFileSystem(TPartedFileSystemSwap, ['linux-swap'], [1], [$FFFFFFFFFFFF]);
 
 end.

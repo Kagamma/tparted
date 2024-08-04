@@ -187,7 +187,7 @@ begin
     if Desktop^.ExecView(D) = cmOk then
     begin
       D^.GetData(AData^);
-      Result := VerifyFileSystemMinSize(FileSystemFormattableArray[AData^.FileSystem], AData^.Size);
+      Result := VerifyFileSystemSize(FileSystemFormattableArray[AData^.FileSystem], AData^.Size);
     end;
   finally
     Dispose(D, Done);

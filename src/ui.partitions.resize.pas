@@ -89,7 +89,7 @@ var
       Result := M
     else
       Result := V;
-    Result := Max(Result, GetFileSystemMinSize(PPart^.FileSystem));
+    Result := Min(Max(Result, GetFileSystemMinSize(PPart^.FileSystem)), GetFileSystemMaxSize(PPart^.FileSystem));
     if ((Result > DataOld.Size) and (SToIndex(PPart^.FileSystem, FileSystemGrowArray) < 0)) or
        ((Result < DataOld.Size) and (SToIndex(PPart^.FileSystem, FileSystemShrinkArray) < 0)) then
       Result := DataOld.Size;
@@ -172,7 +172,7 @@ begin
     begin
       D^.GetData(AData^);
       Result := (DataOld.Preceding <> AData^.Preceding) or (DataOld.Size <> AData^.Size) and
-                 VerifyFileSystemMinSize(PPart^.FileSystem, AData^.Size);
+                 VerifyFileSystemSize(PPart^.FileSystem, AData^.Size);
     end;
   finally
     Dispose(D, Done);

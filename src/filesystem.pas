@@ -55,18 +55,21 @@ type
   TPartedFileSystemClass = class of TPartedFileSystem;
 
   TPartedFileSystemMap = specialize TDictionary<String, TPartedFileSystemClass>;
-  TPartedFileSystemMinSizeMap = specialize TDictionary<String, Int64>;
+  TPartedFileSystemSizeMap = specialize TDictionary<String, Int64>;
   TPartedFileSystemDependenciesMap = specialize TDictionary<String, String>;
 
-procedure RegisterFileSystem(AFSClass: TPartedFileSystemClass; FileSystemTypeArray: TStringDynArray; MinSizeMap: TInt64DynArray);
+procedure RegisterFileSystem(AFSClass: TPartedFileSystemClass; FileSystemTypeArray: TStringDynArray; MinSizeMap, MaxSizeMap: TInt64DynArray);
 // Show a message box, and return false, if Size is invalid
-function VerifyFileSystemMinSize(FS: String; Size: Int64): Boolean;
+function VerifyFileSystemSize(FS: String; Size: Int64): Boolean;
 // Return the minimal size of file system
 function GetFileSystemMinSize(FS: String): Int64;
+// Return the maximum size of file system
+function GetFileSystemMaxSize(FS: String): Int64;
 
 var
   FileSystemMap: TPartedFileSystemMap;
-  FileSystemMinSizeMap: TPartedFileSystemMinSizeMap;
+  FileSystemMinSizeMap: TPartedFileSystemSizeMap;
+  FileSystemMaxSizeMap: TPartedFileSystemSizeMap;
   FileSystemDependenciesMap: TPartedFileSystemDependenciesMap;
 
   FileSystemSupportArray: array of string;
@@ -83,9 +86,10 @@ uses
   FreeVision,
   Math;
 
-function VerifyFileSystemMinSize(FS: String; Size: Int64): Boolean;
+function VerifyFileSystemSize(FS: String; Size: Int64): Boolean;
 var
-  MinSize: Int64;
+  MinSize,
+  MaxSize: Int64;
 begin
   Result := False;
   if FileSystemMinSizeMap.ContainsKey(FS) then
@@ -94,16 +98,22 @@ begin
     if MinSize > Size then
     begin
       MsgBox(Format(S_VerifyMinSize, [FS, MinSize]), nil, mfError + mfOKButton);
-    end else
-    begin
-      Result := True;
+      Exit;
     end;
   end;
+  if FileSystemMaxSizeMap.ContainsKey(FS) then
+  begin
+    MaxSize := FileSystemMaxSizeMap[FS];
+    if MaxSize < Size then
+    begin
+      MsgBox(Format(S_VerifyMaxSize, [FS, MaxSize]), nil, mfError + mfOKButton);
+      Exit;
+    end;
+  end;
+  Result := True;
 end;
 
 function GetFileSystemMinSize(FS: String): Int64;
-var
-  MinSize: Int64;
 begin
   Result := 1;
   if FileSystemMinSizeMap.ContainsKey(FS) then
@@ -112,7 +122,16 @@ begin
   end;
 end;
 
-procedure RegisterFileSystem(AFSClass: TPartedFileSystemClass; FileSystemTypeArray: TStringDynArray; MinSizeMap: TInt64DynArray);
+function GetFileSystemMaxSize(FS: String): Int64;
+begin
+  Result := 1;
+  if FileSystemMaxSizeMap.ContainsKey(FS) then
+  begin
+    Result := FileSystemMaxSizeMap[FS];
+  end;
+end;
+
+procedure RegisterFileSystem(AFSClass: TPartedFileSystemClass; FileSystemTypeArray: TStringDynArray; MinSizeMap, MaxSizeMap: TInt64DynArray);
 var
   I: LongInt;
   S: String;
@@ -122,6 +141,7 @@ var
   Support: TPartedFileSystemSupport;
 begin
   Assert(Length(FileSystemTypeArray) = Length(MinSizeMap), 'Length must be the same!');
+  Assert(Length(FileSystemTypeArray) = Length(MaxSizeMap), 'Length must be the same!');
   SL := Classes.TStringList.Create;
   FS := AFSClass.Create;
   try
@@ -150,6 +170,7 @@ begin
         S := FileSystemTypeArray[I];
         FileSystemMap.Add(S, AFSClass);
         FileSystemMinSizeMap.Add(S, MinSizeMap[I]);
+        FileSystemMaxSizeMap.Add(S, MaxSizeMap[I]);
         SL.Add(S);
       end;
       SetLength(FileSystemFormattableArray, SL.Count);
@@ -334,12 +355,14 @@ end;
 
 initialization
   FileSystemMap := TPartedFileSystemMap.Create;
-  FileSystemMinSizeMap := TPartedFileSystemMinSizeMap.Create;
+  FileSystemMinSizeMap := TPartedFileSystemSizeMap.Create;
+  FileSystemMaxSizeMap := TPartedFileSystemSizeMap.Create;
   FileSystemDependenciesMap := TPartedFileSystemDependenciesMap.Create;
 
 finalization
   FilesystemMap.Free;
   FileSystemMinSizeMap.Free;
+  FileSystemMaxSizeMap.Free;
   FileSystemDependenciesMap.Free;
 
 end.
