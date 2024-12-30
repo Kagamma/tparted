@@ -140,8 +140,8 @@ var
   FS: TPartedFileSystem;
   Support: TPartedFileSystemSupport;
 begin
-  Assert(Length(FileSystemTypeArray) = Length(MinSizeMap), 'Length must be the same!');
-  Assert(Length(FileSystemTypeArray) = Length(MaxSizeMap), 'Length must be the same!');
+  Assert(Length(FileSystemTypeArray) = Length(MinSizeMap), 'MinLength must be the same!');
+  Assert(Length(FileSystemTypeArray) = Length(MaxSizeMap), 'MaxLength must be the same!');
   SL := Classes.TStringList.Create;
   FS := AFSClass.Create;
   try
