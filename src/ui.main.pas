@@ -33,7 +33,7 @@ uses
 const
   cmMenuAbout = 1001;
   cmMenuRefreshDevice = 1002;
-  cmDeviceRefresh = 1003;
+  cmMessageDeviceRefresh = 1003;
   cmMenuDisplayLog = 1004;
   cmMenuDisplayFileSystemSupport = 1005;
   cmDeviceAnchor = 12000;
@@ -48,7 +48,7 @@ const
   cmOperationUndo = 1200;
   cmOperationClear = 1201;
   cmOperationApply = 1202;
-  cmOperatorExists = 1203;
+  cmMessageOperatorExists = 1203;
 
 type
   TUIMain = object(TApplication)
@@ -190,7 +190,7 @@ begin
     case E.Command of
       cmQuit:
         begin
-          if Message(Desktop, evBroadcast, cmOperatorExists, nil) <> nil then
+          if Message(Desktop, evBroadcast, cmMessageOperatorExists, nil) <> nil then
           begin
             if MsgBox(S_QuitMessage, nil, mfConfirmation + mfYesButton + mfNoButton) <> cmYes then
               Self.ClearEvent(E);
@@ -223,7 +223,7 @@ begin
           Self.InitMenuBar;
           Self.Insert(MenuBar);
           Self.ClearEvent(E);
-          Message(Desktop, evBroadcast, cmDeviceRefresh, nil);
+          Message(Desktop, evBroadcast, cmMessageDeviceRefresh, nil);
         end
       else
       begin

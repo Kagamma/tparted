@@ -528,13 +528,13 @@ begin
   if E.What = evBroadcast then
   begin
     case E.Command of
-      cmOperatorExists:
+      cmMessageOperatorExists:
         begin
           if Self.OpList.GetOpCount > 0 then
             ClearEvent(E);
         end;
       // Clear all ops and refresh partition list
-      cmDeviceRefresh:
+      cmMessageDeviceRefresh:
         begin
           DoApplyRefreshDevice;
           Exit;
