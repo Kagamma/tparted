@@ -159,11 +159,23 @@ begin
 end;
 
 function TPartedPartition.GetPartitionPath: String;
+const
+  DevicesWithPPrefix: array[0..7] of String = (
+    '/cciss', '/mmcblk', '/md', '/rd', '/ida', '/nvme', '/nbd', '/loop'
+  );
+var
+  I: Integer;
 begin
-  if (Pos('/hd', Self.Device^.Path) > 0) or (Pos('/sd', Self.Device^.Path) > 0) then
-    Result := Self.Device^.Path // PATA & SCSI devices 
-  else
-    Result := Self.Device^.Path + 'p'; // Other type of devices
+  Result := Self.Device^.Path;
+  // Check to see if we need to add `p` prefix before partition number
+  for I := Low(DevicesWithPPrefix) to High(DevicesWithPPrefix) do
+  begin
+    if Pos(DevicesWithPPrefix[I], Self.Device^.Path) > 0 then
+    begin
+      Result := Result + 'p';
+      break;
+    end;
+  end;
   //
   if Self.Number > 0 then
     Result := Result + Self.Number.ToString
