@@ -89,7 +89,7 @@ var
       Result := M
     else
       Result := V;
-    Result := Min(Max(Result, GetFileSystemMinSize(PPart^.FileSystem)), GetFileSystemMaxSize(PPart^.FileSystem));
+    //Result := Min(Max(Result, GetFileSystemMinSize(PPart^.FileSystem)), GetFileSystemMaxSize(PPart^.FileSystem));
     if ((Result > DataOld.Size) and (SToIndex(PPart^.FileSystem, FileSystemGrowArray) < 0)) or
        ((Result < DataOld.Size) and (SToIndex(PPart^.FileSystem, FileSystemShrinkArray) < 0)) then
       Result := DataOld.Size;
