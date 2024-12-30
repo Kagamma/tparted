@@ -160,8 +160,8 @@ end;
 
 function TPartedPartition.GetPartitionPath: String;
 begin
-  if Pos('nvme', Self.Device^.Path) > 0 then
-    Result := Self.Device^.Path + 'p' // NVME
+  if (Pos('nvme', Self.Device^.Path) > 0) or (Pos('mmcblk', Self.Device^.Path) > 0) then
+    Result := Self.Device^.Path + 'p'
   else
     Result := Self.Device^.Path; // SATA
   //
