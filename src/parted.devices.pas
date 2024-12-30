@@ -160,10 +160,10 @@ end;
 
 function TPartedPartition.GetPartitionPath: String;
 begin
-  if (Pos('nvme', Self.Device^.Path) > 0) or (Pos('mmcblk', Self.Device^.Path) > 0) then
-    Result := Self.Device^.Path + 'p'
+  if (Pos('/hd', Self.Device^.Path) > 0) or (Pos('/sd', Self.Device^.Path) > 0) then
+    Result := Self.Device^.Path // PATA & SCSI devices 
   else
-    Result := Self.Device^.Path; // SATA
+    Result := Self.Device^.Path + 'p'; // Other type of devices
   //
   if Self.Number > 0 then
     Result := Result + Self.Number.ToString
