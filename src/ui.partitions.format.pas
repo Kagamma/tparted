@@ -48,6 +48,8 @@ var
   DataOld: TPartedOpDataFormat;
 begin
   Result := False;
+
+  // The following code should not run because the format button should be disabled for these cases
   if PPart^.IsMounted then // Prevent user to perform format operation on a mounted partition
   begin
     MsgBox(Format(S_PartitionIsMounted, [PPart^.GetPartitionPath]), nil, mfInformation + mfOKButton);

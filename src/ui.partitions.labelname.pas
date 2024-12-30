@@ -47,11 +47,14 @@ var
   DataOld: TPartedOpDataLabel;
 begin
   Result := False;
+
+  // The following code should not run because the label button should be disabled for this case
   if PPart^.Number = 0 then
   begin
     MsgBox(Format(S_PartitionIsUnallocated, []), nil, mfInformation + mfOKButton);
     Exit;
   end;
+
   Desktop^.GetExtent(R);
   MX := R.B.X div 2;
   MY := R.B.Y div 2;
