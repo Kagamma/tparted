@@ -4,7 +4,7 @@ program TParted;
 
 uses
   {$ifdef UNIX}
-  CThreads, cwstring, Unix,
+  CThreads, cwstring, Unix, BaseUnix,
   {$endif}
   SysUtils, Classes, Types,
   FileSystem,
@@ -27,7 +27,7 @@ var
   Report: String;
 
 begin
-  if GetEnvironmentVariable('SUDO_UID') = '' then
+  if FpGeteuid() <> 0 then
   begin
     Writeln(StdErr, 'This program requires admin rights to work properly.');
     Halt(1);
