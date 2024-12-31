@@ -170,7 +170,7 @@ begin
     PPart := PPart^.Next;
   end;
   Self.List^.NewList(Self.ListCollection);
-  if FocusedOld <= Self.ListCollection^.Count then
+  if FocusedOld < Self.ListCollection^.Count then
     Self.List^.FocusItem(FocusedOld);
 end;
 
