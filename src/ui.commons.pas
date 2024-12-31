@@ -217,7 +217,7 @@ BEGIN
        (Desktop^.Size.Y - R.B.Y) DIV 2) Else          { Calculate position }
      R.Move((Application^.Size.X - R.B.X) DIV 2,
        (Application^.Size.Y - R.B.Y) DIV 2);          { Calculate position }
-   MsgBox := MsgBoxRect(R, Msg.Trim.ToUnicode, Params,
+   MsgBox := MsgBoxRect(R, Msg.TrimRight.ToUnicode, Params,
      AOptions);                                       { Create message box }
 END;
 
