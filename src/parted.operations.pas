@@ -113,6 +113,11 @@ type
     procedure Execute; // Execute op
   end;
 
+const
+  PartedOpKindStatusNames: array[TPartedOpKind] of String = (
+    'Nothing', 'Creating', 'Deleting', 'Naming', 'Formatting', 'Resizing', 'Flag'
+  );
+
 implementation
 
 uses
@@ -332,12 +337,15 @@ begin
     begin
       S := Format(S_Executing, [I, Self.GetOpCount]);
       WriteLog(lsInfo, S);
-      LoadingStart(S);
       Op := Self[I]; // Get the op we want to process
+      WriteLog(lsInfo, PartedOpKindStatusNames[Op.Kind]);
+      if Op.Kind = okCreate then
+        LoadingStart(S + #13 + PartedOpKindStatusNames[Op.Kind] + ' ' + Op.AffectedPartNew^.GetPartitionPath)
+      else 
+        LoadingStart(S + #13 + PartedOpKindStatusNames[Op.Kind] + ' ' + Op.AffectedPartOld^.GetPartitionPath);
       case Op.Kind of
         okCreate:
           begin
-            WriteLog(lsInfo, 'CREATE');
             FileSystemCreate;
             try
               FS.DoCreate(Op.AffectedPartNew, Op.AffectedPartOld);
@@ -348,7 +356,6 @@ begin
           end;
         okDelete:
           begin
-            WriteLog(lsInfo, 'DELETE');
             FileSystemCreate;
             try
               FS.DoDelete(Op.AffectedPartNew, Op.AffectedPartOld);
@@ -359,7 +366,6 @@ begin
           end;
         okFormat:
           begin
-            WriteLog(lsInfo, 'FORMAT');
             FileSystemCreate;
             try
               FS.DoFormat(Op.AffectedPartNew, Op.AffectedPartOld);
@@ -370,7 +376,6 @@ begin
           end;
         okFlag:
           begin
-            WriteLog(lsInfo, 'FLAG');
             FileSystemCreate;
             try
               FS.DoFlag(Op.AffectedPartNew, Op.AffectedPartOld);
@@ -380,7 +385,6 @@ begin
           end;
         okLabel:
           begin
-            WriteLog(lsInfo, 'NAME');
             FileSystemCreate;
             try
               FS.DoLabelName(Op.AffectedPartNew, Op.AffectedPartOld);
@@ -390,7 +394,6 @@ begin
           end;
         okResize:
           begin
-            WriteLog(lsInfo, 'RESIZE');
             FileSystemCreate;
             try
               FS.DoResize(Op.AffectedPartNew, Op.AffectedPartOld);

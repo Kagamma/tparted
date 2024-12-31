@@ -181,7 +181,7 @@ begin
     Result := Result + Self.Number.ToString
   else
   if Self.Number < 0 then
-    Result := '?' + (-Self.Number).ToString
+    Result := Result + '?' + (-Self.Number).ToString
 end;
 
 function TPartedPartition.ContainsFlag(AFlag: String): Boolean;

@@ -23,7 +23,7 @@ unit UI.Commons;
 interface
 
 uses
-  Classes, SysUtils,
+  Classes, SysUtils, Types, StrUtils,
   FreeVision,
   Parted.Commons, Locale;
 
@@ -347,20 +347,32 @@ constructor TUILoadingDialog.Init(const AText: String);
 var
   R: TRect;
   L: PLabel;
-  Len: LongInt;
+  Len, H: LongInt;
+  I: LongInt;
+  ATexts: TStringDynArray;
 begin
-  Len := UTF8TerminalLength(AText);
+  ATexts := SplitString(AText, #13);
+  // Find the max length of text
+  Len := 1;
+  for I := 0 to High(ATexts) do
+    if Len < Length(ATexts[I]) then
+      Len := Length(ATexts[I]);
+  //
+  H := AText.CountChar(#13) + 1; 
   Desktop^.GetExtent(R);
   R.A.X := (R.B.X div 2) - Len div 2 - 3;
   R.B.X := (R.B.X div 2) + Len div 2 + 4;
   R.A.Y := (R.B.Y div 2) - 3;
-  R.B.Y := (R.B.Y div 2) + 2;
+  R.B.Y := (R.B.Y div 2) + 1 + H;
   inherited Init(R, '');
   //
   Self.Status := AText;
-  R.Assign(2, 2, 2 + Len + 1, 3);
-  L := New(PLabel, Init(R, AText.ToUnicode, nil));
-  Self.Insert(L);
+  for I := 0 to High(ATexts) do
+  begin
+    R.Assign(2, 2 + I, 2 + Len + 1, 3 + I);
+    L := New(PLabel, Init(R, ATexts[I].ToUnicode, nil));
+    Self.Insert(L);
+  end;
 end;
 
 procedure TUILoadingDialog.HandleEvent(var E: TEvent);

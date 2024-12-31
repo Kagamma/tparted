@@ -173,7 +173,7 @@ begin
     if Desktop^.ExecView(D) = cmOk then
     begin
       D^.GetData(AData^);
-      Result := (DataOld.Preceding <> AData^.Preceding) or (DataOld.Size <> AData^.Size) and
+      Result := ((DataOld.Preceding <> AData^.Preceding) or (DataOld.Size <> AData^.Size)) and
                  VerifyFileSystemSize(PPart^.FileSystem, AData^.Size);
     end;
   finally
