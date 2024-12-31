@@ -80,7 +80,7 @@ uses
 
 const
   SIZE_X = 79;
-  SIZE_XMAX = 130;
+  SIZE_XMAX = 150;
   SIZE_Y = 23;
 
 var
