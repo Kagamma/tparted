@@ -31,6 +31,7 @@ uses
 type
   TUITable = object(TUIListBox)
   public
+    IsFirstEvent: Boolean;
     procedure HandleEvent(var E: TEvent); virtual;
   end;
   PUITable = ^TUITable;
@@ -75,7 +76,7 @@ begin
   CountOld := Self.List^.Count;
   inherited HandleEvent(E);
   // Update button states
-  if (FocusedOld <> Self.Focused) or (CountOld <> Self.List^.Count) then
+  if Self.IsFirstEvent or (FocusedOld <> Self.Focused) or (CountOld <> Self.List^.Count) then
     Message(Self.Owner^.Owner, evCommand, cmListChanged, nil);
   // Handle old event
   if EventOld.What = evMouseDown then
@@ -121,6 +122,7 @@ begin
       Dispose(PopupMenu, Done);
     end;
   end;
+  Self.IsFirstEvent := False;
 end;
 
 // -------------------------
@@ -150,6 +152,7 @@ begin
   Dec(R.B.X, 1);
   Self.List := New(PUITable, Init(R, 1, Self.ScrollBar));
   Self.List^.GrowMode := 0;
+  Self.List^.IsFirstEvent := True;
   Self.Insert(Self.List);
 
   // ListCollection
