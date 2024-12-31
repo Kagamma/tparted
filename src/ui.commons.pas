@@ -534,15 +534,56 @@ end;
 
 // ---------------------------------
 
-procedure TUIStaticText.Draw;
-var
-  B: TDrawBuffer;
-begin
-  // Fill the view with background color first before render text
-  MoveChar(B, ' ', GetColor(1), Size.X);
-  WriteLine(0, 0, Size.X, Size.Y, B);
-  inherited Draw;
-end;
+// Copied from Free Vision implementation of TStaticText, with fixes for weird artifact issue
+PROCEDURE TUIStaticText.Draw;
+VAR Just: Byte; I, J, P, Y, L: Sw_Integer; S: Sw_String;
+  B : TDrawBuffer;
+  Color : Byte;
+BEGIN
+   GetText(S);                                        { Fetch text to write }
+   Color := GetColor(1);
+   P := 1;                                            { X start position }
+   Y := 0;                                            { Y start position }
+   L := Length(S);                                    { Length of text }
+   While (Y < Size.Y) Do Begin
+    MoveChar(B, ' ', Color, Size.X);
+    if P <= L then
+    begin
+      Just := 0;                                       { Default left justify }
+      If (S[P] = #2) Then Begin                        { Right justify AnsiChar }
+        Just := 2;                                     { Set right justify }
+        Inc(P);                                        { Next character }
+      End;
+      If (S[P] = #3) Then Begin                        { Centre justify AnsiChar }
+        Just := 1;                                     { Set centre justify }
+        Inc(P);                                        { Next character }
+      End;
+      I := P;                                          { Start position }
+      repeat
+        J := P;
+        while (P <= L) and (S[P] = ' ') do
+          Inc(P);
+        while (P <= L) and (S[P] <> ' ') and (S[P] <> #13) do
+          Inc(P);
+      until (P > L) or (P >= I + Size.X) or (S[P] = #13);
+      If P > I + Size.X Then                           { Text to long }
+        If J > I Then
+          P := J
+        Else
+          P := I + Size.X;
+      Case Just Of
+        0: J := 0;                           { Left justify }
+        1: J := (Size.X - (P-I)) DIV 2;      { Centre justify }
+        2: J := Size.X - (P-I);              { Right justify }
+      End;
+      MoveBuf(B[J], S[I], Color, P - I);
+      While (P <= L) AND (P-I <= Size.X) AND ((S[P] = #13) OR (S[P] = #10))
+        Do Inc(P);                                     { Remove CR/LF }
+    End;
+    WriteLine(0, Y, Size.X, 1, B);
+    Inc(Y);                                          { Next line }
+  End;
+END;
 
 end.
 
