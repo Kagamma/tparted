@@ -130,6 +130,13 @@ type
     procedure Draw; virtual;
   end;
 
+  // New TUIMenuBox, with fixes for misaligned mouse position
+  PUIMenuBox = ^TUIMenuBox;
+  TUIMenuBox = object(TMenuBox)
+  public
+    procedure Draw; virtual;
+  end;
+
 procedure LoadingStart(const S: String);
 procedure LoadingStop;
 
@@ -240,6 +247,8 @@ begin
     UILoading := nil;
   end;
 end;
+
+// ---------------------------------
 
 constructor TUIWindow.Init(var Bounds: TRect; ATitle: String; ANumber: LongInt);
 begin
@@ -584,6 +593,23 @@ BEGIN
     Inc(Y);                                          { Next line }
   End;
 END;
+
+// ---------------------------------
+
+procedure TUIMenuBox.Draw;
+var
+  R: TRect;
+begin
+  State := State and not sfShadow;
+  Self.GetBounds(R);
+  Dec(R.A.Y);
+  Dec(R.B.Y);
+  Self.SetBounds(R);
+  inherited;
+  Inc(R.A.Y);
+  Inc(R.B.Y);
+  Self.SetBounds(R);
+end;
 
 end.
 

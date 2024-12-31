@@ -54,8 +54,63 @@ type
 
 implementation
 
+uses
+  UI.Main,
+  UI.Devices;
+
 procedure TUITable.HandleEvent(var E: TEvent);
+var
+  PopupMenu: PUIMenuBox;
+  MI: PMenuItem;
+  R: TRect;
+  P: TPoint;
+  UIDevice: PUIDevice;
+  I: LongInt;
 begin
+  if E.What = evMouseDown then
+  begin
+    if (E.Buttons and mbMiddleButton) <> 0 then
+    begin
+      UIDevice := PUIDevice(Self.Owner^.Owner);
+      Desktop^.GetBounds(R);
+      PopupMenu := New(PUIMenuBox, Init(R, NewMenu(
+        NewItem(S_InfoButton.ToUnicode, '', kbNoKey, cmPartitionShowInfo, hcNoContext,
+        NewItem(S_CreateButton.ToUnicode, '', kbNoKey, cmPartitionCreate, hcNoContext,
+        NewItem(S_DeleteButton.ToUnicode, '', kbNoKey, cmPartitionDelete, hcNoContext,
+        NewItem(S_FormatButton.ToUnicode, '', kbNoKey, cmPartitionFormat, hcNoContext,
+        NewItem(S_ResizeButton.ToUnicode, '', kbNoKey, cmPartitionResize, hcNoContext,
+        NewItem(S_LabelButton.ToUnicode, '', kbNoKey, cmPartitionLabel, hcNoContext,
+        NewItem(S_FlagButton.ToUnicode, '', kbNoKey, cmPartitionFlag, hcNoContext,
+        NewItem(S_UnmountButton.ToUnicode, '', kbNoKey, cmPartitionUnmount, hcNoContext, nil))))))))
+      ), nil));
+      // Set menu states
+      MI := PopupMenu^.Menu^.Items;
+      for I := Low(UIDevice^.ButtonPartitionArray) to High(UIDevice^.ButtonPartitionArray) do
+      begin
+        MI^.Disabled := UIDevice^.ButtonPartitionArray[I]^.Disabled;
+        MI := MI^.Next;
+      end;
+      // Make sure popup menu is within screen
+      P := E.Where;
+      if P.Y + PopupMenu^.Size.Y > R.B.Y then 
+      begin
+        Dec(P.Y, PopupMenu^.Size.Y+1);
+        if P.Y < R.A.Y then
+        begin
+          P.Y := R.A.Y;
+          Inc(P.X);
+        end;
+      end;
+      if P.X + PopupMenu^.Size.X > R.B.X then    
+        Dec(P.X, PopupMenu^.Size.X);
+      PopupMenu^.MoveTo(P.X + 1, P.Y + 1);
+      //
+      Desktop^.Insert(PopupMenu);
+      ClearEvent(E); 
+      Message(PopupMenu, evCommand, cmMenu, nil);
+      Dispose(PopupMenu, Done);
+    end;
+  end;
   inherited HandleEvent(E);
   Message(Self.Owner^.Owner, evCommand, cmListChanged, nil);
 end;

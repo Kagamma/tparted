@@ -80,6 +80,7 @@ uses
 
 const
   SIZE_X = 79;
+  SIZE_XMAX = 130;
   SIZE_Y = 23;
 
 var
@@ -188,7 +189,7 @@ begin
     XPos := 0;
   if (YPos + SIZE_Y) >= DesktopR.B.Y then
     YPos := 0;
-  R.Assign(XPos, YPos, XPos + Max(SIZE_X, DesktopR.B.X - 10), YPos + Max(SIZE_Y, DesktopR.B.Y - 10));
+  R.Assign(XPos, YPos, XPos + Max(SIZE_X, Min(SIZE_XMAX, DesktopR.B.X - 10)), YPos + Max(SIZE_Y, DesktopR.B.Y - 10));
   Inc(XPos);
   Inc(YPos);
   //
