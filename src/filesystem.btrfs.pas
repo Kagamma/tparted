@@ -114,19 +114,21 @@ var
   end;
 
 begin
-  inherited;
   WriteLog(lsInfo, 'TPartedFileSystemBTRFS.DoResize');
   // Shrink / Expand right
   Path := PartAfter^.GetPartitionPath;
   PathMnt := GetTempMountPath(Path);
   if PartAfter^.PartEnd > PartBefore^.PartEnd then
   begin
+    inherited;
     Grow;
   end else
   if PartAfter^.PartEnd < PartBefore^.PartEnd then
   begin
     Shrink;
-  end;
+    inherited;
+  end else
+    inherited;
 end;
 
 initialization

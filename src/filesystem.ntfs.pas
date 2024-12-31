@@ -108,17 +108,19 @@ procedure TPartedFileSystemNTFS.DoResize(const PartAfter, PartBefore: PPartedPar
   end;
 
 begin
-  inherited;
   WriteLog(lsInfo, 'TPartedFileSystemNTFS.DoResize');
   // Shrink / Expand right
   if PartAfter^.PartEnd > PartBefore^.PartEnd then
   begin
+    inherited;
     Grow;
   end else
   if PartAfter^.PartEnd < PartBefore^.PartEnd then
   begin
     Shrink;
-  end;
+    inherited;
+  end else
+    inherited;
 end;
 
 initialization
