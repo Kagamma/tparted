@@ -461,9 +461,7 @@ begin
     begin
       Self.Data := OldS;
       if (Length(Self.Data) = 1) and not (Self.Data[1] in ['0'..'9']) then
-        Self.Data := '0'
-      else
-        Self.Data := UpCase(Self.Data);
+        Self.Data := '0';
     end;
     Self.CurPos := CursorP;
     Self.DrawView;
@@ -475,6 +473,7 @@ begin
     if Self.CurPos > Length(Self.Data) then
       Self.CurPos := Length(Self.Data);
   end;
+  Self.Data := UpCase(Self.Data);
   Self.DrawView;
 end;
 
