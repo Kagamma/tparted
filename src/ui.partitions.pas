@@ -66,14 +66,21 @@ var
   P: TPoint;
   UIDevice: PUIDevice;
   I: LongInt;
-  OldEvent: TEvent;
+  EventOld: TEvent;
+  FocusedOld,
+  CountOld: LongInt;
 begin
-  OldEvent := E; // Backup old event so we can use right mouse click for both selection and drop down menu
+  EventOld := E; // Backup old event so we can use right mouse click for both selection and drop down menu
+  FocusedOld := Self.Focused;
+  CountOld := Self.List^.Count;
   inherited HandleEvent(E);
+  // Update button states
+  if (FocusedOld <> Self.Focused) or (CountOld <> Self.List^.Count) then
+    Message(Self.Owner^.Owner, evCommand, cmListChanged, nil);
   // Handle old event
-  if OldEvent.What = evMouseDown then
+  if EventOld.What = evMouseDown then
   begin
-    if (OldEvent.Buttons and mbMiddleButton) <> 0 then
+    if (EventOld.Buttons and mbMiddleButton) <> 0 then
     begin
       UIDevice := PUIDevice(Self.Owner^.Owner);
       Desktop^.GetBounds(R);
@@ -95,7 +102,7 @@ begin
         MI := MI^.Next;
       end;
       // Make sure popup menu is within screen
-      P := OldEvent.Where;
+      P := EventOld.Where;
       if P.Y + PopupMenu^.Size.Y > R.B.Y then 
       begin
         Dec(P.Y, PopupMenu^.Size.Y+1);
@@ -114,7 +121,6 @@ begin
       Dispose(PopupMenu, Done);
     end;
   end;
-  Message(Self.Owner^.Owner, evCommand, cmListChanged, nil);
 end;
 
 // -------------------------

@@ -547,7 +547,6 @@ begin
     case E.Command of
       cmListChanged:
         begin
-          // TODO: Update button state
           Self.UpdateButtonsState(Self.OpList.GetCurrentDevice^.GetPartitionAt(Self.ListPartition^.List^.Focused)^);
           Exit;
         end;
