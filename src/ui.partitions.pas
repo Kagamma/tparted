@@ -66,10 +66,14 @@ var
   P: TPoint;
   UIDevice: PUIDevice;
   I: LongInt;
+  OldEvent: TEvent;
 begin
-  if E.What = evMouseDown then
+  OldEvent := E; // Backup old event so we can use right mouse click for both selection and drop down menu
+  inherited HandleEvent(E);
+  // Handle old event
+  if OldEvent.What = evMouseDown then
   begin
-    if (E.Buttons and mbMiddleButton) <> 0 then
+    if (OldEvent.Buttons and mbMiddleButton) <> 0 then
     begin
       UIDevice := PUIDevice(Self.Owner^.Owner);
       Desktop^.GetBounds(R);
@@ -91,7 +95,7 @@ begin
         MI := MI^.Next;
       end;
       // Make sure popup menu is within screen
-      P := E.Where;
+      P := OldEvent.Where;
       if P.Y + PopupMenu^.Size.Y > R.B.Y then 
       begin
         Dec(P.Y, PopupMenu^.Size.Y+1);
@@ -106,12 +110,10 @@ begin
       PopupMenu^.MoveTo(P.X + 1, P.Y + 1);
       //
       Desktop^.Insert(PopupMenu);
-      ClearEvent(E); 
       Message(PopupMenu, evCommand, cmMenu, nil);
       Dispose(PopupMenu, Done);
     end;
   end;
-  inherited HandleEvent(E);
   Message(Self.Owner^.Owner, evCommand, cmListChanged, nil);
 end;
 
