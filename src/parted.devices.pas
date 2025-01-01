@@ -92,7 +92,7 @@ type
     function GetPartitionAt(const Index: LongInt): PPartedPartition;
     function GetPartitionCount: LongInt;
     // Returns the number of mounted partitions
-    function GetNumberOfMountedPartitions: LongInt;
+    function GetMountedPartitionCount: LongInt;
     function GetPrimaryPartitionCount: LongInt;
     // Merge all possible unallocated space that is closed together into big one
     procedure MergeUnallocatedSpace;
@@ -416,7 +416,7 @@ begin
   end;
 end;
 
-function TPartedDevice.GetNumberOfMountedPartitions: LongInt;
+function TPartedDevice.GetMountedPartitionCount: LongInt;
 var
   P: PPartedPartition;
 begin
