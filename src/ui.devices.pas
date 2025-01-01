@@ -636,6 +636,8 @@ begin
   // Redraw pending operation text
   Self.LabelPendingOperations^.Text := Format(S_PendingOperations, [Self.OpList.GetOpCount]).ToUnicode;
   Self.LabelPendingOperations^.DrawView;
+  // Update button states
+  Self.UpdateButtonsState(Self.OpList.GetCurrentDevice^.GetPartitionAt(Self.ListPartition^.List^.Focused)^);
 end;
 
 end.

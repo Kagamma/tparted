@@ -70,20 +70,26 @@ var
   EventOld: TEvent;
   FocusedOld,
   CountOld: LongInt;
+
+  procedure UpdateButtonStates;
+  begin
+    if Self.IsFirstEvent or (FocusedOld <> Self.Focused) or (CountOld <> Self.List^.Count) then
+      Message(Self.Owner^.Owner, evCommand, cmListChanged, nil);
+  end;
+
 begin
+  UIDevice := PUIDevice(Self.Owner^.Owner);
   EventOld := E; // Backup old event so we can use right mouse click for both selection and drop down menu
   FocusedOld := Self.Focused;
   CountOld := Self.List^.Count;
   inherited HandleEvent(E);
   // Update button states
-  if Self.IsFirstEvent or (FocusedOld <> Self.Focused) or (CountOld <> Self.List^.Count) then
-    Message(Self.Owner^.Owner, evCommand, cmListChanged, nil);
+  UpdateButtonStates;
   // Handle old event
   if EventOld.What = evMouseDown then
   begin
     if (EventOld.Buttons and mbMiddleButton) <> 0 then
     begin
-      UIDevice := PUIDevice(Self.Owner^.Owner);
       Desktop^.GetBounds(R);
       PopupMenu := New(PUIMenuBox, Init(R, NewMenu(
         NewItem(S_InfoButton.ToUnicode, '', kbNoKey, cmPartitionShowInfo, hcNoContext,
