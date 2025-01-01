@@ -207,7 +207,7 @@ msgid "Partition"
 msgstr ""
 
 #: locale:s_filesystem
-msgid "File System"
+msgid "F.System"
 msgstr ""
 
 #: locale:s_create

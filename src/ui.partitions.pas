@@ -169,8 +169,8 @@ begin
   Inc(R.B.X);
   R.B.Y := R.A.Y + 1;
   S := Format('%s│%s│%s│%s│%s│%s│%s', [
-    PadCenterLimit(S_Partition, 15),
-    PadCenterLimit(S_FileSystem, 15),
+    PadCenterLimit(S_Partition, 19), // TODO: The size should be based on the text with highest length
+    PadCenterLimit(S_FileSystem, 10),
     PadCenterLimit(S_Size, 7),
     PadCenterLimit(S_Used, 7),
     PadRightLimit(S_Flags, 20),
@@ -230,8 +230,8 @@ begin
   begin
     // Prepare partition string
     S := Format('%s│%s│%s│%s│%s│%s│%s', [
-      PadRightLimit(PPart^.GetPartitionPathForDisplay, 15),
-      PadRightLimit(PPart^.FileSystem, 15),
+      PadRightLimit(PPart^.GetPartitionPathForDisplay, 19),
+      PadRightLimit(PPart^.FileSystem, 10),
       PadLeftLimit(SizeString(PPart^.PartSize), 7),
       PadLeftLimit(SizeString(PPart^.PartUsed), 7),
       PadRightLimit(SAToS(PPart^.Flags, ','), 20),

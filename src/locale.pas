@@ -57,7 +57,7 @@ resourcestring
   S_InputLabelTitle = 'Change %s label';
   S_InputLabel = 'New label:';
   S_Partition = 'Partition';
-  S_FileSystem = 'File System';
+  S_FileSystem = 'F.System';
   S_Create = 'Create';
   S_Move = 'Move';
   S_Shrink = 'Shrink';
