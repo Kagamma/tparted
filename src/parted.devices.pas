@@ -91,6 +91,8 @@ type
     procedure InsertPartition(const PPart: PPartedPartition);
     function GetPartitionAt(const Index: LongInt): PPartedPartition;
     function GetPartitionCount: LongInt;
+    // Returns the number of mounted partitions
+    function GetNumberOfMountedPartitions: LongInt;
     function GetPrimaryPartitionCount: LongInt;
     // Merge all possible unallocated space that is closed together into big one
     procedure MergeUnallocatedSpace;
@@ -411,6 +413,20 @@ begin
   begin
     Result := Result^.Next;
     Inc(I);
+  end;
+end;
+
+function TPartedDevice.GetNumberOfMountedPartitions: LongInt;
+var
+  P: PPartedPartition;
+begin
+  Result := 0;
+  P := Self.PartitionRoot;
+  while P <> nil do
+  begin
+    if P^.IsMounted then
+      Inc(Result);
+    P := P^.Next;
   end;
 end;
 
