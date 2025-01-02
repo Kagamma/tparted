@@ -52,5 +52,6 @@ Currently supported filesystems:
 - `jfsutils` (optional) for jfs operations.
 - `f2fs-tools` (optional) for f2fs operations.
 
-![image1](./docs/images/1.png)
+![image](https://github.com/user-attachments/assets/bfb82494-360a-4351-99ff-e7785ffb3cf4)
+
 ![image2](./docs/images/2.png)
