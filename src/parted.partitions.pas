@@ -53,6 +53,8 @@ function QueryDeviceAndPartitions(const APath: String; var ADevice: TPartedDevic
 function QueryPartitionMountStatus(var APart: TPartedPartition): TExecResult;
 // /bin/df -B1 APath
 function QueryPartitionUsedAndAvail(var APart: TPartedPartition): TExecResultDA;
+// /bin/tune2fs -l APath
+function QueryPartitionReservedSize(var APart: TPartedPartition): TExecResultDA;
 // /bin/blkid -s LABEL -o value APath
 function QueryPartitionLabel(var APart: TPartedPartition): TExecResult;
 // /bin/umount APath
@@ -280,6 +282,7 @@ begin
       WriteLogAndRaise(Format(S_ProcessExitCode, ['df -B1  ' + Path, Result.ExitCode, SAToS(Result.MessageArray)]));
     ParseUsedAndAvailableBlockFromString(Result.MessageArray[1], APart);
   end;
+  QueryPartitionReservedSize(APart);
   // Try to unmount the device again after we're done
   if (not APart.IsMounted) and (APart.FileSystem <> 'linux-swap') then
   begin
@@ -289,6 +292,52 @@ begin
   APart.PartUsed := 1024 * 1024 * 8;
   APart.PartFree := APart.PartSize - APart.PartUsed;
   {$endif}
+end;
+
+function QueryPartitionReservedSize(var APart: TPartedPartition): TExecResultDA;
+  
+  function ExtractNumberFromText(const S: String): QWord;
+  var
+    C: Char;
+    NText: String;
+  begin
+    Result := 0;
+    for C in S do
+    begin
+      if C in ['0'..'9'] then
+        NText := NText + C;
+    end;
+    if NText <> '' then
+      Result := NText.ToInt64;
+  end;
+
+var
+  Path, S: String;
+  BlockSize: LongInt = 0;
+  BlockCount: QWord = 0;
+begin
+  Result.ExitCode := -1;
+  if APart.Number <= 0 then
+    Exit;
+  if (APart.FileSystem <> 'ext2') and (APart.FileSystem <> 'ext3') and (APart.FileSystem <> 'ext4') then
+    Exit;
+  Path := APart.GetPartitionPath;
+  Result := ExecSA('tune2fs', ['-l', Path]);
+  if Result.ExitCode <> 0 then
+  begin
+    WriteLog(lsError, Format(S_ProcessExitCode, ['tune2fs -l ' + Path, Result.ExitCode, SAToS(Result.MessageArray)]));
+    Exit;
+  end;
+  for S in Result.MessageArray do
+  begin
+    if S.IndexOf('Block size:') >= 0 then
+      BlockSize := ExtractNumberFromText(S)
+    else
+    if S.IndexOf('Reserved block count:') >= 0 then
+      BlockCount := ExtractNumberFromText(S);
+  end;
+  APart.PartUsed := Min(APart.PartSize, APart.PartUsed + BlockSize * BlockCount);
+  APart.PartFree := APart.PartSize - APart.PartUsed;
 end;
 
 function QueryPartitionLabel(var APart: TPartedPartition): TExecResult;
