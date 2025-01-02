@@ -1,6 +1,6 @@
 # tparted
 
-TUI frontend for `parted`: A simple, user-friendly utility for creating, reorganizing, and deleting GPT disk partitions, based on Free Vision application framework.
+TUI frontend for `parted`: A simple, user-friendly utility for creating, moving, resizing, and deleting GPT disk partitions, based on Free Vision application framework.
 
 Currently supported filesystems:
 
@@ -52,6 +52,6 @@ Currently supported filesystems:
 - `jfsutils` (optional) for jfs operations.
 - `f2fs-tools` (optional) for f2fs operations.
 
-![image](https://github.com/user-attachments/assets/bfb82494-360a-4351-99ff-e7785ffb3cf4)
+![image1](./docs/images/1.png)
 
 ![image2](./docs/images/2.png)
