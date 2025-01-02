@@ -148,15 +148,15 @@ begin
       D^.Insert(Size);
       R.Assign(5, 4, 30, 5);
       D^.Insert(New(PLabel, Init(R, S_NewSize.ToUnicode, Size)));
+
+      // Total size
+      R.Assign(6, 6, 30, 8);
+      D^.Insert(New(PStaticText, Init(R, Format(S_MaxPossibleSpace, [BToMBFloor(PPart^.GetPossibleExpandSize)]).ToUnicode)));
+
+      // Min possible size
+      R.Assign(6, 8, 30, 10);
+      D^.Insert(New(PStaticText, Init(R, Format(S_MinPossibleSpace, [BToMBFloor(PPart^.PartUsed)]).ToUnicode)));
     end;
-
-    // Total size
-    R.Assign(6, 6, 30, 8);
-    D^.Insert(New(PStaticText, Init(R, Format(S_MaxPossibleSpace, [BToMBFloor(PPart^.GetPossibleExpandSize)]).ToUnicode)));
-
-    // Min possible size
-    R.Assign(6, 8, 30, 10);
-    D^.Insert(New(PStaticText, Init(R, Format(S_MinPossibleSpace, [BToMBFloor(PPart^.PartUsed)]).ToUnicode)));
 
     // Ok-Button
     R.Assign(11, 12, 23, 14);

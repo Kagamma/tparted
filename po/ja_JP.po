@@ -312,8 +312,8 @@ msgid "Create new partition"
 msgstr "新しいパーティションの作成"
 
 #: locale:s_resizedialogtitle
-msgid "Resize %s"
-msgstr "%s のサイズ変更"
+msgid "Move/Resize %s"
+msgstr "%s 移動/サイズ変更"
 
 #: locale:s_minpossiblespace
 msgid "Min.Possible (MB)\015%d"

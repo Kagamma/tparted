@@ -83,7 +83,7 @@ resourcestring
   S_FormatsDialogTitle = 'Format %s';
   S_FlagsDialogTitle = 'Edit %s flags';
   S_CreateDialogTitle = 'Create new partition';
-  S_ResizeDialogTitle = 'Resize %s';
+  S_ResizeDialogTitle = 'Move/Resize %s';
   S_MinPossibleSpace = 'Min.Possible (MB)'#13'%d';
   S_MaxPossibleSpace = 'Max.Possible (MB)'#13'%d';
   S_CreatingGPT = 'Creating GUID Partition Table...';

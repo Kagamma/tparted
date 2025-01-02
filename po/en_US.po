@@ -311,7 +311,7 @@ msgid "Create new partition"
 msgstr ""
 
 #: locale:s_resizedialogtitle
-msgid "Resize %s"
+msgid "Move/Resize %s"
 msgstr ""
 
 #: locale:s_minpossiblespace
