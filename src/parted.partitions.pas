@@ -321,6 +321,8 @@ begin
     Exit;
   if (APart.FileSystem <> 'ext2') and (APart.FileSystem <> 'ext3') and (APart.FileSystem <> 'ext4') then
     Exit;
+  if not ProgramExists('tune2fs') then
+    Exit;
   Path := APart.GetPartitionPath;
   Result := ExecSA('tune2fs', ['-l', Path]);
   if Result.ExitCode <> 0 then
