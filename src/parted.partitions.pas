@@ -335,9 +335,13 @@ begin
     else
     if S.IndexOf('Reserved block count:') >= 0 then
       BlockCount := ExtractNumberFromText(S);
+    if (BlockSize > 0) and (BlockCount > 0) then
+    begin
+      APart.PartUsed := Min(APart.PartSize, APart.PartUsed + BlockSize * BlockCount);
+      APart.PartFree := APart.PartSize - APart.PartUsed;
+      break;
+    end;
   end;
-  APart.PartUsed := Min(APart.PartSize, APart.PartUsed + BlockSize * BlockCount);
-  APart.PartFree := APart.PartSize - APart.PartUsed;
 end;
 
 function QueryPartitionLabel(var APart: TPartedPartition): TExecResult;
