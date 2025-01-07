@@ -88,7 +88,7 @@ begin
   // Handle old event
   if EventOld.What = evMouseDown then
   begin
-    if (EventOld.Buttons and mbMiddleButton) <> 0 then
+    if (EventOld.Buttons and mbRightButton) <> 0 then
     begin
       Desktop^.GetBounds(R);
       PopupMenu := New(PUIMenuBox, Init(R, NewMenu(
