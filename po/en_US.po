@@ -347,7 +347,7 @@ msgid "%s cannot larger than %dMB!"
 msgstr ""
 
 #: locale:s_menuwindow
-msgid "~W~indow"
+msgid "~W~indows"
 msgstr ""
 
 #: locale:s_menupreviouswindow
@@ -360,5 +360,9 @@ msgstr ""
 
 #: locale:s_menumaximize
 msgid "~M~aximize"
+msgstr ""
+
+#: locale:s_menuswitchcolor
+msgid "Switch Colors"
 msgstr ""
 

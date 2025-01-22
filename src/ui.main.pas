@@ -31,11 +31,13 @@ uses
   UI.Devices;
 
 const
+  cmNothing = 60000;
   cmMenuAbout = 1001;
   cmMenuRefreshDevice = 1002;
   cmMessageDeviceRefresh = 1003;
   cmMenuDisplayLog = 1004;
   cmMenuDisplayFileSystemSupport = 1005;
+  cmMenuSwitchColor = 1006;
   cmDeviceAnchor = 12000;
   cmPartitionShowInfo = 1100;
   cmPartitionCreate = 1101;
@@ -63,6 +65,7 @@ type
     procedure ResizeApplication(X, Y: LongInt);
   public
     destructor Done; virtual;
+    constructor Init;
     procedure InitStatusLine; virtual;
     procedure InitMenuBar; virtual;
     procedure InitDeskTop; virtual;
@@ -108,6 +111,11 @@ begin
   inherited;
 end;
 
+constructor TUIMain.Init;
+begin
+  inherited;
+end;
+
 procedure TUIMain.InitDeskTop;
 var
   R: TRect;
@@ -150,7 +158,9 @@ begin
   Self.FMenuWindow := NewSubMenu(S_MenuWindow.ToUnicode, hcNoContext, NewMenu(
     NewItem(S_MenuPreviousWindow.ToUnicode, 'Shift-F7', kbShiftF7, cmPrev, hcNoContext,
     NewItem(S_MenuNextWindow.ToUnicode, 'F7', kbF7, cmNext, hcNoContext,
-    NewItem(S_MenuMaximize.ToUnicode, 'F8', kbF8, cmZoom, hcNoContext, nil)))
+    NewItem(S_MenuMaximize.ToUnicode, 'F8', kbF8, cmZoom, hcNoContext,
+    NewLine(
+    NewItem(S_MenuSwitchColor.ToUnicode, '', kbNoKey, cmMenuSwitchColor, hcNoContext, nil)))))
   ), Self.FMenuHelp);
 
   // Construct device menu
@@ -214,6 +224,15 @@ begin
       cmMenuDisplayFileSystemSupport:
         begin
           ShowFileSystemSupportDialog;
+          Self.ClearEvent(E);
+        end;
+      cmMenuSwitchColor:
+        begin
+          if AppPalette = apColor then
+            AppPalette := apMonochrome
+          else
+            AppPalette := apColor;
+          Self.ReDraw;
           Self.ClearEvent(E);
         end;
       cmMenuRefreshDevice:

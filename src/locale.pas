@@ -92,10 +92,11 @@ resourcestring
   S_Executing = 'Performing %d/%d operations...';
   S_VerifyMinSize = '%s requires a minimal size of %dMB!';
   S_VerifyMaxSize = '%s cannot larger than %dMB!';
-  S_MenuWindow = '~W~indow';
+  S_MenuWindow = '~W~indows';
   S_MenuPreviousWindow = '~P~revious Window';
   S_MenuNextWindow = '~N~ext Window';
   S_MenuMaximize = '~M~aximize';
+  S_MenuSwitchColor = 'Switch Colors';
 
 implementation
 

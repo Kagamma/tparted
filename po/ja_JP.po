@@ -344,7 +344,7 @@ msgid "%s requires a minimal size of %dMB!"
 msgstr "%s には最小サイズが%dMB必要です！"
 
 #: locale:s_menuwindow
-msgid "~W~indow"
+msgid "~W~indows"
 msgstr "ウィンドウ"
 
 #: locale:s_menupreviouswindow
@@ -358,3 +358,7 @@ msgstr "次のウィンドウ"
 #: locale:s_menumaximize
 msgid "~M~aximize"
 msgstr "最大化"
+
+#: locale:s_menuswitchcolor
+msgid "色の変更"
+msgstr ""
