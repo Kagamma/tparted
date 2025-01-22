@@ -106,11 +106,13 @@ begin
       for I := Low(UIDevice^.ButtonPartitionArray) to High(UIDevice^.ButtonPartitionArray) do
       begin
         MI^.Disabled := UIDevice^.ButtonPartitionArray[I]^.Disabled;
+        if MI^.Disabled then
+          MI^.Command := cmNothing;
         MI := MI^.Next;
       end;
       // Make sure popup menu is within screen
       P := EventOld.Where;
-      if P.Y + PopupMenu^.Size.Y > R.B.Y then 
+      if P.Y + PopupMenu^.Size.Y > R.B.Y then
       begin
         Dec(P.Y, PopupMenu^.Size.Y+1);
         if P.Y < R.A.Y then
@@ -119,7 +121,7 @@ begin
           Inc(P.X);
         end;
       end;
-      if P.X + PopupMenu^.Size.X > R.B.X then    
+      if P.X + PopupMenu^.Size.X > R.B.X then
         Dec(P.X, PopupMenu^.Size.X);
       PopupMenu^.MoveTo(P.X + 1, P.Y + 1);
       //
