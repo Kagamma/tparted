@@ -124,6 +124,6 @@ begin
 end;
 
 initialization
-  RegisterFileSystem(TPartedFileSystemNTFS, ['ntfs'], [2], [17592186044416 - 1]);
+  RegisterFileSystem(TPartedFileSystemNTFS, ['ntfs'], [2], [Pred(17592186044416)]);
 
 end.

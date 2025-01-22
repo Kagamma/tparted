@@ -114,6 +114,6 @@ begin
 end;
 
 initialization
-  RegisterFileSystem(TPartedFileSystemF2FS, ['f2fs'], [1], [16777216 - 1]);
+  RegisterFileSystem(TPartedFileSystemF2FS, ['f2fs'], [1], [Pred(16777216)]);
 
 end.

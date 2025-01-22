@@ -218,12 +218,12 @@ end;
 
 function TPartedFileSystem.GetSupport: TPartedFileSystemSupport;
 begin
-  Result.CanFormat := False;
+  Result.CanFormat := ProgramExists('parted');
   Result.CanMove := False;
   Result.CanShrink := False;
-  Result.CanFormat := False;
+  Result.CanGrow := False;
   Result.CanLabel := False;
-  Result.Dependencies := '';
+  Result.Dependencies := 'parted';
 end;
 
 procedure TPartedFileSystem.DoExec(const Name: String; const Params: TStringDynArray; const Delay: LongWord = 1000);
@@ -358,6 +358,7 @@ initialization
   FileSystemMinSizeMap := TPartedFileSystemSizeMap.Create;
   FileSystemMaxSizeMap := TPartedFileSystemSizeMap.Create;
   FileSystemDependenciesMap := TPartedFileSystemDependenciesMap.Create;
+  RegisterFileSystem(TPartedFileSystem, ['unformatted'], [1], [$FFFFFFFF]);
 
 finalization
   FilesystemMap.Free;

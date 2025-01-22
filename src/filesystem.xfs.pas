@@ -117,6 +117,6 @@ begin
 end;
 
 initialization
-  RegisterFileSystem(TPartedFileSystemXfs, ['xfs'], [300], [8796093022208 - 1]);
+  RegisterFileSystem(TPartedFileSystemXfs, ['xfs'], [300], [Pred(8796093022208)]);
 
 end.
