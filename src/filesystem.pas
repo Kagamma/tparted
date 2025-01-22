@@ -358,7 +358,7 @@ initialization
   FileSystemMinSizeMap := TPartedFileSystemSizeMap.Create;
   FileSystemMaxSizeMap := TPartedFileSystemSizeMap.Create;
   FileSystemDependenciesMap := TPartedFileSystemDependenciesMap.Create;
-  RegisterFileSystem(TPartedFileSystem, ['unformatted'], [1], [$FFFFFFFFFFFF]);
+  RegisterFileSystem(TPartedFileSystem, ['unformatted'], [1], [$1FFFFFFFFFFFFFFF]);
 
 finalization
   FilesystemMap.Free;
