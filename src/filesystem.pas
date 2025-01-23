@@ -60,7 +60,7 @@ type
 
 procedure RegisterFileSystem(AFSClass: TPartedFileSystemClass; FileSystemTypeArray: TStringDynArray; MinSizeMap, MaxSizeMap: TInt64DynArray);
 // Show a message box, and return false, if Size is invalid
-function VerifyFileSystemSize(FS: String; Size: Int64): Boolean;
+function VerifyFileSystemSize(PT, FS: String; Size: Int64): Boolean;
 // Return the minimal size of file system
 function GetFileSystemMinSize(FS: String): Int64;
 // Return the maximum size of file system
@@ -86,7 +86,7 @@ uses
   FreeVision,
   Math;
 
-function VerifyFileSystemSize(FS: String; Size: Int64): Boolean;
+function VerifyFileSystemSize(PT, FS: String; Size: Int64): Boolean;
 var
   MinSize,
   MaxSize: Int64;
@@ -107,6 +107,14 @@ begin
     if MaxSize < Size then
     begin
       MsgBox(Format(S_VerifyMaxSize, [FS, MaxSize]), nil, mfError + mfOKButton);
+      Exit;
+    end;
+  end;
+  if PT = 'msdos' then
+  begin
+    if 2097152 < Size then
+    begin
+      MsgBox(Format(S_VerifyMaxSize, [FS, 2097152]), nil, mfError + mfOKButton);
       Exit;
     end;
   end;

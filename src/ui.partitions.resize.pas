@@ -174,7 +174,7 @@ begin
     begin
       D^.GetData(AData^);
       Result := ((DataOld.Preceding <> AData^.Preceding) or (DataOld.Size <> AData^.Size)) and
-                 VerifyFileSystemSize(PPart^.FileSystem, AData^.Size);
+                 VerifyFileSystemSize(PPart^.Device^.Table, PPart^.FileSystem, AData^.Size);
     end;
   finally
     Dispose(D, Done);

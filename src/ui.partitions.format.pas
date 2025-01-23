@@ -95,7 +95,7 @@ begin
     if Desktop^.ExecView(D) = cmOk then
     begin
       D^.GetData(AData^);
-      Result := VerifyFileSystemSize(FileSystemFormattableArray[AData^.FileSystem], BToMBFloor(PPart^.PartSize));
+      Result := VerifyFileSystemSize(PPart^.Device^.Table, FileSystemFormattableArray[AData^.FileSystem], BToMBFloor(PPart^.PartSize));
     end;
   finally
     Dispose(D, Done);
