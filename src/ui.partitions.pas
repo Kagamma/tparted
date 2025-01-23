@@ -236,7 +236,8 @@ begin
     if PPart^.IsMounted then
       IsMountedSymbol := 'M '
     else
-      IsMountedSymbol := '  ';
+    if PPart^.Number < 0 then
+      IsMountedSymbol := '? ';
     S := Format('%s│%s│%s│%s│%s│%s│%s', [
       PadRightLimit(IsMountedSymbol + ExtractFileName(PPart^.GetPartitionPathForDisplay), 17),
       PadRightLimit(PPart^.FileSystem, 10),
