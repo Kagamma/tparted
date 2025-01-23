@@ -91,7 +91,7 @@ msgid "Un~m~ount"
 msgstr ""
 
 #: locale:s_creategptbutton
-msgid "Create ~G~PT"
+msgid "Create GP~T~"
 msgstr ""
 
 #: locale:s_labelbutton

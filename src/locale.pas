@@ -28,7 +28,7 @@ resourcestring
   S_FormatButton = '~F~ormat';
   S_ResizeButton = '~R~esize';
   S_UnmountButton = 'Un~m~ount';
-  S_CreateGPTButton = 'Create ~G~PT';
+  S_CreateGPTButton = 'Create GP~T~';
   S_LabelButton = '~L~abel/Name';
   S_FlagButton = 'Fla~g~s';
   S_UndoButton = '~U~ndo';
