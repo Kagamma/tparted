@@ -148,18 +148,12 @@ begin
 end;
 
 function TPartedPartition.GetPartitionPathForDisplay: String;
-var
-  IsMountedSymbol: Char;
 begin
-  if Self.IsMounted then
-    IsMountedSymbol := 'M'
-  else
-    IsMountedSymbol := ' ';
   if Self.Number <> 0 then
-    Result := IsMountedSymbol + Self.GetPartitionPath
+    Result := Self.GetPartitionPath
   else
   if Self.Number = 0 then
-    Result := ' unallocated';
+    Result := 'unallocated';
 end;
 
 function TPartedPartition.GetPartitionPath: String;

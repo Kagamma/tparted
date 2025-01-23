@@ -172,7 +172,7 @@ begin
   Inc(R.B.X);
   R.B.Y := R.A.Y + 1;
   S := Format('%s│%s│%s│%s│%s│%s│%s', [
-    PadCenterLimit(S_Partition, 19), // TODO: The size should be based on the text with highest length
+    PadCenterLimit(S_Partition, 17), // TODO: The size should be based on the text with highest length
     PadCenterLimit(S_FileSystem, 10),
     PadCenterLimit(S_Size, 7),
     PadCenterLimit(S_Used, 7),
@@ -225,6 +225,7 @@ var
   FocusedOld: LongInt = 0;
   PPart: PPartedPartition;
   S: String;
+  IsMountedSymbol: String;
 begin
   Self.ListCollection := New(PUnicodeStringPtrCollection, Init(8, 8));
   FocusedOld := Self.List^.Focused;
@@ -232,8 +233,12 @@ begin
   while PPart <> nil do
   begin
     // Prepare partition string
+    if PPart^.IsMounted then
+      IsMountedSymbol := 'M '
+    else
+      IsMountedSymbol := '  ';
     S := Format('%s│%s│%s│%s│%s│%s│%s', [
-      PadRightLimit(PPart^.GetPartitionPathForDisplay, 19),
+      PadRightLimit(IsMountedSymbol + ExtractFileName(PPart^.GetPartitionPathForDisplay), 17),
       PadRightLimit(PPart^.FileSystem, 10),
       PadLeftLimit(SizeString(PPart^.PartSize), 7),
       PadLeftLimit(SizeString(PPart^.PartUsed), 7),
