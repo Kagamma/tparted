@@ -172,7 +172,7 @@ begin
   // Unmount button
   Self.ButtonPartitionArray[7]^.SetDisabled((not APart.IsMounted) or (APart.FileSystem = 'linux-swap') or IsDisabled);
   // Create GPT btton
-  //Self.ButtonPartitionArray[8]^.SetDisabled(Self.OpList[0].Device^.Table <> 'msdos');
+  Self.ButtonPartitionArray[8]^.SetDisabled(Self.OpList[0].Device^.GetMountedPartitionCount > 0);
   // Undo button
   Self.ButtonOperationArray[0]^.SetDisabled(Self.OpList.GetOpCount = 0);
   // Empty button
