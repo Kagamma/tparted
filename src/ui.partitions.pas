@@ -103,7 +103,8 @@ begin
       ), nil));
       // Set menu states
       MI := PopupMenu^.Menu^.Items;
-      for I := Low(UIDevice^.ButtonPartitionArray) to High(UIDevice^.ButtonPartitionArray) do
+      // 'Pred' to exclude 'Create GPT' button
+      for I := Low(UIDevice^.ButtonPartitionArray) to Pred(High(UIDevice^.ButtonPartitionArray)) do
       begin
         MI^.Disabled := UIDevice^.ButtonPartitionArray[I]^.Disabled;
         if MI^.Disabled then
