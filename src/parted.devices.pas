@@ -26,7 +26,7 @@ uses
   Classes, SysUtils, Types, Parted.Commons, Locale, StrUtils, Parted.Logs{$ifdef UNIX}, Unix{$endif};
 
 const
-  PTableNames: array[0..1] of String = ('GPT', 'msdos');
+  PTableNames: array[0..1] of String = ('gpt', 'msdos');
 
 type
   PPartedDevice = ^TPartedDevice;
