@@ -303,7 +303,7 @@ msgid "WARNING! This will ERASE ALL DATA on device %s!\015Do you want to create 
 msgstr ""
 
 #: locale:s_createpartitiontablecompleted
-msgid "GUID Partition Table is created. Please reopen the window again."
+msgid "GUID Partition Table created. Please reopen the window again."
 msgstr ""
 
 #: locale:s_processexitcode

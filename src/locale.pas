@@ -81,7 +81,7 @@ resourcestring
   S_PartitionUnmounting = 'Unmounting %s...';
   S_CreatePartitionTableAsk = 'Device %s has no partition table.'#13'Do you want to create a GUID Partition Table?';
   S_CreatePartitionTableAskWarning = 'WARNING! This will ERASE ALL DATA on device %s!'#13'Do you want to create a GUID Partition Table?';
-  S_CreatePartitionTableCompleted = 'GUID Partition Table is created. Please reopen the window again.';
+  S_CreatePartitionTableCompleted = 'GUID Partition Table created. Please reopen the window again.';
   S_ProcessExitCode = '"%s" exited with exit code %d: %s';
   S_FormatsDialogTitle = 'Format %s';
   S_FlagsDialogTitle = 'Edit %s flags';
