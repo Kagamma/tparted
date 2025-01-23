@@ -32,6 +32,7 @@ uses
   Parted.Operations,
   Parted.Logs,
   UI.Commons,
+  UI.Devices.PTable,
   UI.Partitions;
 
 type
@@ -523,6 +524,8 @@ procedure TUIDevice.HandleEvent(var E: TEvent);
     DoApplyRefreshDevice;
   end;
 
+var
+  TableType: String;
 begin
   if Self.FIsClosing then Exit;
   if E.What = evKeyDown then
@@ -602,13 +605,14 @@ begin
         end;
       cmDeviceCreateGPT:
         begin
-          if MsgBox(Format(S_CreatePartitionTableAskWarning, [Self.OpList.GetCurrentDevice^.Path]), nil, mfWarning + mfYesButton + mfNoButton) = cmYes then
+          if (MsgBox(Format(S_CreatePartitionTableAskWarning, [Self.OpList.GetCurrentDevice^.Path]), nil, mfWarning + mfYesButton + mfNoButton) = cmYes) and
+             ShowPTableDialog(TableType) then
           begin
-            LoadingStart(S_CreatingGPT);
+            LoadingStart(Format(S_CreatingGPT, [TableType]));
             try
-              QueryCreateGPTSilent(Self.OpList.GetCurrentDevice^.Path);
+              QueryCreateGPTSilent(TableType, Self.OpList.GetCurrentDevice^.Path);
               LoadingStop;
-              MsgBox(Format(S_CreatePartitionTableCompleted, [Self.OpList.GetCurrentDevice^.Path]), nil, mfInformation + mfOkButton);
+              MsgBox(S_CreatePartitionTableCompleted, nil, mfInformation + mfOkButton);
               Message(@Self, evCommand, cmClose, nil);
             except
               on E: Exception do

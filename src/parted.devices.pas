@@ -25,6 +25,9 @@ interface
 uses
   Classes, SysUtils, Types, Parted.Commons, Locale, StrUtils, Parted.Logs{$ifdef UNIX}, Unix{$endif};
 
+const
+  PTableNames: array[0..1] of String = ('GPT', 'msdos');
+
 type
   PPartedDevice = ^TPartedDevice;
   PPartedPartition = ^TPartedPartition;
@@ -109,9 +112,9 @@ function ParseDevicesFromStringArray(const SA: TStringDynArray): TPartedDeviceAr
 function QueryDeviceArray: TPartedDeviceArray;
 // This is for checking device and partitions
 function QueryDeviceExists(const APath: String): TExecResult;
-function QueryCreateGPT(const APath: String): TExecResult;
+function QueryCreateGPT(const AType, APath: String): TExecResult;
 // Similar to QueryCreateGPT, but completely ignore user prompt
-function QueryCreateGPTSilent(const APath: String): TExecResult;
+function QueryCreateGPTSilent(const AType, APath: String): TExecResult;
 
 implementation
 
@@ -633,22 +636,22 @@ begin
     WriteLogAndRaise(Format(S_ProcessExitCode, ['blkid ' + APath, Result.ExitCode, Result.Message]));
 end;
 
-function QueryCreateGPT(const APath: String): TExecResult;
+function QueryCreateGPT(const AType, APath: String): TExecResult;
 begin
   Result.ExitCode := -1;
   {$ifndef TPARTED_TEST}
-  Result := ExecS('parted', [APath, 'mklabel', 'GPT']);
+  Result := ExecS('parted', [APath, 'mklabel', AType]);
   if Result.ExitCode <> 0 then
-    WriteLogAndRaise(Format(S_ProcessExitCode, ['parted ' + APath + ' mklabel GPT', Result.ExitCode, Result.Message]));
+    WriteLogAndRaise(Format(S_ProcessExitCode, ['parted ' + APath + ' mklabel ' + AType, Result.ExitCode, Result.Message]));
   {$endif}
 end;
 
-function QueryCreateGPTSilent(const APath: String): TExecResult;
+function QueryCreateGPTSilent(const AType, APath: String): TExecResult;
 begin
   Result.ExitCode := -1;
-  Result := ExecS('sh', ['-c', Format('echo "Yes" | parted %s ---pretend-input-tty mklabel GPT', [APath])]);
+  Result := ExecS('sh', ['-c', Format('echo "Yes" | parted %s ---pretend-input-tty mklabel %s', [APath, AType])]);
   if Result.ExitCode <> 0 then
-    WriteLogAndRaise(Format(S_ProcessExitCode, ['parted ' + APath + ' mklabel GPT', Result.ExitCode, Result.Message]));
+    WriteLogAndRaise(Format(S_ProcessExitCode, ['parted ' + APath + ' mklabel ' + AType, Result.ExitCode, Result.Message]));
 end;
 
 end.

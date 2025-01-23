@@ -91,7 +91,7 @@ msgid "Un~m~ount"
 msgstr ""
 
 #: locale:s_creategptbutton
-msgid "Create GP~T~"
+msgid "P.~T~able"
 msgstr ""
 
 #: locale:s_labelbutton
@@ -295,15 +295,15 @@ msgid "Unmounting %s..."
 msgstr ""
 
 #: locale:s_createpartitiontableask
-msgid "Device %s has no partition table.\015Do you want to create a GUID Partition Table?"
+msgid "Device %s has no partition table.\015Do you want to create a partition table?"
 msgstr ""
 
 #: locale:s_createpartitiontableaskwarning
-msgid "WARNING! This will ERASE ALL DATA on device %s!\015Do you want to create a GUID Partition Table?"
+msgid "WARNING! This will ERASE ALL DATA on device %s!\015Do you want to create a partition table?"
 msgstr ""
 
 #: locale:s_createpartitiontablecompleted
-msgid "GUID Partition Table created. Please reopen the window again."
+msgid "Partition table created. Please reopen the window again."
 msgstr ""
 
 #: locale:s_processexitcode
@@ -335,7 +335,7 @@ msgid "Max.Possible (MB)\015%d"
 msgstr ""
 
 #: locale:s_creatinggpt
-msgid "Creating GUID Partition Table..."
+msgid "Creating %s..."
 msgstr ""
 
 #: locale:s_maximumpartitionreached
@@ -376,5 +376,9 @@ msgstr ""
 
 #: locale:s_menuswitchcolor
 msgid "Switch Colors"
+msgstr ""
+
+#: locale:s_selectpartitiontable
+msgid "Select partition table"
 msgstr ""
 

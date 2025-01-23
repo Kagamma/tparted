@@ -28,6 +28,7 @@ uses
   Parted.Devices,
   Parted.Partitions,
   Parted.Commons, Locale,
+  UI.Devices.PTable,
   UI.Devices;
 
 const
@@ -194,6 +195,7 @@ procedure TUIMain.HandleEvent(var E: TEvent);
 var
   LDevice: PPartedDevice;
   Path: String;
+  TableType: String;
   I: LongInt;
 begin
   if E.What = evCommand then
@@ -258,10 +260,11 @@ begin
               QueryDeviceAndPartitions(Path, LDevice^);
               if LDevice^.Table = 'unknown' then // This device has no partition table, wanna create it?
               begin
-                if MsgBox(Format(S_CreatePartitionTableAsk, [LDevice^.Path]), nil, mfInformation + mfYesButton + mfNoButton) = cmYes then
+                if (MsgBox(Format(S_CreatePartitionTableAsk, [LDevice^.Path]), nil, mfInformation + mfYesButton + mfNoButton) = cmYes) and
+                   ShowPTableDialog(TableType)  then
                 begin
-                  LoadingStart(S_CreatingGPT);
-                  QueryCreateGPT(LDevice^.Path);
+                  LoadingStart(Format(S_CreatingGPT, [TableType]));
+                  QueryCreateGPT(TableType, LDevice^.Path);
                   // Query for device again
                   QueryDeviceAndPartitions(Path, LDevice^);
                   LoadingStop;

@@ -292,8 +292,8 @@ msgid "Unmounting %s..."
 msgstr "%s をアンマウントしています..."
 
 #: locale:s_createpartitiontableask
-msgid "Device %s has no partition table.\015Do you want to create a GUID Partition Table?"
-msgstr "デバイス %s にパーティションテーブルがありません。\015GUIDパーティションテーブルを作成しますか？"
+msgid "Device %s has no partition table.\015Do you want to create a partition table?"
+msgstr "デバイス %s にパーティションテーブルがありません。\015パーティションテーブルを作成しますか？"
 
 #: locale:s_processexitcode
 msgid "\"%s\" exited with exit code %d: %s"
@@ -324,8 +324,8 @@ msgid "Max.Possible (MB)\015%d"
 msgstr "最大可能（MB）\015%d"
 
 #: locale:s_creatinggpt
-msgid "Creating GUID Partition Table..."
-msgstr "GUIDパーティションテーブルを作成中..."
+msgid "Creating %s Partition Table..."
+msgstr "%sパーティションテーブルを作成中..."
 
 #: locale:s_maximumpartitionreached
 msgid "Maximum number of partitions reached!"
@@ -364,9 +364,13 @@ msgid "色の変更"
 msgstr ""
 
 #: locale:s_createpartitiontableaskwarning
-msgid "警告！これによりデバイス /dev/sda のすべてのデータが消去されます！\015GUIDパーティションテーブルを作成しますか？"
+msgid "警告！これによりデバイス /dev/sda のすべてのデータが消去されます！\015パーティションテーブルを作成しますか？"
 msgstr ""
 
 #: locale:s_createpartitiontablecompleted
-msgid "GUIDパーティションテーブルが作成されました。もう一度ウィンドウを再開してください。"
+msgid "パーティションテーブルが作成されました。もう一度ウィンドウを再開してください。"
+msgstr ""
+
+#: locale:s_selectpartitiontable
+msgid "Select partition table"
 msgstr ""

@@ -28,7 +28,7 @@ resourcestring
   S_FormatButton = '~F~ormat';
   S_ResizeButton = '~R~esize';
   S_UnmountButton = 'Un~m~ount';
-  S_CreateGPTButton = 'Create GP~T~';
+  S_CreateGPTButton = 'P.~T~able';
   S_LabelButton = '~L~abel/Name';
   S_FlagButton = 'Fla~g~s';
   S_UndoButton = '~U~ndo';
@@ -79,9 +79,9 @@ resourcestring
   S_MenuFileSystemSupport = '~F~ile System Support';
   S_PartitionUnmounted = #3'"%s" unmounted!';
   S_PartitionUnmounting = 'Unmounting %s...';
-  S_CreatePartitionTableAsk = 'Device %s has no partition table.'#13'Do you want to create a GUID Partition Table?';
-  S_CreatePartitionTableAskWarning = 'WARNING! This will ERASE ALL DATA on device %s!'#13'Do you want to create a GUID Partition Table?';
-  S_CreatePartitionTableCompleted = 'GUID Partition Table created. Please reopen the window again.';
+  S_CreatePartitionTableAsk = 'Device %s has no partition table.'#13'Do you want to create a partition table?';
+  S_CreatePartitionTableAskWarning = 'WARNING! This will ERASE ALL DATA on device %s!'#13'Do you want to create a partition table?';
+  S_CreatePartitionTableCompleted = 'Partition table created. Please reopen the window again.';
   S_ProcessExitCode = '"%s" exited with exit code %d: %s';
   S_FormatsDialogTitle = 'Format %s';
   S_FlagsDialogTitle = 'Edit %s flags';
@@ -89,7 +89,7 @@ resourcestring
   S_ResizeDialogTitle = 'Move/Resize %s';
   S_MinPossibleSpace = 'Min.Possible (MB)'#13'%d';
   S_MaxPossibleSpace = 'Max.Possible (MB)'#13'%d';
-  S_CreatingGPT = 'Creating GUID Partition Table...';
+  S_CreatingGPT = 'Creating %s...';
   S_MaximumPartitionReached = 'Maximum number of partitions reached!';
   S_OperationAdvise = 'Are you sure you want to apply the pending operations to %s? Editing partitions has the potential to cause LOSS of DATA.';
   S_Executing = 'Performing %d/%d operations...';
@@ -100,6 +100,7 @@ resourcestring
   S_MenuNextWindow = '~N~ext Window';
   S_MenuMaximize = '~M~aximize';
   S_MenuSwitchColor = 'Switch Colors';
+  S_SelectPartitionTable = 'Select partition table';
 
 implementation
 
