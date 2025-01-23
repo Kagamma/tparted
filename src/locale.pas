@@ -28,6 +28,7 @@ resourcestring
   S_FormatButton = '~F~ormat';
   S_ResizeButton = '~R~esize';
   S_UnmountButton = 'Un~m~ount';
+  S_CreateGPTButton = 'Create ~G~PT';
   S_LabelButton = '~L~abel/Name';
   S_FlagButton = 'Fla~g~s';
   S_UndoButton = '~U~ndo';
@@ -79,6 +80,8 @@ resourcestring
   S_PartitionUnmounted = #3'"%s" unmounted!';
   S_PartitionUnmounting = 'Unmounting %s...';
   S_CreatePartitionTableAsk = 'Device %s has no partition table.'#13'Do you want to create a GUID Partition Table?';
+  S_CreatePartitionTableAskWarning = 'WARNING! This will ERASE ALL DATA on device %s!'#13'Do you want to create a GUID Partition Table?';
+  S_CreatePartitionTableCompleted = 'GUID Partition Table is created. Please reopen the window again.';
   S_ProcessExitCode = '"%s" exited with exit code %d: %s';
   S_FormatsDialogTitle = 'Format %s';
   S_FlagsDialogTitle = 'Edit %s flags';

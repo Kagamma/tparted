@@ -108,6 +108,8 @@ function QueryDeviceArray: TPartedDeviceArray;
 // This is for checking device and partitions
 function QueryDeviceExists(const APath: String): TExecResult;
 function QueryCreateGPT(const APath: String): TExecResult;
+// Similar to QueryCreateGPT, but completely ignore user prompt
+function QueryCreateGPTSilent(const APath: String): TExecResult;
 
 implementation
 
@@ -615,6 +617,14 @@ begin
   if Result.ExitCode <> 0 then
     WriteLogAndRaise(Format(S_ProcessExitCode, ['parted ' + APath + ' mklabel GPT', Result.ExitCode, Result.Message]));
   {$endif}
+end;
+
+function QueryCreateGPTSilent(const APath: String): TExecResult;
+begin
+  Result.ExitCode := -1;
+  Result := ExecS('sh', ['-c', Format('echo "Yes" | parted %s ---pretend-input-tty mklabel GPT', [APath])]);
+  if Result.ExitCode <> 0 then
+    WriteLogAndRaise(Format(S_ProcessExitCode, ['parted ' + APath + ' mklabel GPT', Result.ExitCode, Result.Message]));
 end;
 
 end.

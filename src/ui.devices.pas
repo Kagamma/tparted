@@ -42,12 +42,13 @@ type
     procedure UpdateButtonsState(var APart: TPartedPartition);
     procedure AddOp(const OpKind: TPartedOpKind; const AData: Pointer; const PPart: PPartedPartition);
   public
+    Command: Word;
     OpList: TPartedOpList;
     ListPartition: PUIPartitionList;
     LabelPendingOperations: PUILabel;
     LabelDeviceInfo: PUILabel;
 
-    ButtonPartitionArray: array[0..7] of PUIButton;
+    ButtonPartitionArray: array[0..8] of PUIButton;
     ButtonOperationArray: array[0..2] of PUIButton;
     constructor Init(var ADevice: TPartedDevice; AIndex: LongInt);
     destructor Done; virtual;
@@ -58,7 +59,7 @@ type
   PUIDevice = ^TUIDevice;
 
 function IsDeviceWindowOpened(var ADevice: TPartedDevice): Boolean;
-function AddDeviceWindowToList(var ADevice: TPartedDevice): Boolean;
+function AddDeviceWindowToList(var ADevice: TPartedDevice; const Command: Word): Boolean;
 procedure RemoveDeviceWindowFromList(const ADeviceWindow: PUIDevice);
 
 var
@@ -103,7 +104,7 @@ begin
   end;
 end;
 
-function AddDeviceWindowToList(var ADevice: TPartedDevice): Boolean;
+function AddDeviceWindowToList(var ADevice: TPartedDevice; const Command: Word): Boolean;
 var
   I: LongInt;
   W: PUIDevice;
@@ -115,6 +116,7 @@ begin
     if OpenedDeviceWindowList[I] = nil then
     begin
       W := New(PUIDevice, Init(ADevice, I));
+      W^.Command := Command;
       Desktop^.Insert(W);
       OpenedDeviceWindowList[I] := W;
       Exit(True);
@@ -169,6 +171,8 @@ begin
   Self.ButtonPartitionArray[6]^.SetDisabled((APart.Number = 0) or (APart.IsMounted) or IsDisabled);
   // Unmount button
   Self.ButtonPartitionArray[7]^.SetDisabled((not APart.IsMounted) or (APart.FileSystem = 'linux-swap') or IsDisabled);
+  // Create GPT btton
+  //Self.ButtonPartitionArray[8]^.SetDisabled(Self.OpList[0].Device^.Table <> 'msdos');
   // Undo button
   Self.ButtonOperationArray[0]^.SetDisabled(Self.OpList.GetOpCount = 0);
   // Empty button
@@ -251,6 +255,9 @@ begin
   Inc(R.A.Y, 2);
   Inc(R.B.Y, 2);
   Self.ButtonPartitionArray[7] := New(PUIButton, Init(R, S_UnmountButton.ToUnicode, cmPartitionUnmount, bfDefault));
+  Inc(R.A.Y, 2);
+  Inc(R.B.Y, 2);
+  Self.ButtonPartitionArray[8] := New(PUIButton, Init(R, S_CreateGPTButton.ToUnicode, cmDeviceCreateGPT, bfDefault));
   for I := 0 to High(Self.ButtonPartitionArray) do
     Self.Insert(Self.ButtonPartitionArray[I]);
 
@@ -589,6 +596,27 @@ begin
       cmPartitionDelete:
         begin
           DoDelete;
+          Exit;
+        end;
+      cmDeviceCreateGPT:
+        begin
+          if MsgBox(Format(S_CreatePartitionTableAskWarning, [Self.OpList.GetCurrentDevice^.Path]), nil, mfWarning + mfYesButton + mfNoButton) = cmYes then
+          begin
+            LoadingStart(S_CreatingGPT);
+            try
+              QueryCreateGPTSilent(Self.OpList.GetCurrentDevice^.Path);
+              LoadingStop;
+              MsgBox(Format(S_CreatePartitionTableCompleted, [Self.OpList.GetCurrentDevice^.Path]), nil, mfInformation + mfOkButton);
+              Message(@Self, evCommand, cmClose, nil);
+            except
+              on E: Exception do
+              begin
+                LoadingStop;
+                WriteLog(lsError, E.Message);
+                MsgBox(E.Message, nil, mfOKButton);
+              end;
+            end;
+          end;
           Exit;
         end;
       cmOperationUndo:

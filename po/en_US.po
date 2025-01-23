@@ -90,6 +90,10 @@ msgstr ""
 msgid "Un~m~ount"
 msgstr ""
 
+#: locale:s_creategptbutton
+msgid "Create ~G~PT"
+msgstr ""
+
 #: locale:s_labelbutton
 msgid "~L~abel/Name"
 msgstr ""
@@ -292,6 +296,14 @@ msgstr ""
 
 #: locale:s_createpartitiontableask
 msgid "Device %s has no partition table.\015Do you want to create a GUID Partition Table?"
+msgstr ""
+
+#: locale:s_createpartitiontableaskwarning
+msgid "WARNING! This will ERASE ALL DATA on device %s!\015Do you want to create a GUID Partition Table?"
+msgstr ""
+
+#: locale:s_createpartitiontablecompleted
+msgid "GUID Partition Table is created. Please reopen the window again."
 msgstr ""
 
 #: locale:s_processexitcode

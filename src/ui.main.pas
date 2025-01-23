@@ -47,6 +47,7 @@ const
   cmPartitionUnmount = 1106;
   cmPartitionLabel = 1107;
   cmPartitionFlag = 1108;
+  cmDeviceCreateGPT = 1109;
   cmOperationUndo = 1200;
   cmOperationClear = 1201;
   cmOperationApply = 1202;
@@ -259,7 +260,6 @@ begin
               begin
                 if MsgBox(Format(S_CreatePartitionTableAsk, [LDevice^.Path]), nil, mfInformation + mfYesButton + mfNoButton) = cmYes then
                 begin
-                  // TODO: Create a new GPT
                   LoadingStart(S_CreatingGPT);
                   QueryCreateGPT(LDevice^.Path);
                   // Query for device again
@@ -275,7 +275,7 @@ begin
               // Get partition's details
               QueryDeviceAll(LDevice^);
               LoadingStop;
-              AddDeviceWindowToList(LDevice^);
+              AddDeviceWindowToList(LDevice^, E.Command);
             except
               on E: Exception do
               begin
