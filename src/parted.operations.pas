@@ -356,7 +356,7 @@ begin
           end;
         okDelete:
           begin
-            FileSystemCreate;
+            FS := TPartedFileSystem.Create;
             try
               FS.DoDelete(Op.AffectedPartNew, Op.AffectedPartOld);
               Op.AffectedPartOld^.Device^.Probe;
