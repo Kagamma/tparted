@@ -2,6 +2,8 @@
 
 TUI frontend for `parted`: A simple, user-friendly utility for creating, moving, resizing, and deleting GPT disk partitions, based on Free Vision application framework.
 
+MBR is partially supported, as long as no extended partition found on the device.
+
 Currently supported filesystems:
 
 | | Create | Move | Shrink | Grow | Label |

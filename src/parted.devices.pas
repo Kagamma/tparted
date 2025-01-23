@@ -91,9 +91,11 @@ type
     procedure InsertPartition(const PPart: PPartedPartition);
     function GetPartitionAt(const Index: LongInt): PPartedPartition;
     function GetPartitionCount: LongInt;
+    function GetNonFreedPartitionCount: LongInt;
     // Returns the number of mounted partitions
     function GetMountedPartitionCount: LongInt;
     function GetPrimaryPartitionCount: LongInt;
+    function GetExtendedPartitionCount: LongInt;
     // Merge all possible unallocated space that is closed together into big one
     procedure MergeUnallocatedSpace;
     function Clone: PPartedDevice;
@@ -439,6 +441,20 @@ begin
   end;
 end;
 
+function TPartedDevice.GetNonFreedPartitionCount: LongInt;
+var
+  P: PPartedPartition;
+begin
+  Result := 0;
+  P := Self.PartitionRoot;
+  while P <> nil do
+  begin
+    if P^.Kind <> 'free' then
+      Inc(Result);
+    P := P^.Next;
+  end;
+end;
+
 function TPartedDevice.GetPrimaryPartitionCount: LongInt;
 var
   P: PPartedPartition;
@@ -448,6 +464,20 @@ begin
   while P <> nil do
   begin
     if P^.Kind = 'primary' then
+      Inc(Result);
+    P := P^.Next;
+  end;
+end;
+
+function TPartedDevice.GetExtendedPartitionCount: LongInt;
+var
+  P: PPartedPartition;
+begin
+  Result := 0;
+  P := Self.PartitionRoot;
+  while P <> nil do
+  begin
+    if P^.Kind = 'extended' then
       Inc(Result);
     P := P^.Next;
   end;
