@@ -242,7 +242,10 @@ var
 begin
   S := Part^.FileSystem;
   if S = 'exfat' then // TODO: parted does not support exfat?
-    S := 'fat32';
+    S := 'fat32'
+  else
+  if S = 'unformatted' then
+    S := 'ext4';
   // Create a new partition
   DoExec('parted', [Part^.Device^.Path, 'mkpart', Part^.Kind, S, Part^.PartStart.ToString + 'B', Part^.PartEnd.ToString + 'B']);
   // Loop through list of flags and set it
