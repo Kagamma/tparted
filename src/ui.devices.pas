@@ -610,7 +610,7 @@ begin
           begin
             LoadingStart(Format(S_CreatingGPT, [TableType]));
             try
-              QueryCreateGPTSilent(TableType, Self.OpList.GetCurrentDevice^.Path);
+              QueryCreatePTableSilent(TableType, Self.OpList.GetCurrentDevice^.Path);
               LoadingStop;
               MsgBox(S_CreatePartitionTableCompleted, nil, mfInformation + mfOkButton);
               Message(@Self, evCommand, cmClose, nil);

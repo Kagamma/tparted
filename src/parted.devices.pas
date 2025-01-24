@@ -112,9 +112,9 @@ function ParseDevicesFromStringArray(const SA: TStringDynArray): TPartedDeviceAr
 function QueryDeviceArray: TPartedDeviceArray;
 // This is for checking device and partitions
 function QueryDeviceExists(const APath: String): TExecResult;
-function QueryCreateGPT(const AType, APath: String): TExecResult;
-// Similar to QueryCreateGPT, but completely ignore user prompt
-function QueryCreateGPTSilent(const AType, APath: String): TExecResult;
+function QueryCreatePTable(const AType, APath: String): TExecResult;
+// Similar to QueryCreatePTable, but completely ignore user prompt
+function QueryCreatePTableSilent(const AType, APath: String): TExecResult;
 
 implementation
 
@@ -636,7 +636,7 @@ begin
     WriteLogAndRaise(Format(S_ProcessExitCode, ['blkid ' + APath, Result.ExitCode, Result.Message]));
 end;
 
-function QueryCreateGPT(const AType, APath: String): TExecResult;
+function QueryCreatePTable(const AType, APath: String): TExecResult;
 begin
   Result.ExitCode := -1;
   {$ifndef TPARTED_TEST}
@@ -646,7 +646,7 @@ begin
   {$endif}
 end;
 
-function QueryCreateGPTSilent(const AType, APath: String): TExecResult;
+function QueryCreatePTableSilent(const AType, APath: String): TExecResult;
 begin
   Result.ExitCode := -1;
   Result := ExecS('sh', ['-c', Format('echo "Yes" | parted %s ---pretend-input-tty mklabel %s', [APath, AType])]);
