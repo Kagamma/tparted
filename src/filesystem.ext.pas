@@ -1,6 +1,6 @@
 {
 tparted
-Copyright (C) 2024-2024 kagamma
+Copyright (C) 2024-2025 kagamma
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
