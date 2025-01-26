@@ -585,7 +585,7 @@ begin
       cmPartitionUnmount:
         begin
           if ShowUnmountDialog(Self.ListPartition^.GetSelectedPartition) then
-            Self.ListPartition^.RefreshList;
+            Self.Refresh;
           Exit;
         end;
       cmPartitionLabel:
