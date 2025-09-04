@@ -33,7 +33,7 @@ Currently supported filesystems:
 - Alternatively you can use an AUR helper, like `paru -S tparted-bin` or `yay -S tparted-bin`
 
 #### Building from source
-- Since the app requires Unicode version of Free Vision, you need to have Free Pascal 3.1.1 or later installed on the system.
+- Since the app requires Unicode version of Free Vision, you need to have Free Pascal (beta 3.3.1) or later beta version installed on the system.
 - Run `make build` to build the app. The binary is located in `./bin` directory.
 - Run `make install` to install the app to `/usr/bin`
 
