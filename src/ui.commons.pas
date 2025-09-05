@@ -130,12 +130,9 @@ type
     procedure Draw; virtual;
   end;
 
-  // New TUIMenuBox, with fixes for misaligned mouse position
+  // New TUIMenuBox, with fixes for misaligned mouse position (TODO: latest FPC trunk fixed the issue already)
   PUIMenuBox = ^TUIMenuBox;
-  TUIMenuBox = object(TMenuBox)
-  public
-    procedure Draw; virtual;
-  end;
+  TUIMenuBox = TMenuBox;
 
 procedure LoadingStart(const S: String);
 procedure LoadingStop;
@@ -595,21 +592,6 @@ BEGIN
 END;
 
 // ---------------------------------
-
-procedure TUIMenuBox.Draw;
-var
-  R: TRect;
-begin
-  State := State and not sfShadow;
-  Self.GetBounds(R);
-  Dec(R.A.Y);
-  Dec(R.B.Y);
-  Self.SetBounds(R);
-  inherited;
-  Inc(R.A.Y);
-  Inc(R.B.Y);
-  Self.SetBounds(R);
-end;
 
 end.
 

@@ -124,7 +124,7 @@ begin
       end;
       if P.X + PopupMenu^.Size.X > R.B.X then
         Dec(P.X, PopupMenu^.Size.X);
-      PopupMenu^.MoveTo(P.X + 1, P.Y + 1);
+      PopupMenu^.MoveTo(P.X, P.Y);
       //
       Desktop^.Insert(PopupMenu);
       Message(PopupMenu, evCommand, cmMenu, nil);
