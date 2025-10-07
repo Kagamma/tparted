@@ -381,10 +381,11 @@ procedure TPartedFileSystem.DoFeedback(SL: Classes.TStringList);
 var
   S: String;
 begin
-  S := SL[SL.Count - 1];
-  if Length(S) > 60 then
+  if SL.Count > 0 then
+    S := SL[0];
+  if Length(S) > 50 then
   begin
-    SetLength(S, 57);
+    SetLength(S, 47);
     S := S + '...';
   end;
   LoadingUpdate(S);
