@@ -287,7 +287,7 @@ begin
   TempPart.PartEnd := PartBefore^.PartEnd;
   TempPart.PartSize := TempPart.PartEnd - TempPart.PartStart + 1;
   // Move partition, the command with
-  DoExec('sh', ['-c', Format('echo "-%dM," | sfdisk --move-data %s -N %d', [BToMBFloor(PartBefore^.PartStart - TempPart.PartStart + 1), PartAfter^.Device^.Path, PartAfter^.Number])]);
+  DoExecAsync('sh', ['-c', Format('echo "-%dM," | sfdisk --move-data %s -N %d', [BToMBFloor(PartBefore^.PartStart - TempPart.PartStart + 1), PartAfter^.Device^.Path, PartAfter^.Number])]);
   // Calculate the shift part to determine if we need to shrink or grow later
   PartBefore^.PartEnd := PartBefore^.PartEnd - (PartBefore^.PartStart - TempPart.PartStart);
 end;
@@ -300,7 +300,7 @@ begin
   TempPart.PartStart := PartBefore^.PartStart;
   TempPart.PartSize := TempPart.PartEnd - TempPart.PartStart + 1;
   // Move partition, the command with
-  DoExec('sh', ['-c', Format('echo "+%dM," | sfdisk --move-data %s -N %d', [BToMBFloor(PartAfter^.PartStart - TempPart.PartStart + 1), PartAfter^.Device^.Path, PartAfter^.Number])]);
+  DoExecAsync('sh', ['-c', Format('echo "+%dM," | sfdisk --move-data %s -N %d', [BToMBFloor(PartAfter^.PartStart - TempPart.PartStart + 1), PartAfter^.Device^.Path, PartAfter^.Number])]);
   // Calculate the shift part to determine if we need to shrink or grow later
   PartBefore^.PartEnd := PartBefore^.PartEnd + (PartAfter^.PartStart - TempPart.PartStart);
 end;
@@ -379,17 +379,25 @@ end;
 
 procedure TPartedFileSystem.DoFeedback(SL: Classes.TStringList);
 var
-  S: String;
+  S, S2: String;
+  I: Integer;
 begin
+  S := #13;
   if SL.Count > 0 then
-    S := SL[0];
-  if Length(S) > 50 then
-  begin
-    SetLength(S, 47);
-    S := S + '...';
-  end;
+    for I := Max(0, SL.Count - 4) to SL.Count - 1 do
+    begin
+      S2 := SL[I];
+      if Length(S2) > 70 then
+        SetLength(S2, 70);
+      if I <> SL.Count - 1 then
+      begin
+        S := S + S2 + #13;
+      end else
+      begin
+        S := S + S2;
+      end;
+    end;
   LoadingUpdate(S);
-  WriteLog(lsInfo, SL.Text);
 end;
 
 initialization

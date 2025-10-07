@@ -390,17 +390,19 @@ var
   I: LongInt;
   P: TProcess;
   S: String;
-  SL: Classes.TStringList;
+  SL,
+  SLTemp: Classes.TStringList;
 
   procedure PollForData;
   begin
-    SL.Clear;
-    SL.LoadFromStream(P.Output);
-    if SL.Count > 0 then
+    SLTemp.LoadFromStream(P.Output);
+    if SLTemp.Count > 0 then
     begin
+      SL.Text := SL.Text + SLTemp.Text;
       if ASignal <> nil then
         ASignal(SL);
-      Result.Message := Result.Message + SL.Text;
+      Result.Message := Result.Message + SLTemp.Text;
+      WriteLog(lsInfo, SLTemp.Text);
     end;
   end;
 
@@ -410,6 +412,7 @@ begin
   Result.ExitCode := -1;
   P := TProcess.Create(nil);
   SL := Classes.TStringList.Create;
+  SLTemp := Classes.TStringList.Create;
   try
     P.Executable := Prog;
     for S in Params do
@@ -419,12 +422,13 @@ begin
     while P.Running do
     begin
       PollForData;
-      Sleep(1000);
+      Sleep(2000);
     end;
     Result.ExitCode := P.ExitStatus;
     PollForData;
   finally
     SL.Free;
+    SLTemp.Free;
     P.Free;
   end;
 end;

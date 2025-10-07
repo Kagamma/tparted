@@ -380,10 +380,10 @@ begin
   //
   H := AText.CountChar(#13) + 1;
   Desktop^.GetExtent(R);
-  R.A.X := (R.B.X div 2) - Len div 2 - 3;
-  R.B.X := (R.B.X div 2) + Len div 2 + 4;
-  R.A.Y := (R.B.Y div 2) - 3;
-  R.B.Y := (R.B.Y div 2) + 1 + H;
+  R.A.X := (R.B.X div 2) - Len div 2 - 4;
+  R.B.X := (R.B.X div 2) + Len div 2 + 3;
+  R.A.Y := (R.B.Y div 2) - 5;
+  R.B.Y := (R.B.Y div 2) - 1 + H;
   inherited Init(R, '');
   //
   Self.Status := AText;
