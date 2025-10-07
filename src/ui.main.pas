@@ -183,7 +183,7 @@ begin
     NewItem(S_MenuLogs.ToUnicode, '', kbNoKey, cmMenuDisplayLog, hcNoContext,
     NewItem(S_MenuFileSystemSupport.ToUnicode, '', kbNoKey, cmMenuDisplayFileSystemSupport, hcNoContext,
     NewLine(
-    NewItem(S_Quit.ToUnicode, 'Alt-X', kbAltX, cmQuit, hcNoContext, nil))))))
+    NewItem(S_Quit.ToUnicode, 'Ctrl-C', kbCtrlC, cmQuit, hcNoContext, nil))))))
   ), FMenuDevices);
 
   M := NewMenu(Self.FMenuSystem);

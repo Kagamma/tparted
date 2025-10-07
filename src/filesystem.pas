@@ -41,6 +41,7 @@ type
     function GetSupport: TPartedFileSystemSupport; virtual;
 
     procedure DoExec(const Name: String; const Params: TStringDynArray; const Delay: LongWord = 1000);
+    procedure DoExecAsync(const Name: String; const Params: TStringDynArray; const Delay: LongWord = 1000);
     procedure DoMoveLeft(const PartAfter, PartBefore: PPartedPartition);
     procedure DoMoveRight(const PartAfter, PartBefore: PPartedPartition);
     procedure DoCreatePartitionOnly(const Part: PPartedPartition);
@@ -51,6 +52,8 @@ type
     procedure DoFlag(const PartAfter, PartBefore: PPartedPartition); virtual;
     procedure DoLabelName(const PartAfter, PartBefore: PPartedPartition); virtual;
     procedure DoResize(const PartAfter, PartBefore: PPartedPartition); virtual;
+
+    procedure DoFeedback(SL: Classes.TStringList); virtual;
   end;
   TPartedFileSystemClass = class of TPartedFileSystem;
 
@@ -244,6 +247,16 @@ begin
     WriteLogAndRaise(Format(S_ProcessExitCode, [Name, ExecResult.ExitCode, ExecResult.Message]));
 end;
 
+procedure TPartedFileSystem.DoExecAsync(const Name: String; const Params: TStringDynArray; const Delay: LongWord = 1000);
+var
+  ExecResult: TExecResult;
+begin
+  Sleep(Delay);
+  ExecResult := ExecAsync(Name, Params, @Self.DoFeedback);
+  if ExecResult.ExitCode <> 0 then
+    WriteLogAndRaise(Format(S_ProcessExitCode, [Name, ExecResult.ExitCode, ExecResult.Message]));
+end;
+
 procedure TPartedFileSystem.DoCreatePartitionOnly(const Part: PPartedPartition);
 var
   S: String;
@@ -362,6 +375,20 @@ begin
   begin
     DoMoveRight(PartAfter, PartBefore);
   end;
+end;
+
+procedure TPartedFileSystem.DoFeedback(SL: Classes.TStringList);
+var
+  S: String;
+begin
+  S := SL[SL.Count - 1];
+  if Length(S) > 60 then
+  begin
+    SetLength(S, 57);
+    S := S + '...';
+  end;
+  LoadingUpdate(S);
+  WriteLog(lsInfo, SL.Text);
 end;
 
 initialization

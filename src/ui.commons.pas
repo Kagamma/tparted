@@ -135,6 +135,7 @@ type
   TUIMenuBox = TMenuBox;
 
 procedure LoadingStart(const S: String);
+procedure LoadingUpdate(const S: String);
 procedure LoadingStop;
 
 // Copied from Free Vision source code. Since the original MessageBox is buggy, we implement fixes
@@ -227,11 +228,24 @@ END;
 
 // ---------------------------------
 
+var
+  LoadingText: String;
+
 procedure LoadingStart(const S: String);
 begin
   if UILoading <> nil then
     Dispose(UILoading, Done);
+  LoadingText := S;
   UILoading := New(PUILoadingDialog, Init(S));
+  Desktop^.Insert(UILoading);
+  UILoading^.ReDraw;
+end;
+
+procedure LoadingUpdate(const S: String);
+begin
+  if UILoading <> nil then
+    Dispose(UILoading, Done);
+  UILoading := New(PUILoadingDialog, Init(LoadingText + #13 + S));
   Desktop^.Insert(UILoading);
   UILoading^.ReDraw;
 end;
@@ -364,7 +378,7 @@ begin
     if Len < Length(ATexts[I]) then
       Len := Length(ATexts[I]);
   //
-  H := AText.CountChar(#13) + 1; 
+  H := AText.CountChar(#13) + 1;
   Desktop^.GetExtent(R);
   R.A.X := (R.B.X div 2) - Len div 2 - 3;
   R.B.X := (R.B.X div 2) + Len div 2 + 4;
@@ -442,7 +456,7 @@ var
 begin
   OldS := Self.Data;
   CursorP := Self.CurPos;
-  
+
   inherited HandleEvent(E);
   CurS := Self.Data.ToUTF8;
   L := Length(CurS);

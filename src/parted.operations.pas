@@ -341,7 +341,7 @@ begin
       WriteLog(lsInfo, PartedOpKindStatusNames[Op.Kind]);
       if Op.Kind = okCreate then
         LoadingStart(S + #13 + PartedOpKindStatusNames[Op.Kind] + ' ' + Op.AffectedPartNew^.GetPartitionPath)
-      else 
+      else
         LoadingStart(S + #13 + PartedOpKindStatusNames[Op.Kind] + ' ' + Op.AffectedPartOld^.GetPartitionPath);
       case Op.Kind of
         okCreate:

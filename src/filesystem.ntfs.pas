@@ -102,7 +102,7 @@ procedure TPartedFileSystemNTFS.DoResize(const PartAfter, PartBefore: PPartedPar
 
   procedure Shrink;
   begin
-    DoExec('ntfsresize', ['-p', '-v', '-f', '-s', PartAfter^.PartSize.ToString, PartAfter^.GetPartitionPath]);
+    DoExecAsync('ntfsresize', ['-v', '-f', '-s', PartAfter^.PartSize.ToString, PartAfter^.GetPartitionPath]);
     DoExec('ntfsfix', ['-b', '-d', PartAfter^.GetPartitionPath]);
     DoExec('sh', ['-c', Format('echo "Yes" | parted %s ---pretend-input-tty resizepart %d %dB', [PartAfter^.Device^.Path, PartAfter^.Number, PartAfter^.PartEnd])]);
   end;

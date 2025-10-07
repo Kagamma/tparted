@@ -108,7 +108,7 @@ var
   begin
     DoExec('btrfs', ['check', PartAfter^.GetPartitionPath]);
     Mount(Path, PathMnt);
-    DoExec('btrfs', ['filesystem', 'resize', BToKBFloor(PartAfter^.PartSize).ToString + 'K', PathMnt]);
+    DoExecAsync('btrfs', ['filesystem', 'resize', BToKBFloor(PartAfter^.PartSize).ToString + 'K', PathMnt]);
     Unmount(Path, PathMnt);
     DoExec('sh', ['-c', Format('echo "Yes" | parted %s ---pretend-input-tty resizepart %d %dB', [PartAfter^.Device^.Path, PartAfter^.Number, PartAfter^.PartEnd])]);
   end;

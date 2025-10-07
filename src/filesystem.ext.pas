@@ -121,7 +121,7 @@ procedure TPartedFileSystemExt.DoResize(const PartAfter, PartBefore: PPartedPart
   procedure Shrink;
   begin
     DoExec('e2fsck', ['-f', '-y', '-v', '-C', '0', PartAfter^.GetPartitionPath]);
-    DoExec('resize2fs', ['-fp', PartAfter^.GetPartitionPath, BToKBFloor(PartAfter^.PartSize).ToString + 'K']);
+    DoExecAsync('resize2fs', ['-fp', PartAfter^.GetPartitionPath, BToKBFloor(PartAfter^.PartSize).ToString + 'K']);
     DoExec('sh', ['-c', Format('echo "Yes" | parted %s ---pretend-input-tty resizepart %d %dB', [PartAfter^.Device^.Path, PartAfter^.Number, PartAfter^.PartEnd])]);
   end;
 
