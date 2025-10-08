@@ -565,7 +565,7 @@ end;
 
 procedure TPartedDevice.Probe;
 begin
-  fpSystem('partprobe ' + Self.Path);
+  ExecSystem('partprobe ' + Self.Path);
 end;
 
 // --------------------------
