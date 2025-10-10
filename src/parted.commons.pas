@@ -358,7 +358,7 @@ begin
     while P.Running do
     begin
       PollForData;
-      Sleep(500);
+      Sleep(200);
     end;
     Result.ExitCode := P.ExitStatus;
     PollForData;
