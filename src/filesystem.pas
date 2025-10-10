@@ -265,7 +265,7 @@ begin
   if S = 'exfat' then // TODO: parted does not support exfat?
     S := 'fat32'
   else
-  if S = 'unformatted' then
+  if (S = 'unformatted') or (S = 'bcachefs') then
     S := 'ext4';
   // Create a new partition
   DoExec('parted', [Part^.Device^.Path, 'mkpart', Part^.Kind, S, Part^.PartStart.ToString + 'B', Part^.PartEnd.ToString + 'B']);

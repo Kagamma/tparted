@@ -8,6 +8,7 @@ Currently supported filesystems:
 
 | | Create | Move | Shrink | Grow | Label |
 |-|-|-|-|-|-|
+| bcachefs | :heavy_check_mark: | :heavy_check_mark: | | :heavy_check_mark:* | |
 | btrfs | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:* | :heavy_check_mark:* | :heavy_check_mark: |
 | ext2 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | ext3 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
@@ -21,7 +22,7 @@ Currently supported filesystems:
 | ntfs | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | xfs | :heavy_check_mark: | :heavy_check_mark: | | :heavy_check_mark: | :heavy_check_mark: |
 
-*In case of btrfs, for now the app doesn't deal with multi disk array.
+*In case of btrfs and bcachefs, for now the app doesn't deal with multi disk array.
 
 ## Install
 

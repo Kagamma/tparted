@@ -12,6 +12,7 @@ uses
   FileSystem.Ext,
   FileSystem.NTFS,
   FileSystem.BTRFS,
+  FileSystem.Bcachefs,
   FileSystem.Swap,
   FileSystem.XFS,
   FileSystem.JFS,

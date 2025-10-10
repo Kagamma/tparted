@@ -98,6 +98,6 @@ begin
 end;
 
 initialization
-  RegisterFileSystem(TPartedFileSystemExFat, ['exfat'], [1], [134217728000 - 1]);
+  RegisterFileSystem(TPartedFileSystemExFat, ['exfat'], [1], [Pred(134217728000)]);
 
 end.
