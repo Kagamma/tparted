@@ -328,28 +328,43 @@ var
   I: LongInt;
   P: TProcess;
   S: String;
-  SL: Classes.TStringList;
+  SL,
+  SLTemp: Classes.TStringList;
+
+  procedure PollForData;
+  begin
+    SLTemp.LoadFromStream(P.Output);
+    if SLTemp.Count > 0 then
+    begin
+      SL.Text := SL.Text + SLTemp.Text;
+      Result.Message := Result.Message + SLTemp.Text;
+      WriteLog(lsInfo, SLTemp.Text);
+    end;
+  end;
+
 begin
   WriteLog(Prog, Params);
   Prog := FindProgram(Prog);
   Result.ExitCode := -1;
   P := TProcess.Create(nil);
   SL := Classes.TStringList.Create;
+  SLTemp := Classes.TStringList.Create;
   try
     P.Executable := Prog;
     for S in Params do
       P.Parameters.Add(S);
-    P.Options := P.Options + [poWaitOnExit, poUsePipes];
+    P.Options := P.Options + [poUsePipes, poStderrToOutPut] - [poWaitOnExit];
     P.Execute;
+    while P.Running do
+    begin
+      PollForData;
+      Sleep(500);
+    end;
     Result.ExitCode := P.ExitStatus;
-    if Result.ExitCode = 0 then
-      SL.LoadFromStream(P.Output)
-    else
-      SL.LoadFromStream(P.StdErr);
-    Result.Message := SL.Text;
-    WriteLog(lsInfo, SL.Text);
+    PollForData;
   finally
     SL.Free;
+    SLTemp.Free;
     P.Free;
   end;
 end;
