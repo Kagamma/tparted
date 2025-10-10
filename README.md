@@ -54,6 +54,7 @@ Currently supported filesystems:
 - `xfsprogs` (optional) for xfs operations.
 - `jfsutils` (optional) for jfs operations.
 - `f2fs-tools` (optional) for f2fs operations.
+- `bcachefs-tools` (optional) for bcachefs operations.
 
 ![image1](./docs/images/1.png)
 
