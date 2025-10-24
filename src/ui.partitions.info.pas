@@ -67,7 +67,7 @@ begin
       Format(S_PartitionEnd, [SizeByteString(PPart^.PartEnd), SizeString(PPart^.PartEnd)]) + #13 +
       Format(S_PartitionFlags, [SAToS(PPart^.Flags, ',')]) + #13 +
       Format(S_PartitionMount, [PPart^.MountPoint]);
-    R.Assign(3, 2, R.B.X - 1, 14);
+    R.Assign(3, 2, R.B.X - 1, 15);
     D^.Insert(New(PStaticText, Init(R, S.ToUnicode)));
 
     R.Assign(HW - 7, R.A.Y + 14, HW + 7, R.A.Y + 16);
