@@ -42,6 +42,7 @@ type
     Kind: String;
     KindUUID: String;
     UUID: String;
+    PartUUID: String;
     FileSystem: String;
     Flags: TStringDynArray;
     LabelName: String;

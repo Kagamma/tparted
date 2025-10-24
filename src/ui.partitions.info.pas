@@ -58,6 +58,7 @@ begin
       Format(S_PartitionLabel, [PPart^.LabelName]) + #13 +
       Format(S_PartitionName, [PPart^.Name]) + #13 +
       Format(S_PartitionUUID, [PPart^.UUID]) + #13 +
+      Format(S_PartitionPARTUUID, [PPart^.PARTUUID]) + #13 +
       Format(S_PartitionType, [PPart^.Kind]) + #13 +
       Format(S_PartitionSize, [SizeByteString(PPart^.PartSize), SizeString(PPart^.PartSize)]) + #13 +
       Format(S_PartitionUsed, [SizeByteString(PPart^.PartUsed), SizeString(PPart^.PartUsed)]) + #13 +

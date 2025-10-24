@@ -23,7 +23,7 @@ unit Parted.Partitions;
 interface
 
 uses
-  Classes, SysUtils, Types, fpjson, jsonparser,
+  Classes, SysUtils, Types, fpjson, jsonparser, StrUtils,
   {$ifdef Unix}Unix,{$endif}
   Parted.Commons, Locale, Parted.Devices, Parted.Logs;
 
@@ -35,7 +35,9 @@ const
   );
 
 // Parse for device info from "parted -j /dev/Xxx unit B print free" string
-procedure ParseDeviceAndPartitionsFromJsonString(const JsonString: String; var ADevice: TPartedDevice);
+procedure ParseDeviceAndPartitionsFromJsonString(const JsonString: String; var ADevice: TPartedDevice); deprecated;
+// Parse for device info from "parted -m /dev/Xxx unit B print free" string
+procedure ParseDeviceAndPartitionsFromMachineString(const SL: TStringDynArray; var ADevice: TPartedDevice);
 // Parse for used and available in bytes from a single partition
 // AText is the result from "df -B1 APath"
 procedure ParseUsedAndAvailableBlockFromString(const AText: String; var APart: TPartedPartition);
@@ -48,7 +50,7 @@ procedure QueryDeviceAll(var ADevice: TPartedDevice);
 procedure QueryPartitionAll(var APart: TPartedPartition);
 
 // /bin/parted -j APath unit B print free
-function QueryDeviceAndPartitions(const APath: String; var ADevice: TPartedDevice): TExecResult;
+function QueryDeviceAndPartitions(const APath: String; var ADevice: TPartedDevice): TExecResultDA;
 // /bin/findmnt -J -n APath
 function QueryPartitionMountStatus(var APart: TPartedPartition): TExecResult;
 // /bin/df -B1 APath
@@ -59,8 +61,8 @@ function QueryPartitionReservedSize(var APart: TPartedPartition): TExecResultDA;
 function QueryPartitionLabel(var APart: TPartedPartition): TExecResult;
 // /bin/umount APath
 function QueryPartitionUnmount(var APart: TPartedPartition): TExecResult;
-// /bin/blkid -s TYPE -o value APath
-function QueryPartitionFileSystem(var APart: TPartedPartition): TExecResult;
+// Run /bin/blkid -s 'S' -o value APath
+function QueryPartitionViaBlkid(var APart: TPartedPartition; const S: String): TExecResult;
 
 implementation
 
@@ -137,7 +139,8 @@ begin
           PPart^.FileSystem := PartJson.Strings['filesystem'];
         except
           on E: Exception do
-            QueryPartitionFileSystem(PPart^); // Use blkid to detect filesystem, in case parted failed to do so
+            // Use blkid to detect filesystem, in case parted failed to do so
+            PPart^.FileSystem := QueryPartitionViaBlkid(PPart^, 'TYPE').Message;
         end;
         // We remove (v1) from linux-swap...
         if PPart^.FileSystem = 'linux-swap(v1)' then
@@ -159,6 +162,103 @@ begin
     end;
   finally
     Data.Free;
+  end;
+end;
+
+procedure ParseDeviceAndPartitionsFromMachineString(const SL: TStringDynArray; var ADevice: TPartedDevice);
+var
+  Line: String;
+  S: String;
+  P: Integer;
+  PPart: PPartedPartition;
+  I, J: Integer;
+  Flags: TStringDynArray;
+
+  function GetData: String;
+  begin
+    Result := '';
+    while P < Length(Line) do
+    begin
+      if (Line[P] = ':') or (Line[P] = ';') then
+      begin
+        Inc(P);
+        Exit;
+      end;
+      Result := Result + Line[P];
+      Inc(P);
+    end;
+  end;
+
+begin
+  // The first line is always BYT;
+  Assert(SL[0] = 'BYT;', 'First line must be "BYT;" but got "' + SL[0] + '"');
+  // The second line is device information
+  P := 1; Line := SL[1];
+  ADevice.Init;
+  ADevice.Path := GetData;
+  ADevice.Size := ExtractQWordFromSize(GetData);
+  ADevice.Transport := GetData;
+  ADevice.LogicalSectorSize := GetData.ToInt64;
+  ADevice.PhysicalSectorSize := GetData.ToInt64;
+  ADevice.Table := GetData;
+  ADevice.Name := GetData;
+  // TODO: Get device size
+  //ADevice.Size := ExtractQWordFromSize(DiskJson.Strings['size']);
+  //ADevice.SizeApprox := SizeString(ADevice.Size);
+  if ADevice.Table = 'unknown' then // This device has no partition table
+  begin
+    // We will create a fake root partition
+    New(PPart);
+    PPart^.Init;
+    ADevice.InsertPartition(PPart);
+    PPart^.Device := @ADevice;
+    PPart^.Number := 0;
+    PPart^.PartStart := 0;
+    PPart^.PartEnd := ADevice.Size;
+    PPart^.PartSize := ADevice.Size;
+    Exit;
+  end else
+  if ADevice.Table = 'msdos' then
+  begin
+    ADevice.MaxPartitions := 4;
+  end else
+  if ADevice.Table = 'gpt' then
+  begin
+    ADevice.MaxPartitions := 128;
+  end;
+
+  for I := 2 to Pred(Length(SL)) do
+  begin
+    Line := SL[I]; P := 1;
+    New(PPart);
+    PPart^.Init;
+    ADevice.InsertPartition(PPart);
+    PPart^.Device := @ADevice;
+    PPart^.Number := GetData.ToInt64;
+    PPart^.PartStart := ExtractQWordFromSize(GetData);
+    PPart^.PartEnd := ExtractQWordFromSize(GetData);
+    PPart^.PartSize := ExtractQWordFromSize(GetData);
+    //
+    PPart^.Kind := GetData;
+    if PPart^.Kind = 'free' then
+      PPart^.Number := 0;
+    //
+    GetData;
+    // Flags
+    Flags := SplitString(GetData, ',');
+    SetLength(PPart^.Flags, Length(Flags));
+    for J := 0 to Pred(Length(Flags)) do
+    begin
+      PPart^.Flags[J] := Flags[J].Trim;
+    end;
+    //
+    PPart^.FileSystem := QueryPartitionViaBlkid(PPart^, 'TYPE').Message;
+    if ADevice.Table = 'gpt' then
+      PPart^.UUID := QueryPartitionViaBlkid(PPart^, 'UUID').Message;
+    PPart^.PartUUID := QueryPartitionViaBlkid(PPart^, 'PARTUUID').Message;
+    // We remove (v1) from linux-swap...
+    if PPart^.FileSystem = 'linux-swap(v1)' then
+      PPart^.FileSystem := 'linux-swap';
   end;
 end;
 
@@ -215,19 +315,13 @@ begin
   QueryPartitionLabel(APart);
 end;
 
-function QueryDeviceAndPartitions(const APath: String; var ADevice: TPartedDevice): TExecResult;
+function QueryDeviceAndPartitions(const APath: String; var ADevice: TPartedDevice): TExecResultDA;
 begin
   Result.ExitCode := -1;
-  {$ifndef TPARTED_TEST}
-  // Performs "parted -j /dev/Xxx unit B list" for details about a device and its partitions
-  Result := ExecS('parted', ['-j', APath, 'unit', 'B', 'print', 'free']);
+  Result := ExecSA('parted', ['-m', APath, 'unit', 'B', 'print', 'free']);
   if Result.ExitCode <> 0 then
-    WriteLogAndRaise(Format(S_ProcessExitCode, ['parted -j ' + APath + ' unit B print free', Result.ExitCode, Result.Message]));
-  ParseDeviceAndPartitionsFromJsonString(Result.Message, ADevice);
-  {$else}
-  // TODO: For testing purpose
-  ParseDeviceAndPartitionsFromJsonString(FileToS('../testdata/parted_output_json.txt'), ADevice);
-  {$endif}
+    WriteLogAndRaise(Format(S_ProcessExitCode, ['parted -j ' + APath + ' unit B print free', Result.ExitCode, SAToS(Result.MessageArray)]));
+  ParseDeviceAndPartitionsFromMachineString(Result.MessageArray, ADevice);
 end;
 
 function QueryPartitionMountStatus(var APart: TPartedPartition): TExecResult;
@@ -365,23 +459,20 @@ begin
   {$endif}
 end;
 
-function QueryPartitionFileSystem(var APart: TPartedPartition): TExecResult;
+function QueryPartitionViaBlkid(var APart: TPartedPartition; const S: String): TExecResult;
 var
   Path: String; // Partition path
 begin
+  Result.Message := '';
   Result.ExitCode := -1;
-  {$ifndef TPARTED_TEST}
   // Immediately skip if this is unallocated space
   if APart.Number <= 0 then
     Exit;
   Path := APart.GetPartitionPath;
-  Result := ExecS('blkid', ['-s', 'TYPE', '-o', 'value', Path]);
+  Result := ExecS('blkid', ['-s', S, '-o', 'value', Path]);
   if Result.ExitCode <> 0 then
-    WriteLogAndRaise(Format(S_ProcessExitCode, ['blkid -s TYPE -o value ' + Path, Result.ExitCode, Result.Message]));
-  APart.FileSystem := Trim(Result.Message);
-  {$else}
-  APart.LabelName := 'ext4'
-  {$endif}
+    WriteLogAndRaise(Format(S_ProcessExitCode, ['blkid -s ' + S + ' -o value ' + Path, Result.ExitCode, Result.Message]));
+  Result.Message := Trim(Result.Message);
 end;
 
 // /bin/umount APath

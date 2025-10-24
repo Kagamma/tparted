@@ -328,7 +328,6 @@ var
   I: LongInt;
   P: TProcess;
   S: String;
-  SL,
   SLTemp: Classes.TStringList;
 
   procedure PollForData;
@@ -336,9 +335,7 @@ var
     SLTemp.LoadFromStream(P.Output);
     if SLTemp.Count > 0 then
     begin
-      SL.Text := SL.Text + SLTemp.Text;
       Result.Message := Result.Message + SLTemp.Text;
-      WriteLog(lsInfo, SLTemp.Text);
     end;
   end;
 
@@ -347,7 +344,6 @@ begin
   Prog := FindProgram(Prog);
   Result.ExitCode := -1;
   P := TProcess.Create(nil);
-  SL := Classes.TStringList.Create;
   SLTemp := Classes.TStringList.Create;
   try
     P.Executable := Prog;
@@ -358,12 +354,12 @@ begin
     while P.Running do
     begin
       PollForData;
-      Sleep(200);
+      Sleep(16);
     end;
+    WriteLog(lsInfo, Result.Message);
     Result.ExitCode := P.ExitStatus;
     PollForData;
   finally
-    SL.Free;
     SLTemp.Free;
     P.Free;
   end;

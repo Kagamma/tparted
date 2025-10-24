@@ -47,6 +47,7 @@ resourcestring
   S_PartitionLabel = 'Label: %s';
   S_PartitionName = 'Name: %s';
   S_PartitionUUID = 'UUID: %s';
+  S_PartitionPARTUUID = 'PARTUUID: %s';
   S_PartitionType = 'Type: %s';
   S_PartitionSize = 'Size: %s (%s)';
   S_PartitionUsed = 'Used: %s (%s)';
