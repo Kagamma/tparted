@@ -26,7 +26,8 @@ uses
   SysUtils, Classes, Types, StrUtils;
 
 const
-  LOG_PATH = '/var/log/tparted/log.txt';
+  LOG_PATH_LEGACY = '/var/log/tparted/log.txt';
+  LOG_PATH = '/var/log/tparted/tparted.log';
 
 type
   TPartedLogStatus = (
@@ -121,6 +122,8 @@ var
 initialization
   Log := TStringList.Create;
   CreateDir('/var/log/tparted');
+  if FileExists(LOG_PATH_LEGACY) then
+    DeleteFile(LOG_PATH_LEGACY);
   if FileExists(LOG_PATH) then
     DeleteFile(LOG_PATH);
   FileClose(FileCreate(LOG_PATH));
