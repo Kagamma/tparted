@@ -253,6 +253,9 @@ begin
     end;
     //
     PPart^.FileSystem := QueryPartitionViaBlkid(PPart^, 'TYPE').Message;
+    if PPart^.FileSystem = 'vfat' then
+      if (PPart^.Kind = 'fat32') or (PPart^.kind = 'fat16') then
+        PPart^.FileSystem := PPart^.Kind;
     if ADevice.Table = 'gpt' then
       PPart^.UUID := QueryPartitionViaBlkid(PPart^, 'UUID').Message;
     PPart^.PartUUID := QueryPartitionViaBlkid(PPart^, 'PARTUUID').Message;
