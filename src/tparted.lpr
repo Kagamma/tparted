@@ -3,9 +3,7 @@ program TParted;
 {$I configs.inc}
 
 uses
-  {$ifdef UNIX}
   CThreads, cwstring, Unix, BaseUnix,
-  {$endif}
   SysUtils, Classes, Types,
   FileSystem,
   // You must include file system implementation behind FileSystem!
@@ -49,8 +47,6 @@ begin
     end;
   finally
     UIMain.Done;
-    {$ifdef UNIX}
     fpSystem('tput cnorm');
-    {$endif}
   end;
 end.

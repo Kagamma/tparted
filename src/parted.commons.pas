@@ -75,6 +75,8 @@ function FileToSA(const AName: String): TStringDynArray;
 // Load a file to String
 function FileToS(const AName: String): String;
 
+// Converts bytes to PB
+function BToPB(const V: QWord): Double;
 // Converts bytes to TB
 function BToTB(const V: QWord): Double;
 // Converts bytes to GB
@@ -444,6 +446,11 @@ begin
   end;
 end;
 
+function BToPB(const V: QWord): Double;
+begin
+  Result := V / 1024 / 1024 / 1024 / 1024 / 1024;
+end;
+
 function BToTB(const V: QWord): Double;
 begin
   Result := V / 1024 / 1024 / 1024 / 1024;
@@ -484,6 +491,10 @@ begin
   if V < 0 then
   begin
     Result := '---';
+  end else
+  if V >= 1024 * 1024 * 1024 * 1024 * 1024 then
+  begin
+    Result := Format('%.1fP', [BToPB(V)]);
   end else
   if V >= 1024 * 1024 * 1024 * 1024 then
   begin
