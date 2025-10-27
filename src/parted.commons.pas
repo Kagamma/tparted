@@ -446,6 +446,7 @@ var
   MasterFD, PID: LongInt;
   Buf: String[255];
   SL: Classes.TStringList;
+  TempS: String;
 
 begin
   WriteLog(Prog, Params);
@@ -475,19 +476,23 @@ begin
         if N > 0 then
         begin
           Result.Message := Result.Message + Buf;
-          SL.Text := Buf;
+          TempS := TempS + Buf;
           if GetTickCount64 - I > 1000 then
           begin
             if ASignal <> nil then
+            begin
+              SL.Text := Buf;
               ASignal(SL);
+            end;
             I := GetTickCount64;
+            WriteLog(lsInfo, TempS);
+            TempS := '';
           end;
         end;
         Sleep(1);
       until N <= 0;
       fpClose(MasterFD);
       fpWaitPid(PID, @Result.ExitCode, 0);
-      WriteLog(lsInfo, Result.Message);
     finally
       SL.Free;
     end;
