@@ -470,7 +470,8 @@ begin
     try
       I := GetTickCount64;
       repeat
-        N := fpRead(MasterFD, @Buf[1], 255);
+        N := fpRead(MasterFD, @Buf[1], 254);
+        Buf[0] := Char(N);
         if N > 0 then
         begin
           Result.Message := Result.Message + Buf;
