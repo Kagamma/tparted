@@ -23,10 +23,30 @@ unit Parted.Commons;
 interface
 
 uses
-  {$ifdef Unix}Unix, BaseUnix, {$endif}
+  {$ifdef Unix}Unix, BaseUnix,{$endif}
   SysUtils, Classes, Generics.Collections, Process, Types, StrUtils, RegExpr, Locale;
 
 type
+  Ptermios = ^termios;
+  termios = record
+    c_iflag: Cardinal;
+    c_oflag: Cardinal;
+    c_cflag: Cardinal;
+    c_lflag: Cardinal;
+    c_line: AnsiChar;
+    c_cc: array [0..31] of AnsiChar;
+    c_ispeed: Cardinal;
+    c_ospeed: Cardinal;
+  end;
+
+  Pwinsize = ^winsize;
+  winsize = record
+    ws_row: Word;
+    ws_col: Word;
+    ws_xpixel: Word;
+    ws_ypixel: Word;
+  end;
+
   TPartedPathDict = specialize TDictionary<String, String>;
 
   TExecResult = record
@@ -51,6 +71,8 @@ type
     function ToUTF8: String;
   end;
 
+function forkpty(AMaster: PLongInt; AName: PChar; ATerm: Ptermios; AWinp: Pwinsize): LongInt; cdecl; external 'libutil' name 'forkpty';
+
 function GetTempMountPath(Path: String): String;
 // Mount a partition to path
 procedure Mount(Path, PathMnt: String);
@@ -63,6 +85,7 @@ procedure ExecSystem(const S: String);
 function ExecS(Prog: String; const Params: TStringDynArray): TExecResult;
 function ExecSA(Prog: String; const Params: TStringDynArray): TExecResultDA;
 function ExecAsync(Prog: String; const Params: TStringDynArray; const ASignal: TSignalMethod): TExecResult;
+function RemoveVT100EscapeSequences(const Input: String): String;
 
 // Converts TStringList to TStringDynArray
 function SLToSA(const SL: Classes.TStringList): TStringDynArray;
@@ -325,44 +348,60 @@ begin
   end;
 end;
 
+function RemoveVT100EscapeSequences(const Input: String): String;
+var
+  I: Integer;
+  InEscape: Boolean;
+begin
+  Result := '';
+  InEscape := False;
+  I := 1;
+
+  while I <= Length(Input) do
+  begin
+    if InEscape then
+    begin
+      // Skip until we find the terminating character (usually a letter)
+      if (Input[I] in ['A'..'Z', 'a'..'z']) then
+        InEscape := False;
+    end else
+    begin
+      if (Input[I] = #27) then // ESC character
+        InEscape := True
+      else
+        Result := Result + Input[I];
+    end;
+    Inc(I);
+  end;
+end;
+
 function ExecS(Prog: String; const Params: TStringDynArray): TExecResult;
 var
   I: LongInt;
   P: TProcess;
   S: String;
-  SLTemp: Classes.TStringList;
-
-  procedure PollForData;
-  begin
-    SLTemp.LoadFromStream(P.Output);
-    if SLTemp.Count > 0 then
-    begin
-      Result.Message := Result.Message + SLTemp.Text;
-    end;
-  end;
-
+  SL: Classes.TStringList;
 begin
   WriteLog(Prog, Params);
   Prog := FindProgram(Prog);
   Result.ExitCode := -1;
   P := TProcess.Create(nil);
-  SLTemp := Classes.TStringList.Create;
+  SL := Classes.TStringList.Create;
   try
     P.Executable := Prog;
     for S in Params do
       P.Parameters.Add(S);
-    P.Options := P.Options + [poUsePipes, poStderrToOutPut] - [poWaitOnExit];
+    P.Options := P.Options + [poWaitOnExit, poUsePipes];
     P.Execute;
-    while P.Running do
-    begin
-      PollForData;
-      Sleep(32);
-    end;
-    WriteLog(lsInfo, Result.Message);
     Result.ExitCode := P.ExitStatus;
-    PollForData;
+    if Result.ExitCode = 0 then
+      SL.LoadFromStream(P.Output)
+    else
+      SL.LoadFromStream(P.StdErr);
+    Result.Message := SL.Text;
+    WriteLog(lsInfo, Result.Message);
   finally
-    SLTemp.Free;
+    SL.Free;
     P.Free;
   end;
 end;
@@ -390,6 +429,8 @@ begin
       SL.LoadFromStream(P.Output)
     else
       SL.LoadFromStream(P.StdErr);
+    for I := 0 to Pred(SL.Count) do
+      SL[I] := SL[I];
     Result.MessageArray := SLToSA(SL);
     WriteLog(lsInfo, SL.Text);
   finally
@@ -400,49 +441,55 @@ end;
 
 function ExecAsync(Prog: String; const Params: TStringDynArray; const ASignal: TSignalMethod): TExecResult;
 var
-  I: LongInt;
-  P: TProcess;
+  I, N: LongInt;
   S: String;
-  SL,
-  SLTemp: Classes.TStringList;
-
-  procedure PollForData;
-  begin
-    SLTemp.LoadFromStream(P.Output);
-    if SLTemp.Count > 0 then
-    begin
-      SL.Text := SL.Text + SLTemp.Text;
-      if ASignal <> nil then
-        ASignal(SL);
-      Result.Message := Result.Message + SLTemp.Text;
-      WriteLog(lsInfo, SLTemp.Text);
-    end;
-  end;
+  MasterFD, PID: LongInt;
+  Buf: String[255];
+  SL: Classes.TStringList;
 
 begin
   WriteLog(Prog, Params);
   Prog := FindProgram(Prog);
   Result.ExitCode := -1;
-  P := TProcess.Create(nil);
-  SL := Classes.TStringList.Create;
-  SLTemp := Classes.TStringList.Create;
-  try
-    P.Executable := Prog;
-    for S in Params do
-      P.Parameters.Add(S);
-    P.Options := P.Options + [poUsePipes, poStderrToOutPut] - [poWaitOnExit];
-    P.Execute;
-    while P.Running do
-    begin
-      PollForData;
-      Sleep(2000);
+
+  PID := forkpty(@MasterFD, nil, nil, nil);
+
+  if PID < 0 then
+  begin
+    Result.Message := 'forkpty failed while calling ' + Prog;
+    Exit;
+  end;
+
+  if PID = 0 then
+  begin
+    fpExecLP(Prog, Params);
+    fpExit(1);
+  end else
+  begin
+    SL := Classes.TStringList.Create;
+    try
+      I := GetTickCount64;
+      repeat
+        N := fpRead(MasterFD, @Buf[1], 255);
+        if N > 0 then
+        begin
+          Result.Message := Result.Message + Buf;
+          SL.Text := Buf;
+          if GetTickCount64 - I > 1000 then
+          begin
+            if ASignal <> nil then
+              ASignal(SL);
+            I := GetTickCount64;
+          end;
+        end;
+        Sleep(1);
+      until N <= 0;
+      fpClose(MasterFD);
+      fpWaitPid(PID, @Result.ExitCode, 0);
+      WriteLog(lsInfo, Result.Message);
+    finally
+      SL.Free;
     end;
-    Result.ExitCode := P.ExitStatus;
-    PollForData;
-  finally
-    SL.Free;
-    SLTemp.Free;
-    P.Free;
   end;
 end;
 

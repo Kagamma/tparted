@@ -384,9 +384,9 @@ var
 begin
   S := #13;
   if SL.Count > 0 then
-    for I := Max(0, SL.Count - 4) to SL.Count - 1 do
+    for I := Max(0, SL.Count - 6) to SL.Count - 1 do
     begin
-      S2 := SL[I];
+      S2 := RemoveVT100EscapeSequences(SL[I]);
       if Length(S2) > 70 then
         SetLength(S2, 70);
       if I <> SL.Count - 1 then
