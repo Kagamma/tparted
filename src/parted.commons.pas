@@ -452,6 +452,7 @@ begin
   WriteLog(Prog, Params);
   Prog := FindProgram(Prog);
   Result.ExitCode := -1;
+  Result.Message := '';
 
   PID := forkpty(@MasterFD, nil, nil, nil);
 
@@ -485,7 +486,6 @@ begin
         Buf[0] := Char(N);
         if N > 0 then
         begin
-          Result.Message := Result.Message + Buf;
           TempS := TempS + Buf;
           if GetTickCount64 - I > 1000 then
           begin
