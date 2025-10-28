@@ -4,6 +4,8 @@
 
 # tparted
 
+https://github.com/user-attachments/assets/434d2a07-aaf9-40e5-898f-14a9a946af2c
+
 TUI frontend for `parted`: A simple, user-friendly utility for creating, moving, resizing, and deleting disk partitions, based on Free Vision application framework.
 
 MBR is partially supported, as long as no extended partition found on the device.
@@ -59,7 +61,3 @@ Currently supported filesystems:
 - `jfsutils` (optional) for jfs operations.
 - `f2fs-tools` (optional) for f2fs operations.
 - `bcachefs-tools` (optional) for bcachefs operations.
-
-![image1](./docs/images/1.png)
-
-![video1](./docs/demos/tparted.mp4)
