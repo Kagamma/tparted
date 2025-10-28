@@ -83,8 +83,10 @@ type
   TUILoadingDialog = object(TDialog)
   public
     Status: String;
+    TextLabel: PLabel;
     constructor Init(const AText: String);
     procedure HandleEvent(var E: TEvent); virtual;
+    procedure Update(const AText: String);
   end;
   PUILoadingDialog = ^TUILoadingDialog;
 
@@ -248,9 +250,13 @@ end;
 procedure LoadingUpdate(const S: String);
 begin
   if UILoading <> nil then
-    Dispose(UILoading, Done);
-  UILoading := New(PUILoadingDialog, Init(LoadingText + #13 + S));
-  Desktop^.Insert(UILoading);
+  begin
+    UILoading^.Update(LoadingText + #13 + S);
+  end else
+  begin
+    UILoading := New(PUILoadingDialog, Init(LoadingText + #13 + S));
+    Desktop^.Insert(UILoading);
+  end;
   UILoading^.ReDraw;
 end;
 
@@ -394,14 +400,51 @@ begin
   for I := 0 to High(ATexts) do
   begin
     R.Assign(2, 2 + I, 2 + Len + 1, 3 + I);
-    L := New(PLabel, Init(R, ATexts[I].ToUnicode, nil));
-    Self.Insert(L);
+    Self.TextLabel := New(PLabel, Init(R, ATexts[I].ToUnicode, nil));
+    Self.Insert(Self.TextLabel);
   end;
 end;
 
 procedure TUILoadingDialog.HandleEvent(var E: TEvent);
 begin
   inherited HandleEvent(E);
+end;
+
+procedure TUILoadingDialog.Update(const AText: String);
+var
+  R: TRect;
+  L: PLabel;
+  Len, H: LongInt;
+  I: LongInt;
+  ATexts: TStringDynArray;
+begin
+  ATexts := SplitString(AText, #13);
+  // Find the max length of text
+  Len := 1;
+  for I := 0 to High(ATexts) do
+    if Len < Length(ATexts[I]) then
+      Len := Length(ATexts[I]);
+  //
+  H := AText.CountChar(#13) + 1;
+  Desktop^.GetExtent(R);
+  R.A.X := (R.B.X div 2) - Len div 2 - 4;
+  R.B.X := (R.B.X div 2) + Len div 2 + 3;
+  R.A.Y := (R.B.Y div 2) - 5;
+  R.B.Y := (R.B.Y div 2) - 1 + H;
+  Self.ChangeBounds(R);
+  //
+  Self.Status := AText;
+  if Self.TextLabel <> nil then
+  begin
+    Dispose(Self.TextLabel, Done);
+    Self.TextLabel := nil;
+  end;
+  for I := 0 to High(ATexts) do
+  begin
+    R.Assign(2, 2 + I, 2 + Len + 1, 3 + I);
+    Self.TextLabel := New(PLabel, Init(R, ATexts[I].ToUnicode, nil));
+    Self.Insert(Self.TextLabel);
+  end;
 end;
 
 // ---------------------------------
