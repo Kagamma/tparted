@@ -447,7 +447,7 @@ var
   Buf: String[255];
   SL: Classes.TStringList;
   TempS: String;
-
+  P: TProcess;
 begin
   WriteLog(Prog, Params);
   Prog := FindProgram(Prog);
@@ -463,8 +463,18 @@ begin
 
   if PID = 0 then
   begin
-    fpExecLP(Prog, Params);
-    fpExit(1);
+    P := TProcess.Create(nil);
+    try
+      P.Executable := Prog;
+      for S in Params do
+        P.Parameters.Add(S);
+      P.Options := P.Options + [poWaitOnExit];
+      P.Execute;
+      Result.ExitCode := P.ExitStatus;
+    finally
+      P.Free;
+    end;
+    fpExit(Result.ExitCode);
   end else
   begin
     SL := Classes.TStringList.Create;
