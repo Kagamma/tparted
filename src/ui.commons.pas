@@ -412,7 +412,7 @@ end;
 
 procedure TUILoadingDialog.Update(const AText: String);
 var
-  R: TRect;
+  R, RO: TRect;
   L: PLabel;
   Len, H: LongInt;
   I: LongInt;
@@ -427,10 +427,15 @@ begin
   //
   H := AText.CountChar(#13) + 1;
   Desktop^.GetExtent(R);
+  Self.GetBounds(RO);
   R.A.X := (R.B.X div 2) - Len div 2 - 4;
   R.B.X := (R.B.X div 2) + Len div 2 + 3;
   R.A.Y := (R.B.Y div 2) - 5;
   R.B.Y := (R.B.Y div 2) - 1 + H;
+  R.A.X := Min(R.A.X, RO.A.X);
+  R.A.Y := Min(R.A.Y, RO.A.Y);
+  R.B.X := Max(R.B.X, RO.B.X);
+  R.B.Y := Max(R.B.Y, RO.B.Y);
   Self.ChangeBounds(R);
   //
   Self.Status := AText;
