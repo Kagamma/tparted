@@ -97,6 +97,8 @@ var
 
   procedure Grow;
   begin
+    if PartAfter^.PartSize = PartBefore^.PartSize then
+      Exit;
     DoExec('btrfs', ['check', PartAfter^.GetPartitionPath]);
     DoExec('parted', [PartAfter^.Device^.Path, 'resizepart', PartAfter^.Number.ToString, PartAfter^.PartEnd.ToString + 'B']);
     Mount(Path, PathMnt);
@@ -106,6 +108,8 @@ var
 
   procedure Shrink;
   begin
+    if PartAfter^.PartSize = PartBefore^.PartSize then
+      Exit;
     DoExec('btrfs', ['check', PartAfter^.GetPartitionPath]);
     Mount(Path, PathMnt);
     DoExecAsync('btrfs', ['filesystem', 'resize', BToKBFloor(PartAfter^.PartSize).ToString + 'K', PathMnt]);

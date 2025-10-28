@@ -97,6 +97,8 @@ var
 
   procedure Grow;
   begin
+    if PartAfter^.PartSize = PartBefore^.PartSize then
+      Exit;
     DoExec('xfs_repair', ['-v', PartAfter^.GetPartitionPath]);
     DoExec('parted', [PartAfter^.Device^.Path, 'resizepart', PartAfter^.Number.ToString, PartAfter^.PartEnd.ToString + 'B']);
     Mount(Path, PathMnt);

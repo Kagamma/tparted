@@ -328,7 +328,8 @@ begin
     begin
       Tmp := Self.Prev;
       Self.Prev := Tmp^.Prev;
-      Tmp^.Prev^.Next := @Self;
+      if Tmp^.Prev <> nil then
+        Tmp^.Prev^.Next := @Self;
       Dispose(Tmp);
     end;
   end;
@@ -341,7 +342,8 @@ begin
     begin
       Tmp := Self.Next;
       Self.Next := Tmp^.Next;
-      Tmp^.Next^.Prev := @Self;
+      if Tmp^.Next <> nil then
+        Tmp^.Next^.Prev := @Self;
       Dispose(Tmp);
     end;
   end;

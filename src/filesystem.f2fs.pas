@@ -97,6 +97,8 @@ var
 
   procedure Grow;
   begin
+    if PartAfter^.PartSize = PartBefore^.PartSize then
+      Exit;
     DoExec('fsck.f2fs', ['-f', '-a', Path]);
     DoExec('parted', [PartAfter^.Device^.Path, 'resizepart', PartAfter^.Number.ToString, PartAfter^.PartEnd.ToString + 'B']);
     DoExec('resize.f2fs', [Path]);
