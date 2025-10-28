@@ -88,8 +88,8 @@ resourcestring
   S_FlagsDialogTitle = 'Edit %s flags';
   S_CreateDialogTitle = 'Create new partition';
   S_ResizeDialogTitle = 'Move/Resize %s';
-  S_MinPossibleSpace = 'Min.Possible (MiB)'#13'%d';
-  S_MaxPossibleSpace = 'Max.Possible (MiB)'#13'%d';
+  S_MinPossibleSpace = 'Min.Possible'#13'%d MiB';
+  S_MaxPossibleSpace = 'Max.Possible'#13'%d MiB';
   S_CreatingGPT = 'Creating %s...';
   S_MaximumPartitionReached = 'Maximum number of partitions reached!';
   S_OperationAdvise = 'Are you sure you want to apply the pending operations to %s? Editing partitions has the potential to cause LOSS of DATA.';

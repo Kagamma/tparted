@@ -327,11 +327,11 @@ msgid "Move/Resize %s"
 msgstr ""
 
 #: locale:s_minpossiblespace
-msgid "Min.Possible (MiB)\015%d"
+msgid "Min.Possible\015%d MiB"
 msgstr ""
 
 #: locale:s_maxpossiblespace
-msgid "Max.Possible (MiB)\015%d"
+msgid "Max.Possible\015%d MiB"
 msgstr ""
 
 #: locale:s_creatinggpt
