@@ -50,6 +50,11 @@ var
   Preceding: PUIInputNumber;
   Size: PUIInputNumber = nil;
 
+  procedure PrecedingChanged(V: Int64);
+  begin
+    Size^.SetDisabled(True);
+  end;
+
   // Real-time correction for preceding
   function PrecedingMin(V: Int64): Int64;
   var
@@ -68,15 +73,20 @@ var
     Ceiling: Int64;
   begin
     if Size <> nil then
-      Ceiling := BToMBFloor(PPart^.GetPossibleExpandSize) - Size^.GetValue
+      Ceiling := BToMBFloor(PPart^.GetPossiblePreceding)
     else
-      Ceiling := BToMBFloor(PPart^.GetPossibleExpandSize) - BToMBFloor(PPart^.PartSizeZero);
+      Ceiling := BToMBFloor(PPart^.GetPossiblePreceding) - BToMBFloor(PPart^.PartSizeZero);
     if V > Ceiling then
       Result := Ceiling
     else
       Result := V;
     if ((Result <> DataOld.Preceding) and (SToIndex(PPart^.FileSystem, FileSystemMoveArray) < 0)) then
       Result := DataOld.Preceding;
+  end;
+
+  procedure SizeChanged(V: Int64);
+  begin
+    Preceding^.SetDisabled(True);
   end;
 
   // Real-time correction for size
@@ -99,7 +109,7 @@ var
   var
     Ceiling: Int64;
   begin
-    Ceiling := BToMBFloor(PPart^.GetPossibleExpandSize) - Preceding^.GetValue;
+    Ceiling := BToMBFloor(PPart^.GetPossibleExpandSize);
     if V > Ceiling then
       Result := Ceiling
     else
@@ -131,6 +141,7 @@ begin
       Preceding^.PostfixValues := 'MGT';
       Preceding^.OnMin := @PrecedingMin;
       Preceding^.OnMax := @PrecedingMax;
+      Preceding^.OnChanged := @PrecedingChanged;
       D^.Insert(Preceding);
       R.Assign(5, 2, 30, 3);
       D^.Insert(New(PLabel, Init(R, S_FreeSpacePreceding.ToUnicode, Preceding)));
@@ -145,6 +156,7 @@ begin
       Size^.PostfixValues := 'MGT';
       Size^.OnMin := @SizeMin;
       Size^.OnMax := @SizeMax;
+      Size^.OnChanged := @SizeChanged;
       D^.Insert(Size);
       R.Assign(5, 4, 30, 5);
       D^.Insert(New(PLabel, Init(R, S_NewSize.ToUnicode, Size)));

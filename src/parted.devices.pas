@@ -65,6 +65,8 @@ type
     function ContainsFlag(AFlag: String): Boolean;
     // Unmount this partition. Returns true if succeed.
     function Unmount: Boolean;
+    // Possible preceding
+    function GetPossiblePreceding: QWord;
     // Possible expand size
     function GetPossibleExpandSize: QWord;
     // Split current partition into multiple partitions, aligned in MB
@@ -215,13 +217,22 @@ begin
   end;
 end;
 
-function TPartedPartition.GetPossibleExpandSize: QWord;
+function TPartedPartition.GetPossiblePreceding: QWord;
 begin
-  Result := Self.PartSizeZero;
+  Result := 0;
   if (Self.Prev <> nil) and (Self.Prev^.Number = 0) then
   begin
     Result := Result + Self.Prev^.PartSizeZero;
   end;
+  if (Self.Next <> nil) and (Self.Next^.Number = 0) then
+  begin
+    Result := Result + Next^.PartSizeZero;
+  end;
+end;
+
+function TPartedPartition.GetPossibleExpandSize: QWord;
+begin
+  Result := Self.PartSizeZero;
   if (Self.Next <> nil) and (Self.Next^.Number = 0) then
   begin
     Result := Result + Next^.PartSizeZero;

@@ -100,10 +100,13 @@ type
 
   // TUIInputNmber
   TUIInputNumberValidateProc = function(V: Int64): Int64 is nested;
+  TUIInputNumberChangedProc = procedure(V: Int64) is nested;
   TUIInputNumber = object(TUIInputLine)
   private
     procedure Validate;
   public
+    Disabled: Boolean;
+    OnChanged: TUIInputNumberChangedProc;
     OnMin,
     OnMax: TUIInputNumberValidateProc;
     PostfixValues: String; // A list of postfixes, encoded as a string
@@ -112,6 +115,7 @@ type
     procedure SetData(var Rec); virtual;
     procedure GetData(var Rec); virtual;
     procedure Draw; virtual;
+    procedure SetDisabled(const V: Boolean);
   end;
   PUIInputNumber = ^TUIInputNumber;
 
@@ -495,6 +499,12 @@ begin
   end;
   Self.Data := UpCase(Self.Data);
   Self.DrawView;
+
+  if Self.OnChanged <> nil then
+  begin
+    if OldS <> Self.Data then
+      Self.OnChanged(Self.GetValue);
+  end;
 end;
 
 function TUIInputNumber.GetValue: Int64;
@@ -550,6 +560,22 @@ begin
     Self.Validate;
   end;
   inherited Draw;
+end;
+
+procedure TUIInputNumber.SetDisabled(const V: Boolean);
+begin
+  if V then
+  begin
+    Self.Options := Self.Options and not ofSelectable;
+    Self.State := Self.State or sfDisabled;
+    Self.DrawView;
+  end else
+  begin
+    Self.Options := Self.Options or ofSelectable;
+    Self.State := Self.State and not sfDisabled;
+    Self.DrawView;
+  end;
+  Self.Disabled := V;
 end;
 
 // ---------------------------------
