@@ -4,7 +4,7 @@
 
 # tparted
 
-https://github.com/user-attachments/assets/434d2a07-aaf9-40e5-898f-14a9a946af2c
+https://github.com/user-attachments/assets/8bdd2978-5892-4505-8226-1ac3b5465b3c
 
 TUI frontend for `parted`: A simple, user-friendly utility for creating, moving, resizing, and deleting disk partitions, based on Free Vision application framework.
 
