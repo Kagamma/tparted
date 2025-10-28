@@ -351,11 +351,11 @@ msgid "Performing %d/%d operations..."
 msgstr ""
 
 #: locale:s_verifyminsize
-msgid "%s requires a minimal size of %dMB!"
+msgid "%s requires a minimal size of %dMiB!"
 msgstr ""
 
 #: locale:s_verifymaxsize
-msgid "%s cannot larger than %dMB!"
+msgid "%s cannot larger than %dMiB!"
 msgstr ""
 
 #: locale:s_menuwindow
