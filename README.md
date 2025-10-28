@@ -62,4 +62,4 @@ Currently supported filesystems:
 
 ![image1](./docs/images/1.png)
 
-![image2](./docs/images/2.png)
+![video1](./docs/demos/tparted.mp4)
