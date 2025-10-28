@@ -114,9 +114,9 @@ function SizeString(const V: Int64): String;
 function SizeByteString(const V: Int64): String;
 // Extract number from a text like this: "34135123B"
 function ExtractQWordFromSize(S: String): QWord;
-// Converts bytes to floor(MB)
+// Converts bytes to floor(MiB)
 function BToMBFloor(const V: QWord): QWord;
-// Converts bytes to ceil(MB)
+// Converts bytes to ceil(MiB)
 function BToMBCeil(const V: QWord): QWord;
 // Converts bytes to floor(KB)
 function BToKBFloor(const V: QWord): QWord;

@@ -236,15 +236,15 @@ msgid "Dependencies"
 msgstr "依存関係"
 
 #: locale:s_freespacepreceding
-msgid "Preceding (MB)"
+msgid "Preceding (MiB)"
 msgstr "先行する（MB）"
 
 #: locale:s_newsize
-msgid "New size (MB)"
+msgid "New size (MiB)"
 msgstr "新しいサイズ（MB）"
 
 #: locale:s_freespacefollowing
-msgid "Following (MB)"
+msgid "Following (MiB)"
 msgstr "後続する（MB）"
 
 #: locale:s_size
@@ -316,11 +316,11 @@ msgid "Move/Resize %s"
 msgstr "%s 移動/サイズ変更"
 
 #: locale:s_minpossiblespace
-msgid "Min.Possible (MB)\015%d"
+msgid "Min.Possible (MiB)\015%d"
 msgstr "最小可能（MB）\015%d"
 
 #: locale:s_maxpossiblespace
-msgid "Max.Possible (MB)\015%d"
+msgid "Max.Possible (MiB)\015%d"
 msgstr "最大可能（MB）\015%d"
 
 #: locale:s_creatinggpt

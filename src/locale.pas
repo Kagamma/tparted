@@ -65,9 +65,9 @@ resourcestring
   S_Shrink = 'Shrink';
   S_Grow = 'Grow';
   S_Dependencies = 'Dependencies';
-  S_FreeSpacePreceding = 'Preceding (MB)';
-  S_NewSize = 'New size (MB)';
-  S_FreeSpaceFollowing = 'Following (MB)';
+  S_FreeSpacePreceding = 'Preceding (MiB)';
+  S_NewSize = 'New size (MiB)';
+  S_FreeSpaceFollowing = 'Following (MiB)';
   S_Size = 'Size';
   S_Used = 'Used';
   S_Flags = 'Flags';
@@ -88,8 +88,8 @@ resourcestring
   S_FlagsDialogTitle = 'Edit %s flags';
   S_CreateDialogTitle = 'Create new partition';
   S_ResizeDialogTitle = 'Move/Resize %s';
-  S_MinPossibleSpace = 'Min.Possible (MB)'#13'%d';
-  S_MaxPossibleSpace = 'Max.Possible (MB)'#13'%d';
+  S_MinPossibleSpace = 'Min.Possible (MiB)'#13'%d';
+  S_MaxPossibleSpace = 'Max.Possible (MiB)'#13'%d';
   S_CreatingGPT = 'Creating %s...';
   S_MaximumPartitionReached = 'Maximum number of partitions reached!';
   S_OperationAdvise = 'Are you sure you want to apply the pending operations to %s? Editing partitions has the potential to cause LOSS of DATA.';
