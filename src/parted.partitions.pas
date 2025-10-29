@@ -256,11 +256,10 @@ begin
     if PPart^.FileSystem = 'vfat' then
       if (PPart^.Kind = 'fat32') or (PPart^.kind = 'fat16') then
         PPart^.FileSystem := PPart^.Kind;
-    if ADevice.Table = 'gpt' then
       PPart^.UUID := QueryPartitionViaBlkid(PPart^, 'UUID').Message;
     PPart^.PartUUID := QueryPartitionViaBlkid(PPart^, 'PARTUUID').Message;
-    // We remove (v1) from linux-swap...
-    if PPart^.FileSystem = 'linux-swap(v1)' then
+    //
+    if (PPart^.FileSystem = 'swap') or (PPart^.FileSystem = 'linux-swap(v1)') then
       PPart^.FileSystem := 'linux-swap';
   end;
 end;
