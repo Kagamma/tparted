@@ -11,9 +11,9 @@
 {$endif}
 
 {$ifdef TPARTED_UNICODE}
-  {$define FreeVision := UApp, UMsgBox, UDrivers, UViews, UMenus, FVConsts, UFVCommon, UDialogs, UValidate, Video, Objects}
+  {$define FreeVision := UApp, UMsgBox, UDrivers, UViews, UMenus, FVConsts, UFVCommon, UDialogs, UValidate, Video, Objects, UEditors}
 {$else}
-  {$define FreeVision := App, MsgBox, Drivers, Views, Menus, FVConsts, FVCommon, Dialogs, Validate, Video, Objects}
+  {$define FreeVision := App, MsgBox, Drivers, Views, Menus, FVConsts, FVCommon, Dialogs, Validate, Video, Objects, Editors}
 {$endif}
 
 

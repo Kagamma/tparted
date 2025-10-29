@@ -35,9 +35,6 @@ type
     lsError
   );
 
-var
-  Log: TStringList;
-
 procedure WriteLog(Status: TPartedLogStatus; Text: String); overload;
 procedure WriteLog(Path: String; Params: TStringDynArray); overload;
 procedure WriteLogAndRaise(Text: String); overload;
@@ -61,18 +58,11 @@ begin
   end;
 end;
 
-procedure TruncateLog;
-begin
-  if Log.Count > 10000 then
-    Log.Delete(0);
-end;
-
 procedure WriteLog(Status: TPartedLogStatus; Text: String);
 var
   S, S2: String;
   Texts: TStringDynArray;
 begin
-  TruncateLog;
   Texts := SplitString(Text, #10);
   for S in Texts do
   begin
@@ -82,7 +72,6 @@ begin
       else
         S2 := S;
     end;
-    Log.Add(S2);
     WriteToLogFile(S2);
   end;
 end;
@@ -91,12 +80,10 @@ procedure WriteLog(Path: String; Params: TStringDynArray);
 var
   S, I: String;
 begin
-  TruncateLog;
   S := '';
   S := S + '+ ' + Path;
   for I in Params do
     S := S + ' ' + I;
-  Log.Add(S);
   WriteToLogFile(S);
 end;
 
@@ -105,12 +92,10 @@ var
   S, S2: String;
   Texts: TStringDynArray;
 begin
-  TruncateLog;
   Texts := SplitString(Text, #10);
   for S in Texts do
   begin
     S2 := '[ERROR] ' + S;
-    Log.Add(S2);
     WriteToLogFile(S2);
   end;
   raise ExceptionAbnormalExitCode.Create(Text);
@@ -120,15 +105,11 @@ var
   Lock: TFileStream;
 
 initialization
-  Log := TStringList.Create;
   CreateDir('/var/log/tparted');
   if FileExists(LOG_PATH_LEGACY) then
     DeleteFile(LOG_PATH_LEGACY);
   if FileExists(LOG_PATH) then
     DeleteFile(LOG_PATH);
   FileClose(FileCreate(LOG_PATH));
-
-finalization
-  Log.Free;
 
 end.

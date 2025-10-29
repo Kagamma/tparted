@@ -104,6 +104,11 @@ end;
 
 // ----------------------------------------------
 
+function BlankEditorDialog(Dialog: SmallInt; Info: Pointer): Word;
+begin
+  Result := cmNo;
+end;
+
 destructor TUIMain.Done;
 var
   I: LongInt;
@@ -116,6 +121,8 @@ end;
 constructor TUIMain.Init;
 begin
   inherited;
+  DisableCommands([cmSave, cmSaveAs, cmCut, cmCopy, cmPaste, cmClear, cmUndo, cmFind, cmReplace, cmSearchAgain]);
+  EditorDialog := @BlankEditorDialog;
 end;
 
 procedure TUIMain.InitDeskTop;
