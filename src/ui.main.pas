@@ -121,7 +121,6 @@ end;
 constructor TUIMain.Init;
 begin
   inherited;
-  DisableCommands([cmSave, cmSaveAs, cmCut, cmCopy, cmPaste, cmClear, cmUndo, cmFind, cmReplace, cmSearchAgain]);
   EditorDialog := @BlankEditorDialog;
 end;
 
