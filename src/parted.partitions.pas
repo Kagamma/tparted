@@ -34,8 +34,6 @@ const
     'lvm', 'msftdata', 'msftres', 'no_automount', 'raid', 'swap'
   );
 
-// Parse for device info from "parted -j /dev/Xxx unit B print free" string
-procedure ParseDeviceAndPartitionsFromJsonString(const JsonString: String; var ADevice: TPartedDevice); deprecated 'Use ParseDeviceAndPartitionsFromMachineString instead';
 // Parse for device info from "parted -m /dev/Xxx unit B print free" string
 procedure ParseDeviceAndPartitionsFromMachineString(const SL: TStringDynArray; var ADevice: TPartedDevice);
 // Parse for used and available in bytes from a single partition
@@ -68,102 +66,6 @@ implementation
 
 uses
   Math;
-
-procedure ParseDeviceAndPartitionsFromJsonString(const JsonString: String; var ADevice: TPartedDevice);
-var
-  I, J: LongInt;
-  Data: TJSONObject;
-  DiskJson: TJSONObject;
-  PartArrayJson: TJSONArray;
-  PartJson: TJSONObject;
-  FlagArrayJson: TJsonArray;
-  PPart: PPartedPartition;
-begin
-  Data := GetJSON(JsonString) as TJSONObject;
-  try
-    DiskJson := Data.Objects['disk'];
-
-    ADevice.Init;
-    ADevice.Name := DiskJson.Strings['model'];
-    ADevice.Path := DiskJson.Strings['path'];
-    ADevice.Size := ExtractQWordFromSize(DiskJson.Strings['size']);
-    ADevice.SizeApprox := SizeString(ADevice.Size);
-    ADevice.Transport := DiskJson.Strings['transport'];
-    ADevice.LogicalSectorSize := DiskJson.Integers['logical-sector-size'];
-    ADevice.PhysicalSectorSize := DiskJson.Integers['physical-sector-size'];
-    ADevice.Table := DiskJson.Strings['label'];
-    if ADevice.Table = 'unknown' then // This device has no partition table
-    begin
-      // We will create a fake root partition
-      New(PPart);
-      PPart^.Init;
-      ADevice.InsertPartition(PPart);
-      PPart^.Device := @ADevice;
-      PPart^.Number := 0;
-      PPart^.PartStart := 0;
-      PPart^.PartEnd := ADevice.Size;
-      PPart^.PartSize := ADevice.Size;
-      Exit;
-    end else
-    // Reading UUID is optional
-    try
-      if ADevice.Table = 'gpt' then
-        ADevice.UUID := DiskJson.Strings['uuid'];
-    except
-      on E: Exception do;
-    end;
-    ADevice.MaxPartitions := DiskJson.Integers['max-partitions'];
-
-    PartArrayJson := DiskJson.Arrays['partitions'];
-    for I := 0 to Pred(PartArrayJson.Count) do
-    begin
-      PartJson := PartArrayJson[I] as TJSONObject;
-      New(PPart);
-      PPart^.Init;
-      ADevice.InsertPartition(PPart);
-      PPart^.Device := @ADevice;
-      PPart^.Number := PartJson.Integers['number'];
-      PPart^.PartStart := ExtractQWordFromSize(PartJson.Strings['start']);
-      PPart^.PartEnd := ExtractQWordFromSize(PartJson.Strings['end']);
-      PPart^.PartSize := ExtractQWordFromSize(PartJson.Strings['size']);
-      PPart^.Kind := PartJson.Strings['type'];
-      if PPart^.Number <> 0 then // Not an unallocated space
-      begin
-        if ADevice.Table = 'gpt' then
-        begin
-          PPart^.KindUUID := PartJson.Strings['type-uuid'];
-          PPart^.UUID := PartJson.Strings['uuid'];
-        end;
-        // FileSystem is optional
-        try
-          PPart^.FileSystem := PartJson.Strings['filesystem'];
-        except
-          on E: Exception do
-            // Use blkid to detect filesystem, in case parted failed to do so
-            PPart^.FileSystem := QueryPartitionViaBlkid(PPart^, 'TYPE').Message;
-        end;
-        // We remove (v1) from linux-swap...
-        if PPart^.FileSystem = 'linux-swap(v1)' then
-          PPart^.FileSystem := 'linux-swap';
-        // Name is optional
-        try PPart^.Name := PartJson.Strings['name'] except on E: Exception do; end;
-      end;
-      // Flag is optional, so we ignore exception if there's none
-      try
-        FlagArrayJson := PartJson.Arrays['flags'];
-        SetLength(PPart^.Flags, FlagArrayJson.Count);
-        for J := 0 to Pred(FlagArrayJson.Count) do
-        begin
-          PPart^.Flags[J] := FlagArrayJson[J].AsString;
-        end;
-      except
-        on E: Exception do;
-      end;
-    end;
-  finally
-    Data.Free;
-  end;
-end;
 
 procedure ParseDeviceAndPartitionsFromMachineString(const SL: TStringDynArray; var ADevice: TPartedDevice);
 var
