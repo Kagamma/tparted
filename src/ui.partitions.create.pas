@@ -35,6 +35,9 @@ function ShowCreateDialog(const PPart: PPartedPartition; const AData: PPartedOpD
 
 implementation
 
+uses
+  UI.Devices;
+
 function ShowCreateDialog(const PPart: PPartedPartition; const AData: PPartedOpDataCreate): Boolean;
 const
   HW = 34;
@@ -175,12 +178,15 @@ begin
     D^.Insert(New(PLabel, Init(R, S_Name.ToUnicode, V)));
 
     // Passphrase
-    R.Assign(46, 13, 65, 14);
-    V := New(PUIInputLine, Init(R, 16));
-    PUIInputLine(V)^.IsPassword := True;
-    D^.Insert(V);
-    R.Assign(46, 12, 65, 13);
-    D^.Insert(New(PLabel, Init(R, S_Passphrase.ToUnicode, V)));
+    if CryptSetupExists then
+    begin
+      R.Assign(46, 13, 65, 14);
+      V := New(PUIInputLine, Init(R, 16));
+      PUIInputLine(V)^.IsPassword := True;
+      D^.Insert(V);
+      R.Assign(46, 12, 65, 13);
+      D^.Insert(New(PLabel, Init(R, S_Passphrase.ToUnicode, V)));
+    end;
 
     // Ok-Button
     R.Assign(HW + HW - 14, 17, HW + HW - 2, 19);
@@ -197,6 +203,8 @@ begin
     if Desktop^.ExecView(D) = cmOk then
     begin
       D^.GetData(AData^);
+      if not CryptSetupExists then
+        AData^.Passphrase := '';
       Result := VerifyFileSystemSize(PPart^.Device^.Table, FileSystemFormattableArray[AData^.FileSystem], AData^.Size);
     end;
   finally

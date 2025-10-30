@@ -65,6 +65,7 @@ procedure RemoveDeviceWindowFromList(const ADeviceWindow: PUIDevice);
 
 var
   OpenedDeviceWindowList: array[1..9] of PUIDevice; // A list of device windows to keep track which device we are opening right now.
+  CryptSetupExists: Boolean;
 
 implementation
 
@@ -89,7 +90,6 @@ const
 var
   XPos: LongInt = 0;
   YPos: LongInt = 0;
-  CryptSetupExists: Boolean;
 
 function IsDeviceWindowOpened(var ADevice: TPartedDevice): Boolean;
 var

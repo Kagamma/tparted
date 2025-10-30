@@ -106,7 +106,7 @@ resourcestring
   S_DecryptPartition = 'Decrypt %s';
   S_EnterPassphrase = 'Enter passphrase';
   S_Decrypting = 'Decrypting %s...';
-  S_DecryptFailed = 'Decrypt %s failed';
+  S_DecryptFailed = 'Decrypt %s failed!';
   S_Passphrase = 'LUKS Passphrase';
 
 implementation

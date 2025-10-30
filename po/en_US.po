@@ -403,7 +403,7 @@ msgid "Decrypting %s..."
 msgstr ""
 
 #: locale:s_decryptfailed
-msgid "Decrypt %s failed"
+msgid "Decrypt %s failed!"
 msgstr ""
 
 #: locale:s_passphrase
