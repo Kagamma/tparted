@@ -1,6 +1,6 @@
 CC=fpc
 CFLAGS=-Mobjfpc -Ci -Cr -Co -Ct -CR -Xs -Sa -gh -gw3 -gl -dTPARTED_DEBUG
-CFLAGS_REL=-Ci -Cr -Co -Ct -CR -Xs -Sa -O2
+CFLAGS_REL=-Mobjfpc -Ci -Cr -Co -Ct -CR -Xs -Sa -O2
 
 build:
 	mkdir -p ./bin
