@@ -58,10 +58,10 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemExFat.DoCreate');
   // Format the new partition
-  DoExec('mkfs.exfat', [PartAfter^.GetPartitionPath]);
+  DoExec('mkfs.exfat', [PartAfter^.GetActualPartitionPath]);
   // Change label if needed
   if PartAfter^.LabelName <> '' then
-    DoExec('exfatlabel', [PartAfter^.GetPartitionPath, PartAfter^.LabelName]);
+    DoExec('exfatlabel', [PartAfter^.GetActualPartitionPath, PartAfter^.LabelName]);
 end;
 
 procedure TPartedFileSystemExFat.DoDelete(const PartAfter, PartBefore: PPartedPartition);
@@ -75,7 +75,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemExFat.DoFormat');
   // Format the partition
-  DoExec('mkfs.exfat', [PartAfter^.GetPartitionPath]);
+  DoExec('mkfs.exfat', [PartAfter^.GetActualPartitionPath]);
 end;
 
 procedure TPartedFileSystemExFat.DoFlag(const PartAfter, PartBefore: PPartedPartition);
@@ -88,7 +88,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemExFat.DoLabelName');
   if PartAfter^.LabelName <> PartBefore^.LabelName then
-    DoExec('exfatlabel', [PartAfter^.GetPartitionPath, PartAfter^.LabelName]);
+    DoExec('exfatlabel', [PartAfter^.GetActualPartitionPath, PartAfter^.LabelName]);
 end;
 
 procedure TPartedFileSystemExFat.DoResize(const PartAfter, PartBefore: PPartedPartition);

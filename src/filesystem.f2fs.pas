@@ -59,9 +59,9 @@ begin
   WriteLog(lsInfo, 'TPartedFileSystemF2FS.DoCreate');
   // Format the new partition
   if PartAfter^.LabelName <> '' then
-    DoExec('mkfs.f2fs', ['-f', '-l', PartAfter^.LabelName, PartAfter^.GetPartitionPath])
+    DoExec('mkfs.f2fs', ['-f', '-l', PartAfter^.LabelName, PartAfter^.GetActualPartitionPath])
   else
-    DoExec('mkfs.f2fs', ['-f', PartAfter^.GetPartitionPath]);
+    DoExec('mkfs.f2fs', ['-f', PartAfter^.GetActualPartitionPath]);
 end;
 
 procedure TPartedFileSystemF2FS.DoDelete(const PartAfter, PartBefore: PPartedPartition);
@@ -75,7 +75,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemF2FS.DoFormat');
   // Format the partition
-  DoExec('mkfs.f2fs', ['-f', PartAfter^.GetPartitionPath]);
+  DoExec('mkfs.f2fs', ['-f', PartAfter^.GetActualPartitionPath]);
 end;
 
 procedure TPartedFileSystemF2FS.DoFlag(const PartAfter, PartBefore: PPartedPartition);
@@ -88,7 +88,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemF2FS.DoLabelName');
   if PartAfter^.LabelName <> '' then
-    DoExec('f2fslabel', [PartAfter^.GetPartitionPath, PartAfter^.LabelName]);
+    DoExec('f2fslabel', [PartAfter^.GetActualPartitionPath, PartAfter^.LabelName]);
 end;
 
 procedure TPartedFileSystemF2FS.DoResize(const PartAfter, PartBefore: PPartedPartition);
@@ -108,7 +108,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemF2FS.DoResize');
   // Shrink / Expand right
-  Path := PartAfter^.GetPartitionPath;
+  Path := PartAfter^.GetActualPartitionPath;
   if PartAfter^.PartEnd > PartBefore^.PartEnd then
   begin
     Grow;

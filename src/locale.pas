@@ -27,6 +27,7 @@ resourcestring
   S_DeleteButton = '~D~elete';
   S_FormatButton = '~F~ormat';
   S_ResizeButton = '~R~esize';
+  S_DecryptButton = 'Decry~p~t';
   S_UnmountButton = 'Un~m~ount';
   S_CreateGPTButton = 'P.~T~able';
   S_LabelButton = '~L~abel/Name';
@@ -74,8 +75,8 @@ resourcestring
   S_Label = 'Label';
   S_Name = 'Name';
   S_Mount = 'Mount';
-  S_Logs = 'In-memory Logs';
-  S_MenuLogs = 'In-memory ~L~ogs';
+  S_Logs = 'Logs';
+  S_MenuLogs = 'Show ~L~ogs';
   S_FileSystemSupport = 'File System Support';
   S_MenuFileSystemSupport = '~F~ile System Support';
   S_PartitionUnmounted = #3'"%s" unmounted!';
@@ -102,6 +103,8 @@ resourcestring
   S_MenuMaximize = '~M~aximize';
   S_MenuSwitchColor = 'Switch Colors';
   S_SelectPartitionTable = 'Select partition table';
+  S_DecryptPartition = 'Decrypt %s';
+  S_EnterPassphrase = 'Enter passphrase';
 
 implementation
 

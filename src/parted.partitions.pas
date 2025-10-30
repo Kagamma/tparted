@@ -99,14 +99,12 @@ begin
   ADevice.Init;
   ADevice.Path := GetData;
   ADevice.Size := ExtractQWordFromSize(GetData);
+  ADevice.SizeApprox := SizeString(ADevice.Size);
   ADevice.Transport := GetData;
   ADevice.LogicalSectorSize := GetData.ToInt64;
   ADevice.PhysicalSectorSize := GetData.ToInt64;
   ADevice.Table := GetData;
   ADevice.Name := GetData;
-  // TODO: Get device size
-  //ADevice.Size := ExtractQWordFromSize(DiskJson.Strings['size']);
-  //ADevice.SizeApprox := SizeString(ADevice.Size);
   if ADevice.Table = 'unknown' then // This device has no partition table
   begin
     // We will create a fake root partition
@@ -155,6 +153,20 @@ begin
     end;
     //
     PPart^.FileSystem := QueryPartitionViaBlkid(PPart^, 'TYPE').Message;
+    //
+    PPart^.IsEncrypted := False;
+    PPart^.IsDecrypted := False;
+    if PPart^.FileSystem = 'crypto_LUKS' then
+    begin
+      PPart^.IsEncrypted := True;
+      // Check if this partition has been decrypted yet
+      if FileExists(PPart^.GetActualPartitionPath(True)) then
+      begin
+        PPart^.IsDecrypted := True;
+        PPart^.FileSystem := QueryPartitionViaBlkid(PPart^, 'TYPE').Message;
+      end;
+    end;
+    //
     if PPart^.FileSystem = 'vfat' then
       if (PPart^.Kind = 'fat32') or (PPart^.kind = 'fat16') then
         PPart^.FileSystem := PPart^.Kind;
@@ -163,8 +175,6 @@ begin
     //
     if (PPart^.FileSystem = 'swap') or (PPart^.FileSystem = 'linux-swap(v1)') then
       PPart^.FileSystem := 'linux-swap';
-    if PPart^.FileSystem = 'crypto_LUKS' then
-      PPart^.IsEncrypted := True;
   end;
 end;
 
@@ -236,7 +246,7 @@ var
 begin
   Result.ExitCode := -1;
   {$ifndef TPARTED_TEST}
-  Path := APart.GetPartitionPath;
+  Path := APart.GetActualPartitionPath;
   if APart.FileSystem <> 'linux-swap' then
   begin
     Result := ExecS('findmnt', ['-J', '-n', Path]);
@@ -265,7 +275,7 @@ begin
   // Immediately skip if this is either efi partition, swap, or unallocated space
   if (APart.Number <= 0) or APart.ContainsFlag('esp') or (APart.FileSystem = '') or (APart.FileSystem = 'linux-swap') then
     Exit;
-  Path := APart.GetPartitionPath;
+  Path := APart.GetActualPartitionPath;
   PathMnt := GetTempMountPath(Path);
   // We will try to mount the partition, in case it is unmount
   // - TODO: For now we dont check the usage of linux-swap
@@ -323,7 +333,7 @@ begin
     Exit;
   if not ProgramExists('tune2fs') then
     Exit;
-  Path := APart.GetPartitionPath;
+  Path := APart.GetActualPartitionPath;
   Result := ExecSA('tune2fs', ['-l', Path]);
   if Result.ExitCode <> 0 then
   begin
@@ -355,10 +365,8 @@ begin
   // Immediately skip if this is a swap, or unallocated space
   if (APart.Number <= 0) or (APart.FileSystem =  'linux-swap') then
     Exit;
-  Path := APart.GetPartitionPath;
-  Result := ExecS('blkid', ['-s', 'LABEL', '-o', 'value', Path]);
-  if Result.ExitCode <> 0 then
-    WriteLogAndRaise(Format(S_ProcessExitCode, ['blkid -s LABEL -o value ' + Path, Result.ExitCode, Result.Message]));
+  Path := APart.GetActualPartitionPath;
+  Result := QueryPartitionViaBlkid(APart, 'LABEL');
   APart.LabelName := Trim(Result.Message);
   {$else}
   APart.LabelName := 'test_label'
@@ -374,9 +382,9 @@ begin
   // Immediately skip if this is unallocated space
   if APart.Number <= 0 then
     Exit;
-  Path := APart.GetPartitionPath;
+  Path := APart.GetActualPartitionPath;
   Result := ExecS('blkid', ['-s', S, '-o', 'value', Path]);
-  if Result.ExitCode <> 0 then
+  if (Result.ExitCode <> 0) and (Result.ExitCode <> 2) then
     WriteLogAndRaise(Format(S_ProcessExitCode, ['blkid -s ' + S + ' -o value ' + Path, Result.ExitCode, Result.Message]));
   Result.Message := Trim(Result.Message);
 end;
@@ -391,7 +399,7 @@ begin
   // Immediately skip if this is unallocated space, or already unmounted
   if (APart.Number <= 0) or (not APart.IsMounted) then
     Exit;
-  Path := APart.GetPartitionPath;
+  Path := APart.GetActualPartitionPath;
   Result := ExecS('umount', [Path]);
   if Result.ExitCode <> 0 then
     WriteLogAndRaise(Format(S_ProcessExitCode, ['umount ' + Path, Result.ExitCode, Result.Message]));

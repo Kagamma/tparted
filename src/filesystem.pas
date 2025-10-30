@@ -312,7 +312,7 @@ begin
   PartAfter^.Number := Abs(PartAfter^.Number);
   //
   DoCreatePartitionOnly(PartAfter);
-  DoExec('wipefs', ['-a', PartAfter^.GetPartitionPath]);
+  DoExec('wipefs', ['-a', PartAfter^.GetActualPartitionPath]);
 end;
 
 procedure TPartedFileSystem.DoDelete(const PartAfter, PartBefore: PPartedPartition);
@@ -322,6 +322,9 @@ begin
   // Make sure number is of a positive one
   if PartBefore^.Number <= 0 then
     WriteLogAndRaise(Format('Wrong number %d while trying to delete partition %s' , [PartBefore^.Number, PartBefore^.GetPartitionPath]));
+  // Make sure to unmount decrypted partition first
+  if PartBefore^.IsDecrypted then
+    ExecSystem('cryptsetup luksClose ' + ExtractFileName(PartBefore^.GetActualPartitionPath));
   // Remove partition from partition table
   DoExec('parted', [PartBefore^.Device^.Path, 'rm', PartBefore^.Number.ToString]);
 end;
@@ -330,7 +333,7 @@ procedure TPartedFileSystem.DoFormat(const PartAfter, PartBefore: PPartedPartiti
 begin
   WriteLog(lsInfo, 'TPartedFileSystem.DoFormat');
   QueryDeviceExists(PartAfter^.Device^.Path);
-  DoExec('wipefs', ['-a', PartAfter^.GetPartitionPath]);
+  DoExec('wipefs', ['-a', PartAfter^.GetActualPartitionPath]);
 end;
 
 procedure TPartedFileSystem.DoFlag(const PartAfter, PartBefore: PPartedPartition);

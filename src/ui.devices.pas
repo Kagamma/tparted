@@ -49,7 +49,7 @@ type
     LabelPendingOperations: PUILabel;
     LabelDeviceInfo: PUILabel;
 
-    ButtonPartitionArray: array[0..8] of PUIButton;
+    ButtonPartitionArray: array[0..9] of PUIButton;
     ButtonOperationArray: array[0..2] of PUIButton;
     constructor Init(var ADevice: TPartedDevice; AIndex: LongInt);
     destructor Done; virtual;
@@ -71,6 +71,7 @@ implementation
 uses
   Math,
   UI.Main,
+  UI.Partitions.Decrypt,
   UI.Partitions.Create,
   UI.Partitions.Resize,
   UI.Partitions.Info,
@@ -88,6 +89,7 @@ const
 var
   XPos: LongInt = 0;
   YPos: LongInt = 0;
+  CryptSetupExists: Boolean;
 
 function IsDeviceWindowOpened(var ADevice: TPartedDevice): Boolean;
 var
@@ -163,19 +165,21 @@ begin
   // Create button
   Self.ButtonPartitionArray[1]^.SetDisabled((APart.Number <> 0) or IsDisabled);
   // Delete button
-  Self.ButtonPartitionArray[2]^.SetDisabled((APart.Number = 0) or (APart.IsMounted) or (APart.Encrypted) or IsDisabled);
+  Self.ButtonPartitionArray[2]^.SetDisabled((APart.Number = 0) or (APart.IsMounted) or IsDisabled);
   // Format button
-  Self.ButtonPartitionArray[3]^.SetDisabled((APart.Number = 0) or (APart.IsMounted) or (APart.Encrypted) or IsDisabled);
+  Self.ButtonPartitionArray[3]^.SetDisabled((APart.Number = 0) or (APart.IsMounted) or (APart.Encrypted)   or IsDisabled);
   // Resize button
-  Self.ButtonPartitionArray[4]^.SetDisabled((APart.Number = 0) or (APart.IsMounted) or (APart.Encrypted) or APart.ContainsFlag('esp') or IsDisabled or IsResizeableDisabled);
+  Self.ButtonPartitionArray[4]^.SetDisabled((APart.Number = 0) or (APart.IsMounted) or (APart.IsEncrypted) or APart.ContainsFlag('esp') or IsDisabled or IsResizeableDisabled);
   // Label button
-  Self.ButtonPartitionArray[5]^.SetDisabled((APart.Number = 0) or (APart.IsMounted) or (APart.Encrypted) or IsDisabled);
+  Self.ButtonPartitionArray[5]^.SetDisabled((APart.Number = 0) or (APart.IsMounted) or (APart.Encrypted)   or IsDisabled);
   // Flag button
-  Self.ButtonPartitionArray[6]^.SetDisabled((APart.Number = 0) or (APart.IsMounted) or (APart.Encrypted) or IsDisabled);
+  Self.ButtonPartitionArray[6]^.SetDisabled((APart.Number = 0) or (APart.IsMounted) or (APart.IsEncrypted) or IsDisabled);
   // Unmount button
   Self.ButtonPartitionArray[7]^.SetDisabled((not APart.IsMounted) or (APart.FileSystem = 'linux-swap') or IsDisabled);
+  // Decrypt button
+  Self.ButtonPartitionArray[8]^.SetDisabled(not APart.Encrypted or not CryptSetupExists);
   // Create GPT btton
-  Self.ButtonPartitionArray[8]^.SetDisabled(Self.OpList[0].Device^.GetMountedPartitionCount > 0);
+  Self.ButtonPartitionArray[9]^.SetDisabled(Self.OpList[0].Device^.GetMountedPartitionCount > 0);
   // Undo button
   Self.ButtonOperationArray[0]^.SetDisabled(Self.OpList.GetOpCount = 0);
   // Empty button
@@ -260,7 +264,10 @@ begin
   Self.ButtonPartitionArray[7] := New(PUIButton, Init(R, S_UnmountButton.ToUnicode, cmPartitionUnmount, bfDefault));
   Inc(R.A.Y, 2);
   Inc(R.B.Y, 2);
-  Self.ButtonPartitionArray[8] := New(PUIButton, Init(R, S_CreateGPTButton.ToUnicode, cmDeviceCreateGPT, bfDefault));
+  Self.ButtonPartitionArray[8] := New(PUIButton, Init(R, S_DecryptButton.ToUnicode, cmPartitionDecrypt, bfDefault));
+  Inc(R.A.Y, 2);
+  Inc(R.B.Y, 2);
+  Self.ButtonPartitionArray[9] := New(PUIButton, Init(R, S_CreateGPTButton.ToUnicode, cmDeviceCreateGPT, bfDefault));
   for I := 0 to High(Self.ButtonPartitionArray) do
     Self.Insert(Self.ButtonPartitionArray[I]);
 
@@ -588,6 +595,12 @@ begin
             Self.Refresh;
           Exit;
         end;
+      cmPartitionDecrypt:
+        begin
+          if ShowDecryptDialog(Self.ListPartition^.GetSelectedPartition) then
+            DoApplyRefreshDevice;
+          Exit;
+        end;
       cmPartitionLabel:
         begin
           DoLabel;
@@ -673,6 +686,9 @@ begin
   // Update button states
   Self.UpdateButtonsState(Self.OpList.GetCurrentDevice^.GetPartitionAt(Self.ListPartition^.List^.Focused)^);
 end;
+
+initialization
+  CryptSetupExists := ProgramExists('cryptsetup');
 
 end.
 

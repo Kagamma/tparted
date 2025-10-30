@@ -49,6 +49,7 @@ type
     Name: String;
     IsMounted: Boolean;
     IsEncrypted: Boolean;
+    IsDecrypted: Boolean;
     MountPoint: String;
     CanBeResized: Boolean;
     OpID: QWord; // The ID used by operations
@@ -62,6 +63,9 @@ type
     function GetPartitionPathForDisplay: String;
     // Get part path
     function GetPartitionPath: String;
+    // Get actual part path for operations.
+    // IsForced will force to return actual path even if the partition hasn't been decrypted
+    function GetActualPartitionPath(const IsForced: Boolean = False): String;
     // Check to see if AFlag exists in this partition
     function ContainsFlag(AFlag: String): Boolean;
     // Unmount this partition. Returns true if succeed.
@@ -76,7 +80,9 @@ type
     procedure ResizePartitionInMB(const Preceding, Size: Int64);
     // Guess and assign a number for this partition
     procedure AutoAssignNumber;
-    // Get this partition's encrypt status
+    // Decrypt a LUKs partition
+    function Decrypt(const APassword: String): Boolean;
+    // Returns true if the partition hasn't been decrypted
     function Encrypted: Boolean;
   end;
   TPartedPartitionDynArray = array of TPartedPartition;
@@ -125,10 +131,12 @@ function QueryCreatePTableSilent(const AType, APath: String): TExecResult;
 implementation
 
 uses
+  UI.Commons,
   Parted.Partitions;
 
 var
   OpIDCounter: QWord = 0;
+  DecryptedPartitionList: Classes.TStringList;
 
 procedure TPartedPartition.Init;
 begin
@@ -156,6 +164,38 @@ begin
     Result := Self.PartEnd + 1
   else
     Result := Self.PartSize;
+end;
+
+function TPartedPartition.GetActualPartitionPath(const IsForced: Boolean = False): String;
+const
+  DevicesWithPPrefix: array[0..7] of String = (
+    '/cciss', '/mmcblk', '/md', '/rd', '/ida', '/nvme', '/nbd', '/loop'
+  );
+var
+  I: Integer;
+begin
+  if Self.IsEncrypted and (Self.IsDecrypted or IsForced) then
+    Result := '/dev/mapper/' + ExtractFileName(Self.Device^.Path)
+  else
+    Result := Self.Device^.Path;
+  // Check to see if we need to add `p` prefix before partition number
+  for I := Low(DevicesWithPPrefix) to High(DevicesWithPPrefix) do
+  begin
+    if Pos(DevicesWithPPrefix[I], Self.Device^.Path) > 0 then
+    begin
+      Result := Result + 'p';
+      break;
+    end;
+  end;
+  //
+  if Self.Number > 0 then
+    Result := Result + Self.Number.ToString
+  else
+  if Self.Number < 0 then
+    Result := Result + '?' + (-Self.Number).ToString;
+  //
+  if Self.IsEncrypted and (Self.IsDecrypted or IsForced) then
+    Result := Result + '_tparted';
 end;
 
 function TPartedPartition.GetPartitionPathForDisplay: String;
@@ -580,9 +620,35 @@ begin
   Self.Number := N;
 end;
 
+function TPartedPartition.Decrypt(const APassword: String): Boolean;
+var
+  Path: String;
+  DecryptPath: String;
+begin
+  if not Self.IsEncrypted then
+    Exit;
+  if Self.IsEncrypted and Self.IsDecrypted then
+    Exit;
+  Path := Self.GetPartitionPath;
+  DecryptPath := Self.GetActualPartitionPath(True);
+  if not FileExists(DecryptPath) then
+  begin
+    LoadingStart(Format('Decrypting %s...', [Path]));
+      ExecSystem(Format('echo "%s" | sudo cryptsetup luksOpen %s %s', [
+        APassword, Path, ExtractFileName(Path) + '_tparted'
+      ]));
+    LoadingStop;
+    if not FileExists(DecryptPath) then
+      Exit(False);
+  end;
+  Self.IsDecrypted := True;
+  DecryptedPartitionList.Add(DecryptPath);
+  Result := True;
+end;
+
 function TPartedPartition.Encrypted: Boolean;
 begin
-  Result := Self.IsEncrypted;
+  Result := Self.IsEncrypted and not Self.IsDecrypted;
 end;
 
 procedure TPartedDevice.Probe;
@@ -675,6 +741,19 @@ begin
   if Result.ExitCode <> 0 then
     WriteLogAndRaise(Format(S_ProcessExitCode, ['parted ' + APath + ' mklabel ' + AType, Result.ExitCode, Result.Message]));
 end;
+
+var
+  S: String;
+
+initialization
+  DecryptedPartitionList := Classes.TStringList.Create;
+  DecryptedPartitionList.Sorted := True;
+  DecryptedPartitionList.Duplicates := dupIgnore;
+
+finalization
+  for S in DecryptedPartitionList do
+    ExecSystem('cryptsetup luksClose ' + ExtractFileName(S));
+  DecryptedPartitionList.Free;
 
 end.
 

@@ -58,7 +58,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemSwap.DoCreate');
   // Format the new partition
-  DoExec('mkswap', [PartAfter^.GetPartitionPath]);
+  DoExec('mkswap', [PartAfter^.GetActualPartitionPath]);
 end;
 
 procedure TPartedFileSystemSwap.DoDelete(const PartAfter, PartBefore: PPartedPartition);
@@ -72,7 +72,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemSwap.DoFormat');
   // Format the partition
-  DoExec('mkswap', [PartAfter^.GetPartitionPath]);
+  DoExec('mkswap', [PartAfter^.GetActualPartitionPath]);
 end;
 
 procedure TPartedFileSystemSwap.DoFlag(const PartAfter, PartBefore: PPartedPartition);

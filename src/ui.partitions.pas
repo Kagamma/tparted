@@ -99,7 +99,8 @@ begin
         NewItem(S_ResizeButton.ToUnicode, '', kbNoKey, cmPartitionResize, hcNoContext,
         NewItem(S_LabelButton.ToUnicode, '', kbNoKey, cmPartitionLabel, hcNoContext,
         NewItem(S_FlagButton.ToUnicode, '', kbNoKey, cmPartitionFlag, hcNoContext,
-        NewItem(S_UnmountButton.ToUnicode, '', kbNoKey, cmPartitionUnmount, hcNoContext, nil))))))))
+        NewItem(S_UnmountButton.ToUnicode, '', kbNoKey, cmPartitionUnmount, hcNoContext,
+        NewItem(S_DecryptButton.ToUnicode, '', kbNoKey, cmPartitionDecrypt, hcNoContext, nil)))))))))
       ), nil));
       // Set menu states
       MI := PopupMenu^.Menu^.Items;

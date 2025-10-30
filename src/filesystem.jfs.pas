@@ -58,10 +58,10 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemJfs.DoCreate');
   // Format the new partition
-  DoExec('mkfs.jfs', ['-q', PartAfter^.GetPartitionPath]);
+  DoExec('mkfs.jfs', ['-q', PartAfter^.GetActualPartitionPath]);
   // Change label if needed
   if PartAfter^.LabelName <> '' then
-    DoExec('jfs_tune', ['-L', PartAfter^.LabelName, PartAfter^.GetPartitionPath]);
+    DoExec('jfs_tune', ['-L', PartAfter^.LabelName, PartAfter^.GetActualPartitionPath]);
 end;
 
 procedure TPartedFileSystemJfs.DoDelete(const PartAfter, PartBefore: PPartedPartition);
@@ -75,7 +75,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemJfs.DoFormat');
   // Format the partition
-  DoExec('mkfs.jfs', ['-q', PartAfter^.GetPartitionPath]);
+  DoExec('mkfs.jfs', ['-q', PartAfter^.GetActualPartitionPath]);
 end;
 
 procedure TPartedFileSystemJfs.DoFlag(const PartAfter, PartBefore: PPartedPartition);
@@ -88,7 +88,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemJfs.DoLabelName');
   if PartAfter^.LabelName <> '' then
-    DoExec('jfs_tune', ['-L', PartAfter^.LabelName, PartAfter^.GetPartitionPath]);
+    DoExec('jfs_tune', ['-L', PartAfter^.LabelName, PartAfter^.GetActualPartitionPath]);
 end;
 
 procedure TPartedFileSystemJfs.DoResize(const PartAfter, PartBefore: PPartedPartition);
@@ -112,7 +112,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemJfs.DoResize');
   // Shrink / Expand right
-  Path := PartAfter^.GetPartitionPath;
+  Path := PartAfter^.GetActualPartitionPath;
   PathMnt := GetTempMountPath(Path);
   if PartAfter^.PartEnd > PartBefore^.PartEnd then
   begin

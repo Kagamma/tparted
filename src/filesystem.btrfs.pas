@@ -58,10 +58,10 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemBTRFS.DoCreate');
   // Format the new partition
-  DoExec('mkfs.btrfs', ['-f', PartAfter^.GetPartitionPath]);
+  DoExec('mkfs.btrfs', ['-f', PartAfter^.GetActualPartitionPath]);
   // Change label if needed
   if PartAfter^.LabelName <> '' then
-    DoExec('btrfs', ['filesystem', 'label', PartAfter^.GetPartitionPath, PartAfter^.LabelName]);
+    DoExec('btrfs', ['filesystem', 'label', PartAfter^.GetActualPartitionPath, PartAfter^.LabelName]);
 end;
 
 procedure TPartedFileSystemBTRFS.DoDelete(const PartAfter, PartBefore: PPartedPartition);
@@ -75,7 +75,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemBTRFS.DoFormat');
   // Format the partition
-  DoExec('mkfs.btrfs', ['-f', PartAfter^.GetPartitionPath]);
+  DoExec('mkfs.btrfs', ['-f', PartAfter^.GetActualPartitionPath]);
 end;
 
 procedure TPartedFileSystemBTRFS.DoFlag(const PartAfter, PartBefore: PPartedPartition);
@@ -88,7 +88,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemBTRFS.DoLabelName');
   if PartAfter^.LabelName <> '' then
-    DoExec('btrfs', ['filesystem', 'label', PartAfter^.GetPartitionPath, PartAfter^.LabelName]);
+    DoExec('btrfs', ['filesystem', 'label', PartAfter^.GetActualPartitionPath, PartAfter^.LabelName]);
 end;
 
 procedure TPartedFileSystemBTRFS.DoResize(const PartAfter, PartBefore: PPartedPartition);
@@ -99,7 +99,7 @@ var
   begin
     if PartAfter^.PartSize = PartBefore^.PartSize then
       Exit;
-    DoExec('btrfs', ['check', PartAfter^.GetPartitionPath]);
+    DoExec('btrfs', ['check', PartAfter^.GetActualPartitionPath]);
     DoExec('parted', [PartAfter^.Device^.Path, 'resizepart', PartAfter^.Number.ToString, PartAfter^.PartEnd.ToString + 'B']);
     Mount(Path, PathMnt);
     DoExec('btrfs', ['filesystem', 'resize', 'max', PathMnt]);
@@ -110,7 +110,7 @@ var
   begin
     if PartAfter^.PartSize = PartBefore^.PartSize then
       Exit;
-    DoExec('btrfs', ['check', PartAfter^.GetPartitionPath]);
+    DoExec('btrfs', ['check', PartAfter^.GetActualPartitionPath]);
     Mount(Path, PathMnt);
     DoExecAsync('btrfs', ['filesystem', 'resize', BToKBFloor(PartAfter^.PartSize).ToString + 'K', PathMnt]);
     Unmount(Path, PathMnt);
@@ -120,7 +120,7 @@ var
 begin
   WriteLog(lsInfo, 'TPartedFileSystemBTRFS.DoResize');
   // Shrink / Expand right
-  Path := PartAfter^.GetPartitionPath;
+  Path := PartAfter^.GetActualPartitionPath;
   PathMnt := GetTempMountPath(Path);
   if PartAfter^.PartEnd > PartBefore^.PartEnd then
   begin

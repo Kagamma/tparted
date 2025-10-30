@@ -58,10 +58,10 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemNTFS.DoCreate');
   // Format the new partition
-  DoExec('mkfs.ntfs', ['-f', PartAfter^.GetPartitionPath]);
+  DoExec('mkfs.ntfs', ['-f', PartAfter^.GetActualPartitionPath]);
   // Change label if needed
   if PartAfter^.LabelName <> '' then
-    DoExec('ntfslabel', [PartAfter^.GetPartitionPath, PartAfter^.LabelName]);
+    DoExec('ntfslabel', [PartAfter^.GetActualPartitionPath, PartAfter^.LabelName]);
 end;
 
 procedure TPartedFileSystemNTFS.DoDelete(const PartAfter, PartBefore: PPartedPartition);
@@ -75,7 +75,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemNTFS.DoFormat');
   // Format the partition
-  DoExec('mkfs.ntfs', ['-f', PartAfter^.GetPartitionPath]);
+  DoExec('mkfs.ntfs', ['-f', PartAfter^.GetActualPartitionPath]);
 end;
 
 procedure TPartedFileSystemNTFS.DoFlag(const PartAfter, PartBefore: PPartedPartition);
@@ -88,7 +88,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemNTFS.DoLabelName');
   if PartAfter^.LabelName <> PartBefore^.LabelName then
-    DoExec('ntfslabel', [PartAfter^.GetPartitionPath, PartAfter^.LabelName]);
+    DoExec('ntfslabel', [PartAfter^.GetActualPartitionPath, PartAfter^.LabelName]);
 end;
 
 procedure TPartedFileSystemNTFS.DoResize(const PartAfter, PartBefore: PPartedPartition);
@@ -97,17 +97,17 @@ procedure TPartedFileSystemNTFS.DoResize(const PartAfter, PartBefore: PPartedPar
   begin
     if PartAfter^.PartSize = PartBefore^.PartSize then
       Exit;
-    DoExec('ntfsresize', ['-f', PartAfter^.GetPartitionPath]);
+    DoExec('ntfsresize', ['-f', PartAfter^.GetActualPartitionPath]);
     DoExec('parted', [PartAfter^.Device^.Path, 'resizepart', PartAfter^.Number.ToString, PartAfter^.PartEnd.ToString + 'B']);
-    DoExec('ntfsfix', ['-b', '-d', PartAfter^.GetPartitionPath]);
+    DoExec('ntfsfix', ['-b', '-d', PartAfter^.GetActualPartitionPath]);
   end;
 
   procedure Shrink;
   begin
     if PartAfter^.PartSize = PartBefore^.PartSize then
       Exit;
-    DoExecAsync('ntfsresize', ['-v', '-f', '-s', PartAfter^.PartSize.ToString, PartAfter^.GetPartitionPath]);
-    DoExec('ntfsfix', ['-b', '-d', PartAfter^.GetPartitionPath]);
+    DoExecAsync('ntfsresize', ['-v', '-f', '-s', PartAfter^.PartSize.ToString, PartAfter^.GetActualPartitionPath]);
+    DoExec('ntfsfix', ['-b', '-d', PartAfter^.GetActualPartitionPath]);
     DoExec('sh', ['-c', Format('echo "Yes" | parted %s ---pretend-input-tty resizepart %d %dB', [PartAfter^.Device^.Path, PartAfter^.Number, PartAfter^.PartEnd])]);
   end;
 

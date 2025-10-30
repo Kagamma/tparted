@@ -59,9 +59,9 @@ begin
   WriteLog(lsInfo, 'TPartedFileSystemBcachefs.DoCreate');
   // Format the new partition
   if PartAfter^.LabelName <> '' then
-    DoExec('bcachefs', ['format', '-L', PartAfter^.LabelName, PartAfter^.GetPartitionPath])
+    DoExec('bcachefs', ['format', '-L', PartAfter^.LabelName, PartAfter^.GetActualPartitionPath])
   else
-    DoExec('bcachefs', ['format', PartAfter^.GetPartitionPath]);
+    DoExec('bcachefs', ['format', PartAfter^.GetActualPartitionPath]);
 end;
 
 procedure TPartedFileSystemBcachefs.DoDelete(const PartAfter, PartBefore: PPartedPartition);
@@ -75,7 +75,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemBcachefs.DoFormat');
   // Format the partition
-  DoExec('bcachefs', ['format', PartAfter^.GetPartitionPath]);
+  DoExec('bcachefs', ['format', PartAfter^.GetActualPartitionPath]);
 end;
 
 procedure TPartedFileSystemBcachefs.DoFlag(const PartAfter, PartBefore: PPartedPartition);
@@ -88,7 +88,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemBcachefs.DoLabelName');
   if PartAfter^.LabelName <> '' then
-    ExecSystem(Format('bcachefs attr -m label="%s" %s', [PartAfter^.LabelName, PartAfter^.GetPartitionPath]));
+    ExecSystem(Format('bcachefs attr -m label="%s" %s', [PartAfter^.LabelName, PartAfter^.GetActualPartitionPath]));
 end;
 
 procedure TPartedFileSystemBcachefs.DoResize(const PartAfter, PartBefore: PPartedPartition);
@@ -99,16 +99,16 @@ var
   begin
     if PartAfter^.PartSize = PartBefore^.PartSize then
       Exit;
-    DoExec('bcachefs', ['fsck', '-f', '-y', '-v', PartAfter^.GetPartitionPath]);
+    DoExec('bcachefs', ['fsck', '-f', '-y', '-v', PartAfter^.GetActualPartitionPath]);
     DoExec('parted', [PartAfter^.Device^.Path, 'resizepart', PartAfter^.Number.ToString, PartAfter^.PartEnd.ToString + 'B']);
-    DoExec('bcachefs', ['device', 'resize', PartAfter^.GetPartitionPath]);
+    DoExec('bcachefs', ['device', 'resize', PartAfter^.GetActualPartitionPath]);
   end;
 
 begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemBcachefs.DoResize');
   // Shrink / Expand right
-  Path := PartAfter^.GetPartitionPath;
+  Path := PartAfter^.GetActualPartitionPath;
   if PartAfter^.PartEnd > PartBefore^.PartEnd then
   begin
     Grow;

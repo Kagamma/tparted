@@ -94,9 +94,11 @@ type
   // See https://gitlab.com/freepascal.org/fpc/source/-/merge_requests/581
   TUIInputLine = object(TInputLine)
   public
+    IsPassword: Boolean;
     function DataSize: LongWord; virtual;
     procedure SetData(var Rec); virtual;
     procedure GetData(var Rec); virtual;
+    procedure Draw; virtual;
   end;
   PUIInputLine = ^TUIInputLine;
 
@@ -468,6 +470,22 @@ end;
 procedure TUIInputLine.GetData(var Rec);
 begin
   Sw_String(Rec) := Self.Data;
+end;
+
+procedure TUIInputLine.Draw;
+var
+  OldData: Sw_String;
+  I: LongInt;
+begin
+  if Self.IsPassword then
+  begin
+    OldData := Self.Data;
+    for I := 1 to Length(OldData) do
+      Self.Data[I] := '*';
+    inherited;
+    Self.Data := OldData;
+  end else
+    inherited;
 end;
 
 procedure TUIInputNumber.Validate;

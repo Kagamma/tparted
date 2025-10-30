@@ -76,10 +76,10 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemExt.DoCreate');
   // Format the new partition
-  DoExec('mkfs.' + PartAfter^.FileSystem, [PartAfter^.GetPartitionPath]);
+  DoExec('mkfs.' + PartAfter^.FileSystem, [PartAfter^.GetActualPartitionPath]);
   // Change label if needed
   if PartAfter^.LabelName <> '' then
-    DoExec('e2label', [PartAfter^.GetPartitionPath, PartAfter^.LabelName]);
+    DoExec('e2label', [PartAfter^.GetActualPartitionPath, PartAfter^.LabelName]);
 end;
 
 procedure TPartedFileSystemExt.DoDelete(const PartAfter, PartBefore: PPartedPartition);
@@ -93,7 +93,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemExt.DoFormat');
   // Format the partition
-  DoExec('mkfs.' + PartAfter^.FileSystem, [PartAfter^.GetPartitionPath]);
+  DoExec('mkfs.' + PartAfter^.FileSystem, [PartAfter^.GetActualPartitionPath]);
 end;
 
 procedure TPartedFileSystemExt.DoFlag(const PartAfter, PartBefore: PPartedPartition);
@@ -106,7 +106,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemExt.DoLabelName');
   if PartAfter^.LabelName <> PartBefore^.LabelName then
-    DoExec('e2label', [PartAfter^.GetPartitionPath, PartAfter^.LabelName]);
+    DoExec('e2label', [PartAfter^.GetActualPartitionPath, PartAfter^.LabelName]);
 end;
 
 procedure TPartedFileSystemExt.DoResize(const PartAfter, PartBefore: PPartedPartition);
@@ -115,17 +115,17 @@ procedure TPartedFileSystemExt.DoResize(const PartAfter, PartBefore: PPartedPart
   begin
     if PartAfter^.PartSize = PartBefore^.PartSize then
       Exit;
-    DoExec('e2fsck', ['-f', '-y', '-v', '-C', '0', PartAfter^.GetPartitionPath]);
+    DoExec('e2fsck', ['-f', '-y', '-v', '-C', '0', PartAfter^.GetActualPartitionPath]);
     DoExec('parted', [PartAfter^.Device^.Path, 'resizepart', PartAfter^.Number.ToString, PartAfter^.PartEnd.ToString + 'B']);
-    DoExec('resize2fs', ['-fp', PartAfter^.GetPartitionPath]);
+    DoExec('resize2fs', ['-fp', PartAfter^.GetActualPartitionPath]);
   end;
 
   procedure Shrink;
   begin
     if PartAfter^.PartSize = PartBefore^.PartSize then
       Exit;
-    DoExec('e2fsck', ['-f', '-y', '-v', '-C', '0', PartAfter^.GetPartitionPath]);
-    DoExecAsync('resize2fs', ['-fp', PartAfter^.GetPartitionPath, BToKBFloor(PartAfter^.PartSize).ToString + 'K']);
+    DoExec('e2fsck', ['-f', '-y', '-v', '-C', '0', PartAfter^.GetActualPartitionPath]);
+    DoExecAsync('resize2fs', ['-fp', PartAfter^.GetActualPartitionPath, BToKBFloor(PartAfter^.PartSize).ToString + 'K']);
     DoExec('sh', ['-c', Format('echo "Yes" | parted %s ---pretend-input-tty resizepart %d %dB', [PartAfter^.Device^.Path, PartAfter^.Number, PartAfter^.PartEnd])]);
   end;
 

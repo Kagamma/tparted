@@ -67,10 +67,10 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemFat.DoCreate');
   // Format the new partition
-  DoExec('mkfs.fat', ['-F', Self.GetFatSize(PartAfter), PartAfter^.GetPartitionPath]);
+  DoExec('mkfs.fat', ['-F', Self.GetFatSize(PartAfter), PartAfter^.GetActualPartitionPath]);
   // Change label if needed
   if PartAfter^.LabelName <> '' then
-    DoExec('fatlabel', [PartAfter^.GetPartitionPath, PartAfter^.LabelName]);
+    DoExec('fatlabel', [PartAfter^.GetActualPartitionPath, PartAfter^.LabelName]);
 end;
 
 procedure TPartedFileSystemFat.DoDelete(const PartAfter, PartBefore: PPartedPartition);
@@ -84,7 +84,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemFat.DoFormat');
   // Format the partition
-  DoExec('mkfs.fat', ['-F', Self.GetFatSize(PartAfter), PartAfter^.GetPartitionPath]);
+  DoExec('mkfs.fat', ['-F', Self.GetFatSize(PartAfter), PartAfter^.GetActualPartitionPath]);
 end;
 
 procedure TPartedFileSystemFat.DoFlag(const PartAfter, PartBefore: PPartedPartition);
@@ -97,7 +97,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemFat.DoLabelName');
   if PartAfter^.LabelName <> PartBefore^.LabelName then
-    DoExec('fatlabel', [PartAfter^.GetPartitionPath, PartAfter^.LabelName]);
+    DoExec('fatlabel', [PartAfter^.GetActualPartitionPath, PartAfter^.LabelName]);
 end;
 
 procedure TPartedFileSystemFat.DoResize(const PartAfter, PartBefore: PPartedPartition);

@@ -58,10 +58,10 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemXfs.DoCreate');
   // Format the new partition
-  DoExec('mkfs.xfs', ['-f', PartAfter^.GetPartitionPath]);
+  DoExec('mkfs.xfs', ['-f', PartAfter^.GetActualPartitionPath]);
   // Change label if needed
   if PartAfter^.LabelName <> '' then
-    DoExec('xfs_admin', ['-L', PartAfter^.LabelName, PartAfter^.GetPartitionPath]);
+    DoExec('xfs_admin', ['-L', PartAfter^.LabelName, PartAfter^.GetActualPartitionPath]);
 end;
 
 procedure TPartedFileSystemXfs.DoDelete(const PartAfter, PartBefore: PPartedPartition);
@@ -75,7 +75,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemXfs.DoFormat');
   // Format the partition
-  DoExec('mkfs.xfs', ['-f', PartAfter^.GetPartitionPath]);
+  DoExec('mkfs.xfs', ['-f', PartAfter^.GetActualPartitionPath]);
 end;
 
 procedure TPartedFileSystemXfs.DoFlag(const PartAfter, PartBefore: PPartedPartition);
@@ -88,7 +88,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemXfs.DoLabelName');
   if PartAfter^.LabelName <> '' then
-    DoExec('xfs_admin', ['-L', PartAfter^.LabelName, PartAfter^.GetPartitionPath]);
+    DoExec('xfs_admin', ['-L', PartAfter^.LabelName, PartAfter^.GetActualPartitionPath]);
 end;
 
 procedure TPartedFileSystemXfs.DoResize(const PartAfter, PartBefore: PPartedPartition);
@@ -99,7 +99,7 @@ var
   begin
     if PartAfter^.PartSize = PartBefore^.PartSize then
       Exit;
-    DoExec('xfs_repair', ['-v', PartAfter^.GetPartitionPath]);
+    DoExec('xfs_repair', ['-v', PartAfter^.GetActualPartitionPath]);
     DoExec('parted', [PartAfter^.Device^.Path, 'resizepart', PartAfter^.Number.ToString, PartAfter^.PartEnd.ToString + 'B']);
     Mount(Path, PathMnt);
     DoExec('xfs_growfs', [PathMnt]);
@@ -110,7 +110,7 @@ begin
   inherited;
   WriteLog(lsInfo, 'TPartedFileSystemXfs.DoResize');
   // Shrink / Expand right
-  Path := PartAfter^.GetPartitionPath;
+  Path := PartAfter^.GetActualPartitionPath;
   PathMnt := GetTempMountPath(Path);
   if PartAfter^.PartEnd > PartBefore^.PartEnd then
   begin

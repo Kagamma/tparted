@@ -46,9 +46,10 @@ const
   cmPartitionFormat = 1104;
   cmPartitionResize = 1105;
   cmPartitionUnmount = 1106;
-  cmPartitionLabel = 1107;
-  cmPartitionFlag = 1108;
-  cmDeviceCreateGPT = 1109;
+  cmPartitionDecrypt = 1107;
+  cmPartitionLabel = 1108;
+  cmPartitionFlag = 1109;
+  cmDeviceCreateGPT = 1110;
   cmOperationUndo = 1200;
   cmOperationClear = 1201;
   cmOperationApply = 1202;
