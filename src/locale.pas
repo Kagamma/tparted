@@ -27,7 +27,7 @@ resourcestring
   S_DeleteButton = '~D~elete';
   S_FormatButton = '~F~ormat';
   S_ResizeButton = '~R~esize';
-  S_DecryptButton = 'Decry~p~t';
+  S_DecryptButton = 'Unloc~k~';
   S_UnmountButton = 'Un~m~ount';
   S_CreateGPTButton = 'P.~T~able';
   S_LabelButton = '~L~abel/Name';
@@ -103,10 +103,10 @@ resourcestring
   S_MenuMaximize = '~M~aximize';
   S_MenuSwitchColor = 'Switch Colors';
   S_SelectPartitionTable = 'Select partition table';
-  S_DecryptPartition = 'Decrypt %s';
+  S_DecryptPartition = 'Unlock %s';
   S_EnterPassphrase = 'Enter passphrase';
-  S_Decrypting = 'Decrypting %s...';
-  S_DecryptFailed = 'Decrypt %s failed!';
+  S_Decrypting = 'Unlocking %s...';
+  S_DecryptFailed = 'Unlock %s failed!';
   S_Passphrase = 'LUKS Passphrase';
 
 implementation

@@ -175,11 +175,11 @@ begin
   // Flag button
   Self.ButtonPartitionArray[6]^.SetDisabled((APart.Number = 0) or (APart.IsMounted) or (APart.IsEncrypted) or IsDisabled);
   // Unmount button
-  Self.ButtonPartitionArray[7]^.SetDisabled((not APart.IsMounted) or (APart.FileSystem = 'linux-swap') or IsDisabled);
+  Self.ButtonPartitionArray[7]^.SetDisabled((not APart.IsMounted and not APart.IsDecrypted) or (APart.FileSystem = 'linux-swap') or IsDisabled);
   // Decrypt button
   Self.ButtonPartitionArray[8]^.SetDisabled(not APart.Encrypted or not CryptSetupExists);
   // Create GPT btton
-  Self.ButtonPartitionArray[9]^.SetDisabled(Self.OpList[0].Device^.GetMountedPartitionCount > 0);
+  Self.ButtonPartitionArray[9]^.SetDisabled((Self.OpList[0].Device^.GetMountedPartitionCount > 0) or (Self.OpList[0].Device^.GetDecryptedPartitionCount > 0));
   // Undo button
   Self.ButtonOperationArray[0]^.SetDisabled(Self.OpList.GetOpCount = 0);
   // Empty button
@@ -592,7 +592,12 @@ begin
       cmPartitionUnmount:
         begin
           if ShowUnmountDialog(Self.ListPartition^.GetSelectedPartition) then
-            Self.Refresh;
+          begin
+            if Self.ListPartition^.GetSelectedPartition^.IsEncrypted then  
+              DoApplyRefreshDevice
+            else
+              Self.Refresh;
+          end;
           Exit;
         end;
       cmPartitionDecrypt:

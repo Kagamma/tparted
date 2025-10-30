@@ -87,7 +87,7 @@ msgid "~R~esize"
 msgstr ""
 
 #: locale:s_decryptbutton
-msgid "Decry~p~t"
+msgid "Unloc~k~"
 msgstr ""
 
 #: locale:s_unmountbutton
@@ -391,7 +391,7 @@ msgid "Select partition table"
 msgstr ""
 
 #: locale:s_decryptpartition
-msgid "Decrypt %s"
+msgid "Unlock %s"
 msgstr ""
 
 #: locale:s_enterpassphrase
@@ -399,11 +399,11 @@ msgid "Enter passphrase"
 msgstr ""
 
 #: locale:s_decrypting
-msgid "Decrypting %s..."
+msgid "Unlocking %s..."
 msgstr ""
 
 #: locale:s_decryptfailed
-msgid "Decrypt %s failed!"
+msgid "Unlock %s failed!"
 msgstr ""
 
 #: locale:s_passphrase

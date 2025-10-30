@@ -52,6 +52,7 @@ type
     IsDecrypted: Boolean;
     Passphrase: String;
     MountPoint: String;
+    LuksName: String;
     CanBeResized: Boolean;
     OpID: QWord; // The ID used by operations
     Next, Prev: PPartedPartition;
@@ -110,6 +111,8 @@ type
     function GetNonFreedPartitionCount: LongInt;
     // Returns the number of mounted partitions
     function GetMountedPartitionCount: LongInt;
+    // Returns the number of unlocked partitions
+    function GetDecryptedPartitionCount: LongInt;
     function GetPrimaryPartitionCount: LongInt;
     function GetExtendedPartitionCount: LongInt;
     // Merge all possible unallocated space that is closed together into big one
@@ -176,8 +179,12 @@ var
   I: Integer;
 begin
   if Self.IsEncrypted and (Self.IsDecrypted or IsForced) then
-    Result := '/dev/mapper/' + ExtractFileName(Self.Device^.Path)
-  else
+  begin
+    if Self.LuksName <> '' then 
+      Exit('/dev/mapper/' + Self.LuksName)
+    else 
+      Result := '/dev/mapper/' + ExtractFileName(Self.Device^.Path);
+  end else
     Result := Self.Device^.Path;
   // Check to see if we need to add `p` prefix before partition number
   for I := Low(DevicesWithPPrefix) to High(DevicesWithPPrefix) do
@@ -484,6 +491,20 @@ begin
   while P <> nil do
   begin
     if P^.IsMounted then
+      Inc(Result);
+    P := P^.Next;
+  end;
+end;
+
+function TPartedDevice.GetDecryptedPartitionCount: LongInt;
+var
+  P: PPartedPartition;
+begin
+  Result := 0;
+  P := Self.PartitionRoot;
+  while P <> nil do
+  begin
+    if P^.IsDecrypted then
       Inc(Result);
     P := P^.Next;
   end;

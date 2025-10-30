@@ -61,6 +61,8 @@ function QueryPartitionLabel(var APart: TPartedPartition): TExecResult;
 function QueryPartitionUnmount(var APart: TPartedPartition): TExecResult;
 // Run /bin/blkid -s 'S' -o value APath
 function QueryPartitionViaBlkid(var APart: TPartedPartition; const S: String): TExecResult;
+// Run /bin/lsblk -l -o NAME  APath
+function QueryPartitionNamesViaLsblk(var APart: TPartedPartition): TExecResultDA;
 
 implementation
 
@@ -75,6 +77,7 @@ var
   PPart: PPartedPartition;
   I, J: Integer;
   Flags: TStringDynArray;
+  ExecResultDA: TExecResultDA;
 
   function GetData: String;
   begin
@@ -160,8 +163,10 @@ begin
     begin
       PPart^.IsEncrypted := True;
       // Check if this partition has been decrypted yet
-      if FileExists(PPart^.GetActualPartitionPath(True)) then
+      ExecResultDA := QueryPartitionNamesViaLsblk(PPart^);
+      if Length(ExecResultDA.MessageArray) = 3 then
       begin
+        PPart^.LuksName := ExecResultDA.MessageArray[2];
         PPart^.IsDecrypted := True;
         PPart^.FileSystem := QueryPartitionViaBlkid(PPart^, 'TYPE').Message;
       end;
@@ -389,23 +394,45 @@ begin
   Result.Message := Trim(Result.Message);
 end;
 
-// /bin/umount APath
-function QueryPartitionUnmount(var APart: TPartedPartition): TExecResult;
+function QueryPartitionNamesViaLsblk(var APart: TPartedPartition): TExecResultDA;
 var
   Path: String; // Partition path
 begin
   Result.ExitCode := -1;
+  // Immediately skip if this is unallocated space
+  if APart.Number <= 0 then
+    Exit;
+  Path := APart.GetPartitionPath;
+  Result := ExecSA('lsblk', ['-l', '-o', 'NAME', Path]);
+  if (Result.ExitCode <> 0) then
+    WriteLogAndRaise(Format(S_ProcessExitCode, ['lsblk -l -o value ' + Path, Result.ExitCode, SAToS(Result.MessageArray)]));
+end;
+
+// /bin/umount APath
+function QueryPartitionUnmount(var APart: TPartedPartition): TExecResult;
+begin
+  Result.ExitCode := -1;
   {$ifndef TPARTED_TEST}
   // Immediately skip if this is unallocated space, or already unmounted
-  if (APart.Number <= 0) or (not APart.IsMounted) then
+  if (APart.Number <= 0) then
     Exit;
-  Path := APart.GetActualPartitionPath;
-  Result := ExecS('umount', [Path]);
-  if Result.ExitCode <> 0 then
-    WriteLogAndRaise(Format(S_ProcessExitCode, ['umount ' + Path, Result.ExitCode, Result.Message]));
-  // Update mount status
-  APart.IsMounted := False;
-  APart.MountPoint := '';
+  if APart.IsMounted then
+  begin
+    Result := ExecS('umount', [APart.MountPoint]);
+    if Result.ExitCode <> 0 then
+      WriteLogAndRaise(Format(S_ProcessExitCode, ['umount ' + APart.MountPoint, Result.ExitCode, Result.Message]));
+    // Update mount status
+    APart.IsMounted := False;
+    APart.MountPoint := '';
+  end;
+  if APart.IsDecrypted then
+  begin
+    Result := ExecS('cryptsetup', ['luksClose', APart.LuksName]);
+    if Result.ExitCode <> 0 then
+      WriteLogAndRaise(Format(S_ProcessExitCode, ['cryptsetup luksClose ' + APart.LuksName, Result.ExitCode, Result.Message]));
+    APart.IsDecrypted := False;
+    APart.LuksName := '';
+  end;
   {$else}
   {$endif}
 end;

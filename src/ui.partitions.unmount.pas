@@ -37,21 +37,18 @@ implementation
 function ShowUnmountDialog(const PPart: PPartedPartition): Boolean;
 begin
   Result := False;
-  if PPart^.IsMounted then // Only perform on a mounted partition
-  begin
-    try
-      LoadingStart(Format(S_PartitionUnmounting, [PPart^.GetPartitionPath]));
-      QueryPartitionUnmount(PPart^);
+  try
+    LoadingStart(Format(S_PartitionUnmounting, [PPart^.GetPartitionPath]));
+    QueryPartitionUnmount(PPart^);
+    LoadingStop;
+    MsgBox(Format(S_PartitionUnmounted, [PPart^.GetPartitionPath]), nil, mfInformation + mfOKButton);
+    Result := True;
+  except
+    on E: Exception do
+    begin
       LoadingStop;
-      MsgBox(Format(S_PartitionUnmounted, [PPart^.GetPartitionPath]), nil, mfInformation + mfOKButton);
-      Result := True;
-    except
-      on E: Exception do
-      begin
-        LoadingStop;
-        WriteLog(lsError, E.Message);
-        MsgBox(E.Message, nil, mfError + mfOKButton);
-      end;
+      WriteLog(lsError, E.Message);
+      MsgBox(E.Message, nil, mfError + mfOKButton);
     end;
   end;
 end;
