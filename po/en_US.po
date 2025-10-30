@@ -398,3 +398,15 @@ msgstr ""
 msgid "Enter passphrase"
 msgstr ""
 
+#: locale:s_decrypting
+msgid "Decrypting %s..."
+msgstr ""
+
+#: locale:s_decryptfailed
+msgid "Decrypt %s failed"
+msgstr ""
+
+#: locale:s_passphrase
+msgid "LUKS Passphrase"
+msgstr ""
+

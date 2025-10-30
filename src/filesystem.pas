@@ -312,7 +312,16 @@ begin
   PartAfter^.Number := Abs(PartAfter^.Number);
   //
   DoCreatePartitionOnly(PartAfter);
-  DoExec('wipefs', ['-a', PartAfter^.GetActualPartitionPath]);
+  DoExec('wipefs', ['-a', PartAfter^.GetPartitionPath]);
+  // Create a LUKS partition?
+  if PartAfter^.Passphrase <> '' then
+  begin
+    ExecSystem(Format('echo -n "%s" | cryptsetup luksFormat --batch-mode %s', [
+      PartAfter^.Passphrase, PartAfter^.GetPartitionPath
+    ]));
+    PartAfter^.IsDecrypted := False;
+    PartAfter^.Decrypt(PartAfter^.Passphrase, True);
+  end;
 end;
 
 procedure TPartedFileSystem.DoDelete(const PartAfter, PartBefore: PPartedPartition);

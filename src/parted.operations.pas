@@ -52,6 +52,7 @@ type
     Size: Int64;
     LabelName: UnicodeString;
     Name: UnicodeString;
+    Passphrase: UnicodeString;
     AffectedPart: PPartedPartition;
   end;
 
@@ -200,6 +201,12 @@ var
     AffectedPartNew^.Kind := 'primary';
     AffectedPartNew^.AutoAssignNumber;
     AffectedPartNew^.Number := -AffectedPartNew^.Number;
+    AffectedPartNew^.Passphrase := PData^.Passphrase;
+    if PData^.Passphrase <> '' then
+    begin
+      AffectedPartNew^.IsEncrypted := True;
+      AffectedPartNew^.IsDecrypted := True;
+    end;
   end;
 
   procedure HandleDelete;

@@ -50,6 +50,7 @@ type
     IsMounted: Boolean;
     IsEncrypted: Boolean;
     IsDecrypted: Boolean;
+    Passphrase: String;
     MountPoint: String;
     CanBeResized: Boolean;
     OpID: QWord; // The ID used by operations
@@ -81,7 +82,7 @@ type
     // Guess and assign a number for this partition
     procedure AutoAssignNumber;
     // Decrypt a LUKs partition
-    function Decrypt(const APassword: String): Boolean;
+    function Decrypt(const APassword: String; const Silent: Boolean = False): Boolean;
     // Returns true if the partition hasn't been decrypted
     function Encrypted: Boolean;
   end;
@@ -192,7 +193,7 @@ begin
     Result := Result + Self.Number.ToString
   else
   if Self.Number < 0 then
-    Result := Result + '?' + (-Self.Number).ToString;
+    Result := Result + (-Self.Number).ToString;
   //
   if Self.IsEncrypted and (Self.IsDecrypted or IsForced) then
     Result := Result + '_tparted';
@@ -620,7 +621,7 @@ begin
   Self.Number := N;
 end;
 
-function TPartedPartition.Decrypt(const APassword: String): Boolean;
+function TPartedPartition.Decrypt(const APassword: String; const Silent: Boolean = False): Boolean;
 var
   Path: String;
   DecryptPath: String;
@@ -633,11 +634,13 @@ begin
   DecryptPath := Self.GetActualPartitionPath(True);
   if not FileExists(DecryptPath) then
   begin
-    LoadingStart(Format(S_Decrypting, [Path]));
-      ExecSystem(Format('echo "%s" | sudo cryptsetup luksOpen %s %s', [
-        APassword, Path, ExtractFileName(Path) + '_tparted'
-      ]));
-    LoadingStop;
+    if not Silent then
+      LoadingStart(Format(S_Decrypting, [Path]));
+    ExecSystem(Format('echo "%s" | sudo cryptsetup luksOpen %s %s', [
+      APassword, Path, ExtractFileName(Path) + '_tparted'
+    ]));
+    if not Silent then
+      LoadingStop;
     if not FileExists(DecryptPath) then
       Exit(False);
   end;
