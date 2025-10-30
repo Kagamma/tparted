@@ -89,7 +89,7 @@ begin
     begin
       D^.GetData(Data);
       if not PPart^.Decrypt(Data.Passphrase) then
-        MsgBox('Decrypt ' + PPart^.GetPartitionPath + ' failed!', nil, mfError + mfOKButton)
+        MsgBox(Format(S_DecryptFailed, [PPart^.GetPartitionPath]).ToUnicode, nil, mfError + mfOKButton)
       else
         Result := True;
     end;

@@ -105,6 +105,8 @@ resourcestring
   S_SelectPartitionTable = 'Select partition table';
   S_DecryptPartition = 'Decrypt %s';
   S_EnterPassphrase = 'Enter passphrase';
+  S_Decrypting = 'Decrypting %s...';
+  S_DecryptFailed = 'Decrypt %s failed';
 
 implementation
 

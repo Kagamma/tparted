@@ -86,6 +86,10 @@ msgstr ""
 msgid "~R~esize"
 msgstr ""
 
+#: locale:s_decryptbutton
+msgid "Decry~p~t"
+msgstr ""
+
 #: locale:s_unmountbutton
 msgid "Un~m~ount"
 msgstr ""
@@ -164,6 +168,10 @@ msgstr ""
 
 #: locale:s_partitionuuid
 msgid "UUID: %s"
+msgstr ""
+
+#: locale:s_partitionpartuuid
+msgid "PARTUUID: %s"
 msgstr ""
 
 #: locale:s_partitiontype
@@ -271,11 +279,11 @@ msgid "Mount"
 msgstr ""
 
 #: locale:s_logs
-msgid "In-memory Logs"
+msgid "Logs"
 msgstr ""
 
 #: locale:s_menulogs
-msgid "In-memory ~L~ogs"
+msgid "Show ~L~ogs"
 msgstr ""
 
 #: locale:s_filesystemsupport
@@ -380,5 +388,13 @@ msgstr ""
 
 #: locale:s_selectpartitiontable
 msgid "Select partition table"
+msgstr ""
+
+#: locale:s_decryptpartition
+msgid "Decrypt %s"
+msgstr ""
+
+#: locale:s_enterpassphrase
+msgid "Enter passphrase"
 msgstr ""
 

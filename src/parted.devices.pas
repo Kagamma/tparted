@@ -633,7 +633,7 @@ begin
   DecryptPath := Self.GetActualPartitionPath(True);
   if not FileExists(DecryptPath) then
   begin
-    LoadingStart(Format('Decrypting %s...', [Path]));
+    LoadingStart(Format(S_Decrypting, [Path]));
       ExecSystem(Format('echo "%s" | sudo cryptsetup luksOpen %s %s', [
         APassword, Path, ExtractFileName(Path) + '_tparted'
       ]));
