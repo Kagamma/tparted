@@ -51,6 +51,7 @@ Currently supported filesystems:
 ## Dependencies
 - `parted`
 - `util-linux`
+- `cryptsetup` (optional) for decrypting LUKS partitions.
 - `sfdisk` (optional) for moving partitions.
 - `dosfstools` (optional) for fat operations.
 - `exfatprogs` (optional) for exfat operations.
