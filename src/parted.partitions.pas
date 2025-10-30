@@ -35,7 +35,7 @@ const
   );
 
 // Parse for device info from "parted -j /dev/Xxx unit B print free" string
-procedure ParseDeviceAndPartitionsFromJsonString(const JsonString: String; var ADevice: TPartedDevice); deprecated;
+procedure ParseDeviceAndPartitionsFromJsonString(const JsonString: String; var ADevice: TPartedDevice); deprecated 'Use ParseDeviceAndPartitionsFromMachineString instead';
 // Parse for device info from "parted -m /dev/Xxx unit B print free" string
 procedure ParseDeviceAndPartitionsFromMachineString(const SL: TStringDynArray; var ADevice: TPartedDevice);
 // Parse for used and available in bytes from a single partition
@@ -261,6 +261,8 @@ begin
     //
     if (PPart^.FileSystem = 'swap') or (PPart^.FileSystem = 'linux-swap(v1)') then
       PPart^.FileSystem := 'linux-swap';
+    if PPart^.FileSystem = 'crypto_LUKS' then
+      PPart^.IsEncrypted := True;
   end;
 end;
 

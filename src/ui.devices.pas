@@ -163,15 +163,15 @@ begin
   // Create button
   Self.ButtonPartitionArray[1]^.SetDisabled((APart.Number <> 0) or IsDisabled);
   // Delete button
-  Self.ButtonPartitionArray[2]^.SetDisabled((APart.Number = 0) or (APart.IsMounted) or IsDisabled);
+  Self.ButtonPartitionArray[2]^.SetDisabled((APart.Number = 0) or (APart.IsMounted) or (APart.Encrypted) or IsDisabled);
   // Format button
-  Self.ButtonPartitionArray[3]^.SetDisabled((APart.Number = 0) or (APart.IsMounted) or IsDisabled);
+  Self.ButtonPartitionArray[3]^.SetDisabled((APart.Number = 0) or (APart.IsMounted) or (APart.Encrypted) or IsDisabled);
   // Resize button
-  Self.ButtonPartitionArray[4]^.SetDisabled((APart.Number = 0) or (APart.IsMounted) or APart.ContainsFlag('esp') or IsDisabled or IsResizeableDisabled);
+  Self.ButtonPartitionArray[4]^.SetDisabled((APart.Number = 0) or (APart.IsMounted) or (APart.Encrypted) or APart.ContainsFlag('esp') or IsDisabled or IsResizeableDisabled);
   // Label button
-  Self.ButtonPartitionArray[5]^.SetDisabled((APart.Number = 0) or (APart.IsMounted) or IsDisabled);
+  Self.ButtonPartitionArray[5]^.SetDisabled((APart.Number = 0) or (APart.IsMounted) or (APart.Encrypted) or IsDisabled);
   // Flag button
-  Self.ButtonPartitionArray[6]^.SetDisabled((APart.Number = 0) or (APart.IsMounted) or IsDisabled);
+  Self.ButtonPartitionArray[6]^.SetDisabled((APart.Number = 0) or (APart.IsMounted) or (APart.Encrypted) or IsDisabled);
   // Unmount button
   Self.ButtonPartitionArray[7]^.SetDisabled((not APart.IsMounted) or (APart.FileSystem = 'linux-swap') or IsDisabled);
   // Create GPT btton

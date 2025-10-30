@@ -48,6 +48,7 @@ type
     LabelName: String;
     Name: String;
     IsMounted: Boolean;
+    IsEncrypted: Boolean;
     MountPoint: String;
     CanBeResized: Boolean;
     OpID: QWord; // The ID used by operations
@@ -75,6 +76,8 @@ type
     procedure ResizePartitionInMB(const Preceding, Size: Int64);
     // Guess and assign a number for this partition
     procedure AutoAssignNumber;
+    // Get this partition's encrypt status
+    function Encrypted: Boolean;
   end;
   TPartedPartitionDynArray = array of TPartedPartition;
 
@@ -575,6 +578,11 @@ begin
   if N = -1 then
     WriteLogAndRaise(S_MaximumPartitionReached);
   Self.Number := N;
+end;
+
+function TPartedPartition.Encrypted: Boolean;
+begin
+  Result := Self.IsEncrypted;
 end;
 
 procedure TPartedDevice.Probe;
