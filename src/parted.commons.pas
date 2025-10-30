@@ -299,8 +299,7 @@ end;
 
 procedure ExecSystem(const S: String);
 begin
-  WriteLog(lsInfo, '+ ' + S);
-  fpSystem(S);
+  ExecS('sh', ['-c', S]);
   Sleep(100);
 end;
 
