@@ -227,6 +227,7 @@ var
   PPart: PPartedPartition;
   S: String;
   IsMountedSymbol: String;
+  FS: String;
 begin
   Self.ListCollection := New(PUnicodeStringPtrCollection, Init(8, 8));
   FocusedOld := Self.List^.Focused;
@@ -241,9 +242,13 @@ begin
       IsMountedSymbol := '* '
     else
       IsMountedSymbol := '  ';
+    if PPart^.IsEncrypted and PPart^.IsDecrypted then
+      FS := PPart^.FileSystem + '[E]'
+    else
+      FS := PPart^.FileSystem;
     S := Format('%s│%s│%s│%s│%s│%s│%s', [
       PadRightLimit(IsMountedSymbol + ExtractFileName(PPart^.GetPartitionPathForDisplay), 15),
-      PadRightLimit(PPart^.FileSystem, 12),
+      PadRightLimit(FS, 12),
       PadLeftLimit(SizeString(PPart^.PartSize), 7),
       PadLeftLimit(SizeString(PPart^.PartUsed), 7),
       PadRightLimit(SAToS(PPart^.Flags, ','), 20),
