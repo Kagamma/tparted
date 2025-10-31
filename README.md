@@ -1,5 +1,5 @@
 [![GitHub License](https://img.shields.io/github/license/Kagamma/tparted)](https://github.com/Kagamma/tparted/blob/main/LICENSE)
-[![GitHub Release](https://img.shields.io/github/v/release/Kagamma/tparted)](https://github.com/Kagamma/tpartedr/releases)
+[![GitHub Release](https://img.shields.io/github/v/release/Kagamma/tparted)](https://github.com/Kagamma/tparted/releases)
 [![Total Downloads](https://img.shields.io/github/downloads/Kagamma/tparted/total)](https://github.com/Kagamma/tparted/releases)
 
 # tparted
