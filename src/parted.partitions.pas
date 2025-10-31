@@ -95,7 +95,7 @@ var
   end;
 
 begin
-  // The first line is always BYT;
+  // The first line is always BYT; If not, the disk likely has no partition table
   Assert(SL[0] = 'BYT;', 'First line must be "BYT;" but got "' + SL[0] + '"');
   // The second line is device information
   P := 1; Line := SL[1];
@@ -239,10 +239,15 @@ end;
 function QueryDeviceAndPartitions(const APath: String; var ADevice: TPartedDevice): TExecResultDA;
 begin
   Result.ExitCode := -1;
+  Assert(APath <> '', '[QueryDeviceAndPartitions] APath is empty while queuing for device ' + ADevice.Path);
   Result := ExecSA('parted', ['-m', APath, 'unit', 'B', 'print', 'free']);
   if Result.ExitCode <> 0 then
     WriteLogAndRaise(Format(S_ProcessExitCode, ['parted -j ' + APath + ' unit B print free', Result.ExitCode, SAToS(Result.MessageArray)]));
-  ParseDeviceAndPartitionsFromMachineString(Result.MessageArray, ADevice);
+  // The first line is always BYT; If not, the disk likely has no partition table
+  if Result.MessageArray[0] <> 'BYT;' then
+    ADevice.Table := 'unknown'
+  else
+    ParseDeviceAndPartitionsFromMachineString(Result.MessageArray, ADevice);
 end;
 
 function QueryPartitionMountStatus(var APart: TPartedPartition): TExecResult;
