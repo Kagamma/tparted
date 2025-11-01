@@ -5,25 +5,30 @@ CFLAGS_REL=-Mobjfpc -Ci -Cr -Co -Ct -CR -Xs -Sa -O2
 build:
 	mkdir -p ./bin
 	mkdir -p ./output
-	$(CC) -FE./bin -FU./output $(CFLAGS_REL) ./src/tparted.lpr
+	$(CC) -FE./bin -FU./output -Fi./src/fv -Fu./src/fv $(CFLAGS_REL) ./src/tparted.lpr
 
 debug:
 	mkdir -p ./bin
 	mkdir -p ./output
-	$(CC) -FE./bin -FU./output $(CFLAGS) ./src/tparted.lpr
+	$(CC) -FE./bin -FU./output -Fi./src/fv -Fu./src/fv $(CFLAGS) ./src/tparted.lpr
+
+debug2:
+	mkdir -p ./bin
+	mkdir -p ./output
+	$(CC) -FE./bin -FU./output $(CFLAGS) ./test.pas
 
 clean:
 	rm -rf ./bin
 	rm -rf ./output
 
 install:
-	sudo cp ./bin/tparted /usr/bin/tparted
+	sudo cp ./bin/tparted /usr/local/bin/tparted
 	sudo rm -rf /opt/tparted
 	sudo mkdir /opt/tparted
 	sudo cp -rf ./bin/locale /opt/tparted
 
 uninstall:
-	sudo rm /usr/bin/tparted
+	sudo rm /usr/local/bin/tparted
 	sudo rm -rf /opt/tparted
 
 test:

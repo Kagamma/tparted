@@ -43,7 +43,7 @@ Currently supported filesystems:
 #### Building from source
 - Since the app requires Unicode version of Free Vision, you need to have Free Pascal (beta 3.3.1) or later beta version installed on the system.
 - Run `make build` to build the app. The binary is located in `./bin` directory.
-- Run `make install` to install the app to `/usr/bin`
+- Run `make install` to install the app to `/usr/local/bin`
 
 #### Translation
 - The app is capable of loading translation files in `.mo` format. Simply translate the default `en_US.po` file to your language of choice, convert it to the `.mo` format via `msgfmt` tool, then place the converted file into the `./bin/locale` directory.
