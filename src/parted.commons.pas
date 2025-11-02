@@ -167,16 +167,22 @@ begin
   Result := '/tmp/tparted_' + StringReplace(Path, '/', '_', [rfReplaceAll]) + TempRandom;
 end;
 
+procedure fpSystemLog(const S: String);
+begin
+  WriteLog(lsInfo, '+ ' + S);
+  fpSystem(S);
+end;
+
 procedure Mount(Path, PathMnt: String);
 begin
-  ExecSystem(Format('mkdir -p "%s" > /dev/null', [PathMnt]));
-  ExecSystem(Format('mount "%s" "%s" > /dev/null', [Path, PathMnt]));
+  fpSystemLog(Format('mkdir -p "%s" > /dev/null', [PathMnt]));
+  fpSystemLog(Format('mount "%s" "%s" > /dev/null', [Path, PathMnt]));
 end;
 
 procedure Unmount(Path, PathMnt: String);
 begin
-  ExecSystem(Format('umount "%s" > /dev/null', [Path]));
-  ExecSystem(Format('rm -d "%s" > /dev/null', [PathMnt]));
+  fpSystemLog(Format('umount "%s" > /dev/null', [Path]));
+  fpSystemLog(Format('rm -d "%s" > /dev/null', [PathMnt]));
 end;
 
 procedure DumpCallStack(var Report: String);
