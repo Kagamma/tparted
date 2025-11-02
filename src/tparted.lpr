@@ -17,6 +17,7 @@ uses
   FileSystem.ExFat,
   FileSystem.F2FS,
   FileSystem.Fat,
+  FileSystem.NILFS2,
   FreeVision,
   Parted.Commons, Locale, Parted.Devices, Parted.Partitions,
   Parted.Operations, Parted.Logs,

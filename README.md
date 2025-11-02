@@ -26,6 +26,7 @@ Currently supported filesystems:
 | jfs | :heavy_check_mark: | :heavy_check_mark: | | :heavy_check_mark: | :heavy_check_mark: |
 | linux-swap | :heavy_check_mark: | :heavy_check_mark: | | | |
 | luks | :heavy_check_mark: | | | | |
+| nilfs2 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | ntfs | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | xfs | :heavy_check_mark: | :heavy_check_mark: | | :heavy_check_mark: | :heavy_check_mark: |
 
@@ -58,6 +59,7 @@ Currently supported filesystems:
 - `exfatprogs` (optional) for exfat operations.
 - `e2fsprogs` (optional) for ext2/3/4 operations.
 - `ntfs-3g` (optional) for ntfs operations.
+- `nilfs-utils` (optional) for nilfs2 operations.
 - `btrfs-progs` (optional) for btrfs operations.
 - `xfsprogs` (optional) for xfs operations.
 - `jfsutils` (optional) for jfs operations.
