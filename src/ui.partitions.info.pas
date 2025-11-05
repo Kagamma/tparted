@@ -42,6 +42,7 @@ var
   D: PDialog;
   S: String;
   MX, MY: LongInt;
+  FS: String;
 begin
   Result := True;
   if PPart = nil then
@@ -53,8 +54,12 @@ begin
   D := New(PDialog, Init(R, PPart^.GetPartitionPathForDisplay.ToUnicode));
   try
     D^.GetExtent(R);
+    if PPart^.IsEncrypted and PPart^.IsDecrypted then
+      FS := PPart^.FileSystem + '[E]'
+    else
+      FS := PPart^.FileSystem;
 
-    S := Format(S_PartitionFileSystem, [PPart^.FileSystem]) + #13 +
+    S := Format(S_PartitionFileSystem, [FS]) + #13 +
       Format(S_PartitionLabel, [PPart^.LabelName]) + #13 +
       Format(S_PartitionName, [PPart^.Name]) + #13 +
       Format(S_PartitionUUID, [PPart^.UUID]) + #13 +
