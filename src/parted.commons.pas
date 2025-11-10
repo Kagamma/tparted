@@ -143,6 +143,11 @@ function PadRightLimit(S: String; Limit: LongInt): String;
 function PadLeftLimit(S: String; Limit: LongInt): String;
 function PadCenterLimit(S: String; Limit: LongInt): String;
 
+// Parse an expression and return actual numbers
+// Note: The original code was written in Turbo Pascal 3.02 while I was at a coffee shop with my Book8088
+// so some of it's weirdness makes it's way here
+function Eval(Expr: String): QWord;
+
 implementation
 
 uses
@@ -764,6 +769,216 @@ begin
   end else
     SR := S;
   Result := UTF8PadCenter(SR, Limit);
+end;
+
+function Eval(Expr: String): QWord;
+type
+  TExprTokenKind = (
+    tkEOL,
+    tkUnknown,
+    tkNumber,
+    tkAdd,
+    tkSub,
+    tkMul,
+    tkDiv,
+    tkBracketOpen,
+    tkBracketClose
+  );
+var
+  Len, Cur: LongWord;
+  Data: QWord;
+  Stack: array[0..63] of QWord;
+  StackPtr: LongWord;
+
+  function NextToken: TExprTokenKind;
+  var
+    C: Char;
+    S: String;
+    Code: Integer;
+
+    function Peek: Char;
+    var
+      CI: LongWord;
+    begin
+      CI := Cur + 1;
+      if CI > Len then
+        Peek := #0
+      else
+        Peek := Expr[CI];
+    end;
+
+  begin
+    C := Peek;
+    S := '';
+    while C = ' ' do
+    begin
+      Cur := Cur + 1;
+      C := Peek;
+    end;
+    case C of
+      '0'..'9':
+        begin
+          NextToken := tkNumber;
+          repeat
+            Cur := Cur + 1;
+            S := S + C;
+            C := Peek;
+          until (C < '0') or (C > '9');
+          Val(S, Data, Code);
+          case UpCase(C) of
+            'M':
+              begin
+                Cur := Cur + 1;
+              end;
+            'G':
+              begin
+                Cur := Cur + 1;
+                Data := Data * 1024;
+              end;
+            'T':
+              begin
+                Cur := Cur + 1;
+                Data := Data * 1024 * 1024;
+              end;
+          end;
+        end;
+      '+':
+        begin
+          Cur := Cur + 1;
+          NextToken := tkAdd;
+        end;
+      '-':
+        begin
+          Cur := Cur + 1;
+          NextToken := tkSub;
+        end;
+      '*':
+        begin
+          Cur := Cur + 1;
+          NextToken := tkMul;
+        end;
+      '/':
+        begin
+          Cur := Cur + 1;
+          NextToken := tkDiv;
+        end;
+      '(':
+        begin
+          Cur := Cur + 1;
+          NextToken := tkBracketOpen;
+        end;
+      ')':
+        begin
+          Cur := Cur + 1;
+          NextToken := tkBracketClose;
+        end;
+      #0:
+        begin
+          NextToken := tkEOL;
+        end;
+      else
+        NextToken := tkUnknown;
+    end;
+  end;
+
+  function PeekToken: TExprTokenKind;
+  var
+    OldCur: LongWord;
+  begin
+    OldCur := Cur;
+    PeekToken := NextToken;
+    Cur := OldCur;
+  end;
+
+  procedure Calc(Op: TExprTokenKind);
+  var
+    V1, V2: QWord;
+  begin
+    if StackPtr < 2 then
+      Exit;
+    V2 := Stack[StackPtr - 1];
+    V1 := Stack[StackPtr - 2];
+    case Op of
+      tkAdd:
+        V1 := V1 + V2;
+      tkSub:
+        V1 := V1 - V2;
+      tkMul:
+        V1 := V1 * V2;
+      tkDiv:
+        V1 := V1 div V2;
+    end;
+    Stack[StackPtr - 2] := V1;
+    StackPtr := StackPtr - 1;
+  end;
+
+  procedure Term; forward;
+
+  procedure Expression;
+  var
+    Op: TExprTokenKind;
+  begin
+    while True do
+    case PeekToken of
+      tkNumber:
+        begin
+          Op := NextToken;
+          Stack[StackPtr] := Data;
+          StackPtr := StackPtr + 1;
+        end;
+      tkBracketOpen:
+        begin
+          Op := NextToken;
+          Term;
+          Op := NextToken; { Close }
+        end;
+      else
+        Exit;
+    end;
+  end;
+
+  procedure Factor;
+  var
+    Op: TExprTokenKind;
+  begin
+    Expression;
+    while True do
+    case PeekToken of
+      tkMul, tkDiv:
+        begin
+          Op := NextToken;
+          Expression;
+          Calc(Op);
+        end;
+      else
+        Exit;
+    end;
+  end;
+
+  procedure Term;
+  var
+    Op: TExprTokenKind;
+  begin
+    Factor;
+    while True do
+    case PeekToken of
+      tkAdd, tkSub:
+        begin
+          Op := NextToken;
+          Factor;
+          Calc(Op);
+        end;
+      else
+       Exit;
+    end;
+  end;
+
+begin
+  Len := Length(Expr);
+  Cur := 0;
+  StackPtr := 0;
+  Term;
+  Eval := Stack[0];
 end;
 
 initialization

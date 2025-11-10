@@ -113,7 +113,6 @@ type
     OnChanged: TUIInputNumberChangedProc;
     OnMin,
     OnMax: TUIInputNumberValidateProc;
-    PostfixValues: String; // A list of postfixes, encoded as a string
     procedure HandleEvent(var E: TEvent); virtual;
     function GetValue: Int64;
     procedure SetData(var Rec); virtual;
@@ -493,6 +492,7 @@ var
   V, V0: Int64;
 begin
   V := Self.GetValue;
+  Self.Data := V.ToString.ToUnicode;
   // Real-time validation
   if Self.OnMax <> nil then
   begin
@@ -517,52 +517,11 @@ end;
 
 procedure TUIInputNumber.HandleEvent(var E: TEvent);
 var
-  V: Int64;
   OldS: UnicodeString; // Old string
-  CurS: String; // Current string in UTF-8
-  CursorP: LongInt; // Old cursor position
-  C: Char;
-  L: LongInt;
 begin
   OldS := Self.Data;
-  CursorP := Self.CurPos;
 
   inherited HandleEvent(E);
-  CurS := Self.Data.ToUTF8;
-  L := Length(CurS);
-
-  // Remove postfix before we attempt to validate input data
-  if L > 0 then
-  begin
-    for C in Self.PostfixValues do
-      if UpCase(CurS[L]) = UpCase(C) then
-      begin
-        Delete(CurS, L, 1);
-        break;
-      end;
-  end;
-
-  // Make sure the text is valid number
-  if not TryStrToInt64(CurS, V) then
-  begin
-    if Self.Data = '' then
-      Self.Data := '0'
-    else
-    begin
-      Self.Data := OldS;
-      if (Length(Self.Data) = 1) and not (Self.Data[1] in ['0'..'9']) then
-        Self.Data := '0';
-    end;
-    Self.CurPos := CursorP;
-    Self.DrawView;
-  end;
-  // Remove left zeroes
-  while (Self.Data[1] = '0') and (Length(Self.Data) > 1) do
-  begin
-    Delete(Self.Data, 1, 1);
-    if Self.CurPos > Length(Self.Data) then
-      Self.CurPos := Length(Self.Data);
-  end;
   Self.Data := UpCase(Self.Data);
   Self.DrawView;
 
@@ -574,38 +533,8 @@ begin
 end;
 
 function TUIInputNumber.GetValue: Int64;
-var
-  CurS: String;
-  L: LongInt;
 begin
-  CurS := Self.Data.ToUTF8;
-  L := Length(CurS);
-  // Default is MB, the actual value depends on postfix
-  if (L > 1) and (Self.PostfixValues <> '') then
-  begin
-    case UpCase(CurS[L]) of
-      '0'..'9':
-        Result := CurS.ToInt64;
-      'M': // MB
-        begin
-          Delete(CurS, L, 1);
-          Result := CurS.ToInt64;
-        end;
-      'G': // GB
-        begin
-          Delete(CurS, L, 1);
-          Result := CurS.ToInt64 * 1024;
-        end;
-      'T': // TB
-        begin
-          Delete(CurS, L, 1);
-          Result := CurS.ToInt64 * 1024 * 1024;
-        end;
-      else
-        raise Exception.Create('Postfix not handled! This should never happen!');
-    end;
-  end else
-    Result := CurS.ToInt64;
+  Result := Eval(Self.Data.ToUTF8);
 end;
 
 procedure TUIInputNumber.SetData(var Rec);

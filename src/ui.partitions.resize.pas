@@ -138,7 +138,6 @@ begin
     begin
       R.Assign(5, 3, 30, 4);
       Preceding := New(PUIInputNumber, Init(R, 16));
-      Preceding^.PostfixValues := 'MGT';
       Preceding^.OnMin := @PrecedingMin;
       Preceding^.OnMax := @PrecedingMax;
       Preceding^.OnChanged := @PrecedingChanged;
@@ -153,7 +152,6 @@ begin
     begin
       R.Assign(5, 5, 30, 6);
       Size := New(PUIInputNumber, Init(R, 16));
-      Size^.PostfixValues := 'MGT';
       Size^.OnMin := @SizeMin;
       Size^.OnMax := @SizeMax;
       Size^.OnChanged := @SizeChanged;
