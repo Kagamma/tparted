@@ -145,7 +145,8 @@ function PadCenterLimit(S: String; Limit: LongInt): String;
 
 // Parse an expression and return actual numbers
 // Note: The original code was written in Turbo Pascal 3.02 while I was at a coffee shop with my Book8088
-// so some of it's weirdness makes it's way here
+// so some of it's weirdness makes it's way here.
+// Possible postfixes: G (GiB), T (TiB), GB, TB.
 function Eval(Expr: String): QWord;
 
 implementation
@@ -833,12 +834,22 @@ var
             'G':
               begin
                 Cur := Cur + 1;
-                Data := Data * 1024;
+                if UpCase(Peek) = 'B' then
+                begin
+                  Cur := Cur + 1;
+                  Data := Data * 1000;
+                end else
+                  Data := Data * 1024;
               end;
             'T':
               begin
                 Cur := Cur + 1;
-                Data := Data * 1024 * 1024;
+                if UpCase(Peek) = 'B' then
+                begin
+                  Cur := Cur + 1;
+                  Data := Data * 1000 * 1000;
+                end else
+                  Data := Data * 1024 * 1024;
               end;
           end;
         end;
