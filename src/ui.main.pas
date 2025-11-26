@@ -222,8 +222,6 @@ begin
       cmResizeApp:
         begin
           Self.ResizeApplication(E.Id, E.InfoWord);
-          AppPalette := CurrentPalette;
-          Self.ReDraw;
           Self.ClearEvent(E);
         end;
       cmMenuAbout:
@@ -325,6 +323,7 @@ begin
     Mode.Col := X;
     Mode.Row := Y;
     Self.SetScreenVideoMode(Mode);
+    AppPalette := CurrentPalette;
     Self.Redraw;
   end;
 end;
