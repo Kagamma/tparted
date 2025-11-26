@@ -95,6 +95,9 @@ type
   end;
   PUIBlankBlackground = ^TUIBlankBlackground;
 
+var
+  CurrentPalette: Word = apColor;
+
 procedure TUIBlankBlackground.Draw;
 var
   B: TDrawBuffer;
@@ -219,6 +222,8 @@ begin
       cmResizeApp:
         begin
           Self.ResizeApplication(E.Id, E.InfoWord);
+          AppPalette := CurrentPalette;
+          Self.ReDraw;
           Self.ClearEvent(E);
         end;
       cmMenuAbout:
@@ -242,6 +247,7 @@ begin
             AppPalette := apMonochrome
           else
             AppPalette := apColor;
+          CurrentPalette := AppPalette;
           Self.ReDraw;
           Self.ClearEvent(E);
         end;
