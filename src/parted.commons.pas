@@ -147,7 +147,7 @@ function PadCenterLimit(S: String; Limit: LongInt): String;
 // Note: The original code was written in Turbo Pascal 3.02 while I was at a coffee shop with my Book8088
 // so some of it's weirdness makes it's way here.
 // Possible postfixes: G (GiB), T (TiB), GB, TB.
-function Eval(Expr: String): QWord;
+function Eval(Expr: String): Int64;
 
 implementation
 
@@ -772,7 +772,7 @@ begin
   Result := UTF8PadCenter(SR, Limit);
 end;
 
-function Eval(Expr: String): QWord;
+function Eval(Expr: String): Int64;
 type
   TExprTokenKind = (
     tkEOL,
@@ -787,8 +787,8 @@ type
   );
 var
   Len, Cur: LongWord;
-  Data: QWord;
-  Stack: array[0..63] of QWord;
+  Data: Int64;
+  Stack: array[0..63] of Int64;
   StackPtr: LongWord;
 
   function NextToken: TExprTokenKind;
@@ -903,7 +903,7 @@ var
 
   procedure Calc(Op: TExprTokenKind);
   var
-    V1, V2: QWord;
+    V1, V2: Int64;
   begin
     if StackPtr < 2 then
       Exit;
