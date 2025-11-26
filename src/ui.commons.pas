@@ -534,7 +534,7 @@ end;
 
 function TUIInputNumber.GetValue: Int64;
 begin
-  Result := Max(1, Eval(Self.Data.ToUTF8));
+  Result := Eval(Self.Data.ToUTF8);
 end;
 
 procedure TUIInputNumber.SetData(var Rec);
