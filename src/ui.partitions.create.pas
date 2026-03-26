@@ -190,7 +190,7 @@ begin
       V := New(PUIInputLine, Init(R, 16));
       PUIInputLine(V)^.IsPassword := True;
       D^.Insert(V);
-      R.Assign(46, 14, 65, 13);
+      R.Assign(46, 14, 65, 15);
       D^.Insert(New(PLabel, Init(R, S_PassphraseConfirm.ToUnicode, V)));
     end;
 
