@@ -32,7 +32,7 @@ Currently supported filesystems:
 
 *In case of btrfs and bcachefs, for now the app doesn't deal with multi disk array.
 
-*We do not support full disk encryption/descyption at the moment.
+*The app does not support full disk encryption/decryption at the moment.
 
 ## Install
 
