@@ -111,6 +111,7 @@ resourcestring
   S_PassphraseConfirm = 'Confirm passphrase';
   S_PassphraseMismatch = 'LUKS passphrase and confirm passphrase mismatched!';
   S_PassphraseIgnored = 'cryptsetup not found on this system. LUKS passphrase ignored.';
+  S_RootRequired = 'You cannot perform this operation unless you are root.';
 
 implementation
 

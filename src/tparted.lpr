@@ -29,7 +29,7 @@ var
 begin
   if FpGeteuid() <> 0 then
   begin
-    Writeln(StdErr, 'This program requires admin rights to work properly.');
+    Writeln(StdErr, S_RootRequired);
     Halt(1);
   end;
   UIMain.Init;

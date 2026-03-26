@@ -422,3 +422,7 @@ msgstr ""
 msgid "cryptsetup not found on this system. LUKS passphrase ignored."
 msgstr ""
 
+#: locale:s_rootrequired
+msgid "You cannot perform this operation unless you are root."
+msgstr ""
+
