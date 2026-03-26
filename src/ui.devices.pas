@@ -154,26 +154,29 @@ end;
 procedure TUIDevice.UpdateButtonsState(var APart: TPartedPartition);
 var
   IsDisabled: Boolean;
+  IsTheFirst1MB: Boolean;
+  IsLessThan1MB: Boolean;
   IsResizeableDisabled: Boolean;
 begin
-  IsDisabled := (APart.PartEnd <= 1024 * 1024) // The first 1MB in device
-    or (APart.PartSize < 1024 * 1024) // Partition is less than 1MB in size
-    or ((Self.OpList[0].Device^.Table <> 'gpt') and (Self.OpList[0].Device^.Table <> 'msdos')) // Device is neither gpt nor msdos
+  IsDisabled :=
+    ((Self.OpList[0].Device^.Table <> 'gpt') and (Self.OpList[0].Device^.Table <> 'msdos')) // Device is neither gpt nor msdos
     or (Self.OpList[0].Device^.GetExtendedPartitionCount > 0); // Device has extended partition
   IsResizeableDisabled := (SToFlag(APart.FileSystem, FileSystemMoveArray) = 0) or (APart.Number < 0); // Can it be resize?
+  IsLessThan1MB := APart.PartSize < 1024 * 1024; // Partition is less than 1MB in size
+  IsTheFirst1MB := APart.PartEnd <= 1024 * 1024; // The first 1MB in device
 
   // Create button
-  Self.ButtonPartitionArray[1]^.SetDisabled((APart.Number <> 0) or IsDisabled);
+  Self.ButtonPartitionArray[1]^.SetDisabled((APart.Number <> 0) or IsDisabled or IsLessThan1MB or IsTheFirst1MB);
   // Delete button
   Self.ButtonPartitionArray[2]^.SetDisabled((APart.Number = 0) or (APart.IsMounted) or IsDisabled);
   // Format button
-  Self.ButtonPartitionArray[3]^.SetDisabled((APart.Number = 0) or (APart.IsMounted) or (APart.Encrypted)   or IsDisabled);
+  Self.ButtonPartitionArray[3]^.SetDisabled((APart.Number = 0) or (APart.IsMounted) or (APart.Encrypted)   or IsDisabled or IsLessThan1MB or IsTheFirst1MB);
   // Resize button
-  Self.ButtonPartitionArray[4]^.SetDisabled((APart.Number = 0) or (APart.IsMounted) or (APart.IsEncrypted) or APart.ContainsFlag('esp') or IsDisabled or IsResizeableDisabled);
+  Self.ButtonPartitionArray[4]^.SetDisabled((APart.Number = 0) or (APart.IsMounted) or (APart.IsEncrypted) or APart.ContainsFlag('esp') or IsDisabled or IsLessThan1MB or IsTheFirst1MB or IsResizeableDisabled);
   // Label button
-  Self.ButtonPartitionArray[5]^.SetDisabled((APart.Number = 0) or (APart.IsMounted) or (APart.Encrypted)   or IsDisabled);
+  Self.ButtonPartitionArray[5]^.SetDisabled((APart.Number = 0) or (APart.IsMounted) or (APart.Encrypted)   or IsDisabled or IsLessThan1MB or IsTheFirst1MB);
   // Flag button
-  Self.ButtonPartitionArray[6]^.SetDisabled((APart.Number = 0) or (APart.IsMounted) or (APart.IsEncrypted) or IsDisabled);
+  Self.ButtonPartitionArray[6]^.SetDisabled((APart.Number = 0) or (APart.IsMounted) or (APart.IsEncrypted) or IsDisabled or IsLessThan1MB or IsTheFirst1MB);
   // Unmount button
   Self.ButtonPartitionArray[7]^.SetDisabled((not APart.IsMounted and not APart.IsDecrypted) or (APart.FileSystem = 'linux-swap') or IsDisabled);
   // Decrypt button
