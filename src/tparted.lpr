@@ -49,9 +49,14 @@ end;
 
 procedure HandleSigInt(Sig: LongInt); cdecl;
 begin
-  // Restore terminal before exiting
-  fpSystem('clear');
-  Halt(130);
+  case Sig of
+    2:
+      begin
+        // Restore terminal before exiting
+        fpSystem('clear');
+        Halt(130);
+      end;
+  end;
 end;
 
 begin
