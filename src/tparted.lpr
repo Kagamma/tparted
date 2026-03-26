@@ -5,6 +5,7 @@ program TParted;
 uses
   CThreads, cwstring, Unix, BaseUnix,
   SysUtils, Classes, Types,
+  Termio,
   FileSystem,
   // You must include file system implementation behind FileSystem!
   FileSystem.Ext,
@@ -25,6 +26,33 @@ uses
 
 var
   Report: String;
+  OrigAttr: Termios;
+
+procedure TermBackupAttr;
+begin
+  TcGetAttr(0, OrigAttr);
+end;
+
+procedure TermEnableRawExceptSig;
+var
+  Attr: Termios;
+begin
+  Attr := OrigAttr;
+  // Disable echo, canonical mode
+  Attr.c_lflag := Attr.c_lflag and not (ECHO or ICANON);
+  // Disable Ctrl-S/Q and CR-to-NL translation
+  Attr.c_iflag := Attr.c_iflag and not (IXON or ICRNL);
+  // Disable output processing
+  Attr.c_oflag := Attr.c_oflag and not (OPOST);
+  TcSetAttr(0, TCSAFLUSH, Attr);
+end;
+
+procedure HandleSigInt(Sig: LongInt); cdecl;
+begin
+  // Restore terminal before exiting
+  fpSystem('clear');
+  Halt(130);
+end;
 
 begin
   if FpGeteuid() <> 0 then
@@ -32,9 +60,12 @@ begin
     Writeln(StdErr, S_RootRequired);
     Halt(1);
   end;
+  TermBackupAttr;
   UIMain.Init;
   try
     try
+      TermEnableRawExceptSig;
+      fpSignal(SIGINT, @HandleSigInt);
       UIMain.Run;
     except
       on E: Exception do

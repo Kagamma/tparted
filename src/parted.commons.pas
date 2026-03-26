@@ -23,30 +23,12 @@ unit Parted.Commons;
 interface
 
 uses
-  {$ifdef Unix}Unix, BaseUnix,{$endif}
+  {$ifdef Unix}Unix, BaseUnix, Termio,{$endif}
   SysUtils, Classes, Generics.Collections, Process, Types, StrUtils, RegExpr, Locale;
 
 type
-  Ptermios = ^termios;
-  termios = record
-    c_iflag: Cardinal;
-    c_oflag: Cardinal;
-    c_cflag: Cardinal;
-    c_lflag: Cardinal;
-    c_line: AnsiChar;
-    c_cc: array [0..31] of AnsiChar;
-    c_ispeed: Cardinal;
-    c_ospeed: Cardinal;
-  end;
-
-  Pwinsize = ^winsize;
-  winsize = record
-    ws_row: Word;
-    ws_col: Word;
-    ws_xpixel: Word;
-    ws_ypixel: Word;
-  end;
-
+  Ptermios = ^TTermios;
+  Pwinsize = ^TWinsize;
   TPartedPathDict = specialize TDictionary<String, String>;
 
   TExecResult = record
