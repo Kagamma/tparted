@@ -52,6 +52,7 @@ var
   V: PView;
   Preceding,
   Size: PUIInputNumber;
+  IsRequestedAgain: Boolean;
 
   // Real-time correction for preceding
   function PrecedingMin(V: Int64): Int64;
@@ -184,6 +185,13 @@ begin
       D^.Insert(V);
       R.Assign(46, 12, 65, 13);
       D^.Insert(New(PLabel, Init(R, S_Passphrase.ToUnicode, V)));
+
+      R.Assign(46, 15, 65, 16);
+      V := New(PUIInputLine, Init(R, 16));
+      PUIInputLine(V)^.IsPassword := True;
+      D^.Insert(V);
+      R.Assign(46, 14, 65, 13);
+      D^.Insert(New(PLabel, Init(R, S_PassphraseConfirm.ToUnicode, V)));
     end;
 
     // Ok-Button
@@ -198,13 +206,24 @@ begin
 
     DataOld := AData^;
     D^.SetData(AData^);
-    if Desktop^.ExecView(D) = cmOk then
-    begin
-      D^.GetData(AData^);
-      if not CryptSetupExists then
-        AData^.Passphrase := '';
-      Result := VerifyFileSystemSize(PPart^.Device^.Table, FileSystemFormattableArray[AData^.FileSystem], AData^.Size);
-    end;
+    repeat
+      IsRequestedAgain := False;
+      if Desktop^.ExecView(D) = cmOk then
+      begin
+        D^.GetData(AData^);
+        if not CryptSetupExists then
+          AData^.Passphrase := ''
+        else
+        begin
+          if AData^.Passphrase <> AData^.PassphraseRepeat then
+          begin
+            MsgBox(S_PassphraseMismatch, nil, mfError + mfOKButton);
+            IsRequestedAgain := True;
+          end;
+        end;
+        Result := VerifyFileSystemSize(PPart^.Device^.Table, FileSystemFormattableArray[AData^.FileSystem], AData^.Size);
+      end;
+    until not IsRequestedAgain;
   finally
     Dispose(D, Done);
   end;

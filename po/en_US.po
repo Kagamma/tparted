@@ -410,3 +410,11 @@ msgstr ""
 msgid "LUKS Passphrase"
 msgstr ""
 
+#: locale:s_passphraseconfirm
+msgid "Confirm passphrase"
+msgstr ""
+
+#: locale:s_passphrasemismatch
+msgid "LUKS passphrase and confirm passphrase mismatched!"
+msgstr ""
+

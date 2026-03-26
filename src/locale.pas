@@ -108,6 +108,8 @@ resourcestring
   S_Decrypting = 'Unlocking %s...';
   S_DecryptFailed = 'Unlock %s failed!';
   S_Passphrase = 'LUKS Passphrase';
+  S_PassphraseConfirm = 'Confirm passphrase';
+  S_PassphraseMismatch = 'LUKS passphrase and confirm passphrase mismatched!';
 
 implementation
 

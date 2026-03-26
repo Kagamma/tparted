@@ -53,6 +53,7 @@ type
     LabelName: UnicodeString;
     Name: UnicodeString;
     Passphrase: UnicodeString;
+    PassphraseRepeat: UnicodeString;
     AffectedPart: PPartedPartition;
   end;
 
