@@ -31,6 +31,7 @@ Currently supported filesystems:
 | xfs | :heavy_check_mark: | :heavy_check_mark: | | :heavy_check_mark: | :heavy_check_mark: |
 
 *In case of btrfs and bcachefs, for now the app doesn't deal with multi disk array.
+
 *We do not support full disk encryption/descyption at the moment.
 
 ## Install
