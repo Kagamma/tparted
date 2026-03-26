@@ -212,8 +212,13 @@ begin
       begin
         D^.GetData(AData^);
         if not CryptSetupExists then
-          AData^.Passphrase := ''
-        else
+        begin
+          if AData^.Passphrase <> '' then
+          begin
+            MsgBox(S_PassphraseIgnored, nil, mfInformation + mfOKButton);
+            AData^.Passphrase := '';
+          end;
+        end else
         begin
           if AData^.Passphrase <> AData^.PassphraseRepeat then
           begin

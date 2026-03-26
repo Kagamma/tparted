@@ -110,6 +110,7 @@ resourcestring
   S_Passphrase = 'LUKS Passphrase';
   S_PassphraseConfirm = 'Confirm passphrase';
   S_PassphraseMismatch = 'LUKS passphrase and confirm passphrase mismatched!';
+  S_PassphraseIgnored = 'cryptsetup not found on this system. LUKS passphrase ignored.';
 
 implementation
 

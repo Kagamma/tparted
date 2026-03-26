@@ -418,3 +418,7 @@ msgstr ""
 msgid "LUKS passphrase and confirm passphrase mismatched!"
 msgstr ""
 
+#: locale:s_passphraseignored
+msgid "cryptsetup not found on this system. LUKS passphrase ignored."
+msgstr ""
+
