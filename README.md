@@ -44,12 +44,16 @@ Currently supported filesystems:
 - Alternatively you can use an AUR helper, like `paru -S tparted-bin` or `yay -S tparted-bin`
 
 #### Building from source
-- Since the app requires Unicode version of Free Vision, you need to have Free Pascal (beta 3.3.1) or later beta version installed on the system.
+- For unicode version:
+  + Since the app requires Unicode version of Free Vision, you need to have Free Pascal (beta 3.3.1) or later beta version installed on the system.
+- For ShortString version:
+  + Officially support for Free Pascal 3.2.2 and newer, although older version should work.
+  + Make sure to disable `TPARTED_UNICODE` flag in `configs.inc` before building.
 - Run `make build` to build the app. The binary is located in `./bin` directory.
 - Run `make install` to install the app to `/usr/local/bin`
 
 #### Translation
-- The app is capable of loading translation files in `.mo` format. Simply translate the default `en_US.po` file to your language of choice, convert it to the `.mo` format via `msgfmt` tool, then place the converted file into the `./bin/locale` directory.
+- The unicode version of the app is capable of loading translation files in `.mo` format. Simply translate the default `en_US.po` file to your language of choice, convert it to the `.mo` format via `msgfmt` tool, then place the converted file into the `./bin/locale` directory.
 - The app depends on the `LANG` environment variable to determine the language. For example, the app will try to load `ja_JP.mo` or `ja.mo` if `LANG=ja_JP.UTF-8`.
 
 ## Dependencies
