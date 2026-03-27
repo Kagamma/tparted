@@ -40,8 +40,8 @@ Currently supported filesystems:
 - See `Releases` section.
 
 #### Archlinux User Repository (AUR)
-- For unicode version: Run `git clone https://aur.archlinux.org/tparted-bin.git`, then enter `tparted-bin` directory and run `makepkg -si`
-- For ShortString/non-unicode version: Run `git clone https://aur.archlinux.org/tparted-git.git`, then enter `tparted-git` directory and run `makepkg -si`
+- For unicode version: Run `git clone https://aur.archlinux.org/tparted-bin.git`, then enter `tparted-bin` directory and run `makepkg -si OPTIONS=-debug`
+- For ShortString/non-unicode version: Run `git clone https://aur.archlinux.org/tparted-git.git`, then enter `tparted-git` directory and run `makepkg -si OPTIONS=-debug`
 
 #### Building from source
 - For unicode version:
