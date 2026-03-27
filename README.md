@@ -45,10 +45,10 @@ Currently supported filesystems:
 
 #### Building from source
 - For unicode version:
-  + Since the app requires Unicode version of Free Vision, you need to have Free Pascal (beta 3.3.1) or later beta version installed on the system.
+  + Requires Free Pascal (beta 3.3.1) or later beta version installed on the system.
 - For ShortString version:
-  + Officially support for Free Pascal 3.2.2 and newer, although older version should work.
-  + Make sure to disable `TPARTED_UNICODE` flag in `configs.inc` before building.
+  + Officially support for Free Pascal 3.2.2 and newer, although older versions should work.
+- By default unicode version will be built automatically if it detects fpc 3.3.1 on the system.
 - Run `make build` to build the app. The binary is located in `./bin` directory.
 - Run `make install` to install the app to `/usr/local/bin`
 
