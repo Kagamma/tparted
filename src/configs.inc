@@ -4,7 +4,7 @@
 {$modeswitch advancedrecords}
 {$modeswitch nestedprocvars}
 {$modeswitch typehelpers}
-{$if FPC_FULLVERSION > 30202}
+{$if FPC_FULLVERSION >= 30301}
   {$define TPARTED_UNICODE}
 {$endif}
 

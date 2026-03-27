@@ -46,7 +46,7 @@ Currently supported filesystems:
 
 #### Building from source
 - For unicode version:
-  + Requires Free Pascal (beta 3.3.1) or later beta version installed on the system.
+  + Requires Free Pascal 3.3.1
 - For ShortString version:
   + Officially support for Free Pascal 3.2.2 and newer, although older versions should work.
 - By default unicode version will be built automatically if it detects fpc 3.3.1 on the system.
