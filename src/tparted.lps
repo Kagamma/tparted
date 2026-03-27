@@ -108,7 +108,7 @@
         <UsageCount Value="10"/>
       </Unit>
       <Unit>
-        <Filename Value="../../../sdks/fpc/fpcsrc/packages/fv/src/msgbox.inc"/>
+        <Filename Value="../../../sdks/fpc/fpcsrc/packages/fv/src/MessageDlg.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="313"/>
         <CursorPos X="4" Y="305"/>

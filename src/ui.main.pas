@@ -215,7 +215,7 @@ begin
         begin
           if Message(Desktop, evBroadcast, cmMessageOperatorExists, nil) <> nil then
           begin
-            if MsgBox(S_QuitMessage, nil, mfConfirmation + mfYesButton + mfNoButton) <> cmYes then
+            if MessageDlg(S_QuitMessage, nil, mfConfirmation + mfYesButton + mfNoButton) <> cmYes then
               Self.ClearEvent(E);
           end;
         end;
@@ -226,7 +226,7 @@ begin
         end;
       cmMenuAbout:
         begin
-          MsgBox(Format(S_AboutMessage, [{$I %DATE%}, IntToStr(FPC_VERSION) + '.' + IntToStr(FPC_RELEASE) + '.' + IntToStr(FPC_PATCH)]), nil, mfInformation + mfOKButton);
+          MessageDlg(Format(S_AboutMessage, [{$I %DATE%}, IntToStr(FPC_VERSION) + '.' + IntToStr(FPC_RELEASE) + '.' + IntToStr(FPC_PATCH)]), nil, mfInformation + mfOKButton);
           Self.ClearEvent(E);
         end;
       cmMenuDisplayLog:
@@ -271,7 +271,7 @@ begin
               QueryDeviceAndPartitions(Path, LDevice^);
               if LDevice^.Table = 'unknown' then // This device has no partition table, wanna create it?
               begin
-                if (MsgBox(Format(S_CreatePartitionTableAsk, [LDevice^.Path]), nil, mfInformation + mfYesButton + mfNoButton) = cmYes) and
+                if (MessageDlg(Format(S_CreatePartitionTableAsk, [LDevice^.Path]), nil, mfInformation + mfYesButton + mfNoButton) = cmYes) and
                    ShowPTableDialog(TableType)  then
                 begin
                   LoadingStart(Format(S_CreatingGPT, [TableType]));
@@ -295,7 +295,7 @@ begin
               begin
                 LoadingStop;
                 WriteLog(lsError, E.Message);
-                MsgBox(E.Message, nil, mfOKButton);
+                MessageDlg(E.Message, nil, mfOKButton);
                 LDevice^.Done; // An exception here is dangerous - set partitions to empty to avoid further damage
               end;
             end;

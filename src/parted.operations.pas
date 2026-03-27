@@ -30,7 +30,8 @@ uses
   Parted.Logs,
   Parted.Commons, Locale,
   Parted.Partitions,
-  Parted.Devices;
+  Parted.Devices,
+  DataTypes;
 
 type
   TPartedOpKind = (

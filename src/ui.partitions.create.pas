@@ -215,14 +215,14 @@ begin
         begin
           if AData^.Passphrase <> '' then
           begin
-            MsgBox(S_PassphraseIgnored, nil, mfInformation + mfOKButton);
+            MessageDlg(S_PassphraseIgnored, nil, mfInformation + mfOKButton);
             AData^.Passphrase := '';
           end;
         end else
         begin
           if AData^.Passphrase <> AData^.PassphraseRepeat then
           begin
-            MsgBox(S_PassphraseMismatch, nil, mfError + mfOKButton);
+            MessageDlg(S_PassphraseMismatch, nil, mfError + mfOKButton);
             IsRequestedAgain := True;
           end;
         end;

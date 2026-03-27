@@ -37,7 +37,11 @@ procedure ShowFileSystemSupportDialog;
   function FeatureExists(FS: String; FeatureArray: TStringDynArray): String;
   begin
     if SToIndex(FS, FeatureArray) >= 0 then
+      {$ifdef TPARTED_UNICODE}
       Result := '   ✓    '
+      {$else}
+      Result := '   Y    '
+      {$endif}
     else
       Result := '        ';
   end;
@@ -73,7 +77,11 @@ begin
   C := New(PUnicodeStringPtrCollection, Init(8, 8));
   for FSName in FileSystemSupportArray do
   begin
+    {$ifdef TPARTED_UNICODE}
     Str := Format('%s│%s│%s│%s│%s│%s│%s', [
+    {$else}
+    Str := Format('%s'#179'%s'#179'%s'#179'%s'#179'%s'#179'%s'#179'%s', [
+    {$endif}
       PadRightLimit(FSName, 12),
       FeatureExists(FSName, FileSystemFormattableArray),
       FeatureExists(FSName, FileSystemMoveArray),
@@ -89,7 +97,11 @@ begin
   // Header
   Dec(R.A.Y);
   R.B.Y := R.A.Y + 1;
+  {$ifdef TPARTED_UNICODE}
   Str := Format('%s│%s│%s│%s│%s│%s│%s', [
+  {$else}
+  Str := Format('%s'#179'%s'#179'%s'#179'%s'#179'%s'#179'%s'#179'%s', [
+  {$endif}
     PadCenterLimit(S_FileSystem, 13),
     PadCenterLimit(S_Create, 8),
     PadCenterLimit(S_Move, 8),

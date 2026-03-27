@@ -51,7 +51,7 @@ begin
   // The following code should not run because the label button should be disabled for this case
   if PPart^.Number = 0 then
   begin
-    MsgBox(Format(S_PartitionIsUnallocated, []), nil, mfInformation + mfOKButton);
+    MessageDlg(Format(S_PartitionIsUnallocated, []), nil, mfInformation + mfOKButton);
     Exit;
   end;
 

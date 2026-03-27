@@ -55,7 +55,7 @@ begin
   // The following code should not run because the label button should be disabled for this case
   if PPart^.Number = 0 then
   begin
-    MsgBox(Format(S_PartitionIsUnallocated, []), nil, mfInformation + mfOKButton);
+    MessageDlg(Format(S_PartitionIsUnallocated, []), nil, mfInformation + mfOKButton);
     Exit;
   end;
 
@@ -89,7 +89,7 @@ begin
     begin
       D^.GetData(Data);
       if not PPart^.Decrypt(Data.Passphrase) then
-        MsgBox(Format(S_DecryptFailed, [PPart^.GetPartitionPath]).ToUnicode, nil, mfError + mfOKButton)
+        MessageDlg(Format(S_DecryptFailed, [PPart^.GetPartitionPath]).ToUnicode, nil, mfError + mfOKButton)
       else
         Result := True;
     end;

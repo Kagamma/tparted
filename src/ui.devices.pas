@@ -33,7 +33,8 @@ uses
   Parted.Logs,
   UI.Commons,
   UI.Devices.PTable,
-  UI.Partitions;
+  UI.Partitions,
+  DataTypes;
 
 type
   { The main dialog for device }
@@ -101,7 +102,7 @@ begin
   begin
     if (OpenedDeviceWindowList[I] <> nil) and (OpenedDeviceWindowList[I]^.OpList.GetCurrentDevice^.Path = ADevice.Path) then
     begin
-      MsgBox(Format(S_DeviceAlreadyOpened, [ADevice.Path]), nil, mfInformation + mfOKButton);
+      MessageDlg(Format(S_DeviceAlreadyOpened, [ADevice.Path]), nil, mfInformation + mfOKButton);
       Exit(True);
     end;
   end;
@@ -126,7 +127,7 @@ begin
     end;
   end;
   // No slot left, show message
-  MsgBox(Format(S_MaxDeviceWindow, [High(OpenedDeviceWindowList)]), nil, mfInformation + mfOKButton);
+  MessageDlg(Format(S_MaxDeviceWindow, [High(OpenedDeviceWindowList)]), nil, mfInformation + mfOKButton);
 end;
 
 procedure RemoveDeviceWindowFromList(const ADeviceWindow: PUIDevice);
@@ -313,7 +314,11 @@ begin
   Self.GetExtent(R);
   R.A.Y := R.B.Y - 1;
   Inc(R.A.X);
+  {$ifdef TPARTED_UNICODE}
   R.B.X := Min(R.B.X - 1, Length(Self.LabelPendingOperations^.Text) + R.A.X + 2);
+  {$else}
+  R.B.X := Min(R.B.X - 1, Length(Self.LabelPendingOperations^.Text^) + R.A.X + 2);
+  {$endif}
   Self.LabelPendingOperations^.SetBounds(R);
   // Partition Buttons
   Self.GetExtent(R);
@@ -356,7 +361,7 @@ procedure TUIDevice.HandleEvent(var E: TEvent);
     CurrentDevice := Self.OpList.GetCurrentDevice;
     if CurrentDevice^.GetPrimaryPartitionCount >= CurrentDevice^.MaxPartitions then
     begin
-      MsgBox(S_MaximumPartitionReached, nil, mfInformation + mfOKButton);
+      MessageDlg(S_MaximumPartitionReached, nil, mfInformation + mfOKButton);
       Exit;
     end;
     PPart := Self.ListPartition^.GetSelectedPartition;
@@ -512,7 +517,7 @@ procedure TUIDevice.HandleEvent(var E: TEvent);
       on E: Exception do
       begin
         WriteLog(lsError, E.Message);
-        MsgBox(E.Message, nil, mfOKButton);
+        MessageDlg(E.Message, nil, mfOKButton);
         Self.OpList.GetCurrentDevice^.Done;
       end;
     end;
@@ -528,7 +533,7 @@ procedure TUIDevice.HandleEvent(var E: TEvent);
       on E: Exception do
       begin
         WriteLog(lsError, E.Message);
-        MsgBox(E.Message, nil, mfError + mfOKButton);
+        MessageDlg(E.Message, nil, mfError + mfOKButton);
       end;
     end;
     DoApplyRefreshDevice;
@@ -626,21 +631,21 @@ begin
         end;
       cmDeviceCreateGPT:
         begin
-          if (MsgBox(Format(S_CreatePartitionTableAskWarning, [Self.OpList.GetCurrentDevice^.Path]), nil, mfWarning + mfYesButton + mfNoButton) = cmYes) and
+          if (MessageDlg(Format(S_CreatePartitionTableAskWarning, [Self.OpList.GetCurrentDevice^.Path]), nil, mfWarning + mfYesButton + mfNoButton) = cmYes) and
              ShowPTableDialog(TableType) then
           begin
             LoadingStart(Format(S_CreatingGPT, [TableType]));
             try
               QueryCreatePTableSilent(TableType, Self.OpList.GetCurrentDevice^.Path);
               LoadingStop;
-              MsgBox(S_CreatePartitionTableCompleted, nil, mfInformation + mfOkButton);
+              MessageDlg(S_CreatePartitionTableCompleted, nil, mfInformation + mfOkButton);
               Message(@Self, evCommand, cmClose, nil);
             except
               on E: Exception do
               begin
                 LoadingStop;
                 WriteLog(lsError, E.Message);
-                MsgBox(E.Message, nil, mfOKButton);
+                MessageDlg(E.Message, nil, mfOKButton);
               end;
             end;
           end;
@@ -662,7 +667,7 @@ begin
         end;
       cmOperationApply:
         begin
-          if MsgBox(Format(S_OperationAdvise, [Self.OpList.GetCurrentDevice^.Path]), nil, mfConfirmation + mfYesButton + mfNoButton) = cmYes then
+          if MessageDlg(Format(S_OperationAdvise, [Self.OpList.GetCurrentDevice^.Path]), nil, mfConfirmation + mfYesButton + mfNoButton) = cmYes then
             DoApplyOperations;
           Exit;
         end;
@@ -670,7 +675,7 @@ begin
         begin
           if Self.OpList.GetOpCount > 0 then
           begin
-            if MsgBox(Format(S_CloseMessage, [Self.OpList.GetCurrentDevice^.Path]), nil, mfConfirmation + mfYesButton + mfNoButton) <> cmYes then
+            if MessageDlg(Format(S_CloseMessage, [Self.OpList.GetCurrentDevice^.Path]), nil, mfConfirmation + mfYesButton + mfNoButton) <> cmYes then
             begin
               Exit;
             end;
@@ -689,7 +694,11 @@ begin
   Self.ListPartition^.Device := PDevice;
   Self.ListPartition^.RefreshList; // Redraw partition list
   // Redraw pending operation text
+  {$ifdef TPARTED_UNICODE}
   Self.LabelPendingOperations^.Text := Format(S_PendingOperations, [Self.OpList.GetOpCount]).ToUnicode;
+  {$else}
+  Self.LabelPendingOperations^.Text^ := Format(S_PendingOperations, [Self.OpList.GetOpCount]).ToUnicode;
+  {$endif}
   Self.LabelPendingOperations^.DrawView;
   // Update button states
   Self.UpdateButtonsState(Self.OpList.GetCurrentDevice^.GetPartitionAt(Self.ListPartition^.List^.Focused)^);

@@ -25,7 +25,8 @@ interface
 uses
   Classes, SysUtils, Types, StrUtils,
   FreeVision,
-  Parted.Commons, Locale;
+  Parted.Commons, Locale,
+  DataTypes;
 
 const
   CUIButton = #10#22#12#13#14#14#14#15;
@@ -42,7 +43,7 @@ type
   // A new listbox, to be used with TUnicodeStringPtrCollection
   TUIListBox = object(TListBox)
   public
-    function GetText(Item: LongInt; MaxLen: LongInt): Sw_String; virtual;
+    function GetText(Item: LongInt; MaxLen: LongInt): TPartedString; virtual;
   end;
   PUIListBox = ^TUIListBox;
 
@@ -55,7 +56,7 @@ type
     procedure FreeItem(Item: Pointer); virtual;
     procedure PutItem(var S: TStream; Item: Pointer); virtual;
     // New method allows to update existing item
-    procedure AtUpdate(Index: LongInt; const AText: UnicodeString);
+    procedure AtUpdate(Index: LongInt; const AText: TPartedString);
   end;
   PUnicodeStringPtrCollection = ^TUnicodeStringPtrCollection;
 
@@ -115,6 +116,7 @@ type
     OnMax: TUIInputNumberValidateProc;
     procedure HandleEvent(var E: TEvent); virtual;
     function GetValue: Int64;
+    function DataSize: LongWord; virtual;
     procedure SetData(var Rec); virtual;
     procedure GetData(var Rec); virtual;
     procedure Draw; virtual;
@@ -147,8 +149,8 @@ procedure LoadingStop;
 
 // Copied from Free Vision source code. Since the original MessageBox is buggy, we implement fixes
 // on our own instead. See https://gitlab.com/freepascal.org/fpc/source/-/issues/40607
-FUNCTION MsgBox(Const Msg: String; Params: Pointer; AOptions: Word): Word;
-FUNCTION MsgBoxRect(Var R: TRect; Const Msg: Sw_String; Params: Pointer;
+FUNCTION MessageDlg(Const Msg: String; Params: Pointer; AOptions: Word): Word;
+FUNCTION MsgBoxRect(Var R: TRect; Const Msg: TPartedString; Params: Pointer;
   AOptions: Word): Word;
 
 var
@@ -172,9 +174,9 @@ const
 
 // From FreeVision
 
-FUNCTION MsgBoxRectDlg (Dlg: PDialog; Var R: TRect; Const Msg: Sw_String;
+FUNCTION MsgBoxRectDlg (Dlg: PDialog; Var R: TRect; Const Msg: TPartedString;
   Params: Pointer; AOptions: Word): Word;
-VAR I, X, ButtonCount: SmallInt; S: Sw_String; Control: PView;
+VAR I, X, ButtonCount: SmallInt; S: TPartedString; Control: PView;
     ButtonList: Array[0..4] Of PView;
 BEGIN
    With Dlg^ Do Begin
@@ -207,7 +209,7 @@ BEGIN
      MsgBoxRectDlg := Application^.ExecView(Dlg); { Execute dialog }
 end;
 
-FUNCTION MsgBoxRect(Var R: TRect; Const Msg: Sw_String; Params: Pointer;
+FUNCTION MsgBoxRect(Var R: TRect; Const Msg: TPartedString; Params: Pointer;
   AOptions: Word): Word;
 var
   Dialog: PDialog;
@@ -220,7 +222,7 @@ BEGIN
   Dispose (Dialog, Done);                            { Dispose of dialog }
 END;
 
-FUNCTION MsgBox(Const Msg: String; Params: Pointer; AOptions: Word): Word;
+FUNCTION MessageDlg(Const Msg: String; Params: Pointer; AOptions: Word): Word;
 VAR R: TRect;
 BEGIN
    R.Assign(0, 0, 50, 10);                             { Assign area }
@@ -229,7 +231,7 @@ BEGIN
        (Desktop^.Size.Y - R.B.Y) DIV 2) Else          { Calculate position }
      R.Move((Application^.Size.X - R.B.X) DIV 2,
        (Application^.Size.Y - R.B.Y) DIV 2);          { Calculate position }
-   MsgBox := MsgBoxRect(R, Msg.TrimRight.ToUnicode, Params,
+   MessageDlg := MsgBoxRect(R, Msg.TrimRight.ToUnicode, Params,
      AOptions);                                       { Create message box }
 END;
 
@@ -290,9 +292,9 @@ end;
 
 // ---------------------------------
 
-function TUIListBox.GetText(Item: LongInt; MaxLen: LongInt): Sw_String;
+function TUIListBox.GetText(Item: LongInt; MaxLen: LongInt): TPartedString;
 begin
-  Result := PUnicodeString(List^.At(Item))^;
+  Result := PPartedString(List^.At(Item))^;
 end;
 
 // ---------------------------------
@@ -305,25 +307,33 @@ end;
 function TUnicodeStringPtrCollection.GetItem(var S: TStream): Pointer;
 begin
   Result := nil;
-  PUnicodeString(Result)^ := S.ReadUnicodeString;
+  {$ifdef TPARTED_UNICODE}
+  PPartedString(Result)^ := S.ReadUnicodeString;
+  {$else}
+  PPartedString(Result)^ := S.ReadStr^;
+  {$endif}
 end;
 
 procedure TUnicodeStringPtrCollection.FreeItem(Item: Pointer);
 begin
-  PUnicodeString(Item)^ := '';
-  Dispose(PUnicodeString(Item));
+  PPartedString(Item)^ := '';
+  Dispose(PPartedString(Item));
 end;
 
 procedure TUnicodeStringPtrCollection.PutItem(var S: TStream; Item: Pointer);
 begin
-  S.WriteUnicodeString(PUnicodeString(Item)^);
+  {$ifdef TPARTED_UNICODE}
+  S.WriteUnicodeString(PPartedString(Item)^);
+  {$else}
+  S.WriteStr(PPartedString(Item));
+  {$endif}
 end;
 
-procedure TUnicodeStringPtrCollection.AtUpdate(Index: LongInt; const AText: UnicodeString);
+procedure TUnicodeStringPtrCollection.AtUpdate(Index: LongInt; const AText: TPartedString);
 begin
   if (Index >= 0) and (Index <= Self.Count) then
   begin
-    PUnicodeString(Items^[Index])^ := AText;
+    PPartedString(Items^[Index])^ := AText;
   end else
     Error(coIndexError, Index)
 end;
@@ -456,33 +466,55 @@ end;
 // ---------------------------------
 
 function TUIInputLine.DataSize: LongWord;
+var
+  DSize: LongWord;
 begin
-  Result := SizeOf(Sw_String);
+  Result := SizeOf(UnicodeString);
 end;
 
 procedure TUIInputLine.SetData(var Rec);
 begin
-  Self.Data := Sw_String(Rec);
+  {$ifdef TPARTED_UNICODE}
+  Self.Data := UnicodeString(Rec);
+  {$else}
+  Self.Data^ := UnicodeString(Rec);
+  {$endif}
   Self.SelectAll(True);
 end;
 
 procedure TUIInputLine.GetData(var Rec);
 begin
-  Sw_String(Rec) := Self.Data;
+  {$ifdef TPARTED_UNICODE}
+  UnicodeString(Rec) := Self.Data;
+  {$else}
+  UnicodeString(Rec) := Self.Data^;
+  {$endif}
 end;
 
 procedure TUIInputLine.Draw;
 var
-  OldData: Sw_String;
+  OldData: TPartedString;
   I: LongInt;
 begin
   if Self.IsPassword then
   begin
+    {$ifdef TPARTED_UNICODE}
     OldData := Self.Data;
+    {$else}
+    OldData := Self.Data^;
+    {$endif}
     for I := 1 to Length(OldData) do
+      {$ifdef TPARTED_UNICODE}
       Self.Data[I] := '*';
+      {$else}
+      Self.Data^[I] := '*';
+      {$endif}
     inherited;
+    {$ifdef TPARTED_UNICODE}
     Self.Data := OldData;
+    {$else}
+    Self.Data^ := OldData;
+    {$endif}
   end else
     inherited;
 end;
@@ -492,7 +524,11 @@ var
   V, V0: Int64;
 begin
   V := Self.GetValue;
+  {$ifdef TPARTED_UNICODE}
   Self.Data := V.ToString.ToUnicode;
+  {$else}
+  Self.Data^ := V.ToString.ToUnicode;
+  {$endif}
   // Real-time validation
   if Self.OnMax <> nil then
   begin
@@ -500,7 +536,11 @@ begin
     V := Self.OnMax(V);
     if V <> V0 then
     begin
+      {$ifdef TPARTED_UNICODE}
       Self.Data := V.ToString.ToUnicode;
+      {$else}
+      Self.Data^ := V.ToString.ToUnicode;
+      {$endif}
     end;
   end;
   V := Self.GetValue;
@@ -510,36 +550,66 @@ begin
     V := Self.OnMin(V);
     if V <> V0 then
     begin
+      {$ifdef TPARTED_UNICODE}
       Self.Data := V.ToString.ToUnicode;
+      {$else}
+      Self.Data^ := V.ToString.ToUnicode;
+      {$endif}
     end;
   end;
 end;
 
 procedure TUIInputNumber.HandleEvent(var E: TEvent);
 var
-  OldS: UnicodeString; // Old string
+  OldS: {$ifdef TPARTED_UNICODE}UnicodeString{$else}ShortString{$endif}; // Old string
 begin
+  {$ifdef TPARTED_UNICODE}
   OldS := Self.Data;
+  {$else}
+  OldS := Self.Data^;
+  {$endif}
 
   inherited HandleEvent(E);
+  {$ifdef TPARTED_UNICODE}
   Self.Data := UpCase(Self.Data);
+  {$else}
+  Self.Data^ := UpCase(Self.Data^);
+  {$endif}
   Self.DrawView;
 
   if Self.OnChanged <> nil then
   begin
+    {$ifdef TPARTED_UNICODE}
     if OldS <> Self.Data then
       Self.OnChanged(Self.GetValue);
+    {$else}
+    if OldS <> Self.Data^ then
+      Self.OnChanged(Self.GetValue);
+    {$endif}
   end;
 end;
 
 function TUIInputNumber.GetValue: Int64;
 begin
+  {$ifdef TPARTED_UNICODE}
   Result := Eval(Self.Data.ToUTF8);
+  {$else}
+  Result := Eval(Self.Data^);
+  {$endif}
+end;
+
+function TUIInputNumber.DataSize: LongWord;
+begin
+  Result := SizeOf(Int64);
 end;
 
 procedure TUIInputNumber.SetData(var Rec);
 begin
+  {$ifdef TPARTED_UNICODE}
   Self.Data := Int64(Rec).ToString.ToUnicode;
+  {$else}
+  Self.Data^ := Int64(Rec).ToString.ToUnicode;
+  {$endif}
 end;
 
 procedure TUIInputNumber.GetData(var Rec);
@@ -577,7 +647,7 @@ end;
 
 // Copied from Free Vision implementation of TStaticText, with fixes for weird artifact issue
 PROCEDURE TUIStaticText.Draw;
-VAR Just: Byte; I, J, P, Y, L: Sw_Integer; S: Sw_String;
+VAR Just: Byte; I, J, P, Y, L: Sw_Integer; S: TPartedString;
   B : TDrawBuffer;
   Color : Byte;
 BEGIN

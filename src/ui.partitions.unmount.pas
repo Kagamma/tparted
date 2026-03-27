@@ -41,14 +41,14 @@ begin
     LoadingStart(Format(S_PartitionUnmounting, [PPart^.GetPartitionPath]));
     QueryPartitionUnmount(PPart^);
     LoadingStop;
-    MsgBox(Format(S_PartitionUnmounted, [PPart^.GetPartitionPath]), nil, mfInformation + mfOKButton);
+    MessageDlg(Format(S_PartitionUnmounted, [PPart^.GetPartitionPath]), nil, mfInformation + mfOKButton);
     Result := True;
   except
     on E: Exception do
     begin
       LoadingStop;
       WriteLog(lsError, E.Message);
-      MsgBox(E.Message, nil, mfError + mfOKButton);
+      MessageDlg(E.Message, nil, mfError + mfOKButton);
     end;
   end;
 end;

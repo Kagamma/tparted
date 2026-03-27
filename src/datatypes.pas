@@ -16,29 +16,20 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 }
 
-unit UI.Partitions.Delete;
+unit DataTypes;
 
 {$I configs.inc}
 
 interface
 
-uses
-  SysUtils, Classes, FreeVision,
-  UI.Commons,
-  Parted.Operations,
-  Parted.Commons, Locale,
-  Parted.Devices,
-  Parted.Partitions;
-
-function ShowDeleteDialog(const PPart: PPartedPartition): Boolean;
+type
+  {$ifdef TPARTED_UNICODE}
+  TPartedString = UnicodeString;
+  {$else}
+  TPartedString = ShortString;
+  {$endif}
+  PPartedString = ^TPartedString;
 
 implementation
-
-function ShowDeleteDialog(const PPart: PPartedPartition): Boolean;
-begin
-  //Result := False;
-  //if MessageDlg(Format(S_PartitionAskDelete, [PPart^.GetPartitionPath]), nil, mfInformation + mfYesButton + mfNoButton) = cmYes then
-    Result := True;
-end;
 
 end.

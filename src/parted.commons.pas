@@ -24,7 +24,8 @@ interface
 
 uses
   {$ifdef Unix}Unix, BaseUnix, Termio,{$endif}
-  SysUtils, Classes, Generics.Collections, Process, Types, StrUtils, RegExpr, Locale;
+  SysUtils, Classes, Generics.Collections, Process, Types, StrUtils, RegExpr, Locale,
+  DataTypes;
 
 type
   Ptermios = ^TTermios;
@@ -46,10 +47,14 @@ type
   TSignalMethod = procedure(SL: TStringList) of object;
 
   TPartedStringHelper = type helper(TStringHelper) for String
-    function ToUnicode: UnicodeString;
+    function ToUnicode: TPartedString;
   end;
 
   TPartedUnicodeStringHelper = type helper for UnicodeString
+    function ToUTF8: String;
+  end;
+
+  TPartedShortStringHelper = type helper for ShortString
     function ToUTF8: String;
   end;
 
@@ -104,7 +109,7 @@ function BToMBCeil(const V: QWord): QWord;
 function BToKBFloor(const V: QWord): QWord;
 
 // Allocate new PUnicodeString from given string
-function GetUnicodeStr(const S: String): PUnicodeString;
+function GetUnicodeStr(const S: String): PPartedString;
 
 // Set text attribute
 function TextAttr(const FG, BG, Blink: Byte): Char; inline;
@@ -140,14 +145,27 @@ var
   TempRandom: String;
   PathDict: TPartedPathDict; // Stores file paths in dictionary
 
-function TPartedStringHelper.ToUnicode: UnicodeString;
+function TPartedStringHelper.ToUnicode: TPartedString;
 begin
+  {$ifdef TPARTED_UNICODE}
   Result := UTF8Decode(Self);
+  {$else}
+  Result := Self;
+  {$endif}
 end;
 
 function TPartedUnicodeStringHelper.ToUTF8: String;
 begin
+  {$ifdef TPARTED_UNICODE}
   Result := UTF8Encode(Self);
+  {$else}
+  Result := Self;
+  {$endif}
+end;
+
+function TPartedShortStringHelper.ToUTF8: String;
+begin
+  Result := Self;
 end;
 
 function GetTempMountPath(Path: String): String;
@@ -206,7 +224,7 @@ begin
    except
      { prevent endless dump if an exception occured }
    end;
-  MsgBox(Report, nil, mfError + mfOKButton);
+  MessageDlg(Report, nil, mfError + mfOKButton);
 end;
 
 function Match(S: String; RegexPattermArray: TStringDynArray): TStringDynArray;
@@ -597,7 +615,7 @@ begin
   Result := S.ToInt64;
 end;
 
-function GetUnicodeStr(const S: String): PUnicodeString;
+function GetUnicodeStr(const S: String): PPartedString;
 begin
   New(Result);
   Result^ := S.ToUnicode;

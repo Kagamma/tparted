@@ -172,7 +172,11 @@ begin
   Dec(R.A.Y);
   Inc(R.B.X);
   R.B.Y := R.A.Y + 1;
+  {$ifdef TPARTED_UNICODE}
   S := Format('%s│%s│%s│%s│%s│%s│%s', [
+  {$else}
+  S := Format('%s'#179'%s'#179'%s'#179'%s'#179'%s'#179'%s'#179'%s', [
+  {$endif}
     PadCenterLimit(S_Partition, 15), // TODO: The size should be based on the text with highest length
     PadCenterLimit(S_FileSystem, 12),
     PadCenterLimit(S_Size, 7),
@@ -246,7 +250,11 @@ begin
       FS := PPart^.FileSystem + '[E]'
     else
       FS := PPart^.FileSystem;
+    {$ifdef TPARTED_UNICODE}
     S := Format('%s│%s│%s│%s│%s│%s│%s', [
+    {$else}
+    S := Format('%s'#179'%s'#179'%s'#179'%s'#179'%s'#179'%s'#179'%s', [
+    {$endif}
       PadRightLimit(IsMountedSymbol + ExtractFileName(PPart^.GetPartitionPathForDisplay), 15),
       PadRightLimit(FS, 12),
       PadLeftLimit(SizeString(PPart^.PartSize), 7),

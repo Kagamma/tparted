@@ -40,9 +40,9 @@ const
 var
   R: TRect;
   D: PDialog;
-  S: String;
   MX, MY: LongInt;
   FS: String;
+  I: Byte;
 begin
   Result := True;
   if PPart = nil then
@@ -59,21 +59,33 @@ begin
     else
       FS := PPart^.FileSystem;
 
-    S := Format(S_PartitionFileSystem, [FS]) + #13 +
-      Format(S_PartitionLabel, [PPart^.LabelName]) + #13 +
-      Format(S_PartitionName, [PPart^.Name]) + #13 +
-      Format(S_PartitionUUID, [PPart^.UUID]) + #13 +
-      Format(S_PartitionPARTUUID, [PPart^.PARTUUID]) + #13 +
-      Format(S_PartitionType, [PPart^.Kind]) + #13 +
-      Format(S_PartitionSize, [SizeByteString(PPart^.PartSize), SizeString(PPart^.PartSize)]) + #13 +
-      Format(S_PartitionUsed, [SizeByteString(PPart^.PartUsed), SizeString(PPart^.PartUsed)]) + #13 +
-      Format(S_PartitionFree, [SizeByteString(PPart^.PartFree), SizeString(PPart^.PartFree)]) + #13 +
-      Format(S_PartitionStart, [SizeByteString(PPart^.PartStart), SizeString(PPart^.PartStart)]) + #13 +
-      Format(S_PartitionEnd, [SizeByteString(PPart^.PartEnd), SizeString(PPart^.PartEnd)]) + #13 +
-      Format(S_PartitionFlags, [SAToS(PPart^.Flags, ',')]) + #13 +
-      Format(S_PartitionMount, [PPart^.MountPoint]);
-    R.Assign(3, 2, R.B.X - 1, 15);
-    D^.Insert(New(PStaticText, Init(R, S.ToUnicode)));
+    I := 2;
+    R.Assign(3, I, R.B.X - 1, I + 1); Inc(I);
+    D^.Insert(New(PStaticText, Init(R, Format(S_PartitionFileSystem, [FS]).ToUnicode)));
+    R.Assign(3, I, R.B.X - 1, I + 1); Inc(I);
+    D^.Insert(New(PStaticText, Init(R, Format(S_PartitionLabel, [PPart^.LabelName]).ToUnicode)));
+    R.Assign(3, I, R.B.X - 1, I + 1); Inc(I);
+    D^.Insert(New(PStaticText, Init(R, Format(S_PartitionName, [PPart^.Name]).ToUnicode)));
+    R.Assign(3, I, R.B.X - 1, I + 1); Inc(I);
+    D^.Insert(New(PStaticText, Init(R, Format(S_PartitionUUID, [PPart^.UUID]).ToUnicode)));
+    R.Assign(3, I, R.B.X - 1, I + 1); Inc(I);
+    D^.Insert(New(PStaticText, Init(R, Format(S_PartitionPARTUUID, [PPart^.PARTUUID]).ToUnicode)));
+    R.Assign(3, I, R.B.X - 1, I + 1); Inc(I);
+    D^.Insert(New(PStaticText, Init(R, Format(S_PartitionType, [PPart^.Kind]).ToUnicode)));
+    R.Assign(3, I, R.B.X - 1, I + 1); Inc(I);
+    D^.Insert(New(PStaticText, Init(R, Format(S_PartitionSize, [SizeByteString(PPart^.PartSize), SizeString(PPart^.PartSize)]).ToUnicode)));
+    R.Assign(3, I, R.B.X - 1, I + 1); Inc(I);
+    D^.Insert(New(PStaticText, Init(R, Format(S_PartitionUsed, [SizeByteString(PPart^.PartUsed), SizeString(PPart^.PartUsed)]).ToUnicode)));
+    R.Assign(3, I, R.B.X - 1, I + 1); Inc(I);
+    D^.Insert(New(PStaticText, Init(R, Format(S_PartitionFree, [SizeByteString(PPart^.PartFree), SizeString(PPart^.PartFree)]).ToUnicode)));
+    R.Assign(3, I, R.B.X - 1, I + 1); Inc(I);
+    D^.Insert(New(PStaticText, Init(R, Format(S_PartitionStart, [SizeByteString(PPart^.PartStart), SizeString(PPart^.PartStart)]).ToUnicode)));
+    R.Assign(3, I, R.B.X - 1, I + 1); Inc(I);
+    D^.Insert(New(PStaticText, Init(R, Format(S_PartitionEnd, [SizeByteString(PPart^.PartEnd), SizeString(PPart^.PartEnd)]).ToUnicode)));
+    R.Assign(3, I, R.B.X - 1, I + 1); Inc(I);
+    D^.Insert(New(PStaticText, Init(R, Format(S_PartitionFlags, [SAToS(PPart^.Flags, ',')]).ToUnicode)));
+    R.Assign(3, I, R.B.X - 1, I);
+    D^.Insert(New(PStaticText, Init(R, Format(S_PartitionMount, [PPart^.MountPoint]).ToUnicode)));
 
     R.Assign(HW - 7, R.A.Y + 14, HW + 7, R.A.Y + 16);
     D^.Insert(New(PButton, Init(R, S_CloseButton.ToUnicode, cmCancel, bfDefault)));

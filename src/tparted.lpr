@@ -79,7 +79,7 @@ begin
         // If it makes to this message box, then stop the app immediately!
         DumpCallStack(Report);
         WriteLog(lsError, Report);
-        MsgBox(E.Message, nil, mfError + mfOKButton);
+        MessageDlg(E.Message, nil, mfError + mfOKButton);
       end;
     end;
   finally

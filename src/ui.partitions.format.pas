@@ -52,12 +52,12 @@ begin
   // The following code should not run because the format button should be disabled for these cases
   if PPart^.IsMounted then // Prevent user to perform format operation on a mounted partition
   begin
-    MsgBox(Format(S_PartitionIsMounted, [PPart^.GetPartitionPath]), nil, mfInformation + mfOKButton);
+    MessageDlg(Format(S_PartitionIsMounted, [PPart^.GetPartitionPath]), nil, mfInformation + mfOKButton);
     Exit;
   end;
   if PPart^.Number = 0 then // Prevent user to perform format operation on an unallocated space
   begin
-    MsgBox(Format(S_PartitionIsUnallocated, []), nil, mfInformation + mfOKButton);
+    MessageDlg(Format(S_PartitionIsUnallocated, []), nil, mfInformation + mfOKButton);
     Exit;
   end;
 

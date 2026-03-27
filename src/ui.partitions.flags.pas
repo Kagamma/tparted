@@ -49,7 +49,7 @@ begin
   Result := False;
   if PPart^.Number = 0 then
   begin
-    MsgBox(Format(S_PartitionIsUnallocated, []), nil, mfInformation + mfOKButton);
+    MessageDlg(Format(S_PartitionIsUnallocated, []), nil, mfInformation + mfOKButton);
     Exit;
   end;
   Desktop^.GetExtent(R);

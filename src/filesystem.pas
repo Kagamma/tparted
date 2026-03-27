@@ -100,7 +100,7 @@ begin
     MinSize := FileSystemMinSizeMap[FS];
     if MinSize > Size then
     begin
-      MsgBox(Format(S_VerifyMinSize, [FS, MinSize]), nil, mfError + mfOKButton);
+      MessageDlg(Format(S_VerifyMinSize, [FS, MinSize]), nil, mfError + mfOKButton);
       Exit;
     end;
   end;
@@ -109,7 +109,7 @@ begin
     MaxSize := FileSystemMaxSizeMap[FS];
     if MaxSize < Size then
     begin
-      MsgBox(Format(S_VerifyMaxSize, [FS, MaxSize]), nil, mfError + mfOKButton);
+      MessageDlg(Format(S_VerifyMaxSize, [FS, MaxSize]), nil, mfError + mfOKButton);
       Exit;
     end;
   end;
@@ -117,7 +117,7 @@ begin
   begin
     if 2097152 < Size then
     begin
-      MsgBox(Format(S_VerifyMaxSize, [FS, 2097152]), nil, mfError + mfOKButton);
+      MessageDlg(Format(S_VerifyMaxSize, [FS, 2097152]), nil, mfError + mfOKButton);
       Exit;
     end;
   end;

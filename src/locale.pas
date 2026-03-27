@@ -42,7 +42,11 @@ resourcestring
   S_Quit = '~Q~uit';
   S_RefreshDevices = '~R~efresh Devices';
   S_QuitMessage = #3'You have pending operations.'#13#3'Quit TParted?';
-  S_AboutMessage = #3'TParted (%s) by kagamma'#13#3'Built with Free Pascal %s';
+  {$ifdef TPARTED_UNICODE}
+  S_AboutMessage = #3'TParted (%s) by kagamma'#13#3'Built with Free Pascal %s'#13#3'Free Vision (Unicode)';
+  {$else}
+  S_AboutMessage = #3'TParted (%s) by kagamma'#13#3'Built with Free Pascal %s'#13#3'Free Vision (ShortString)';
+  {$endif}
   S_LoadingPartitions = 'Loading partitions...';
   S_PartitionFileSystem = 'File System: %s';
   S_PartitionLabel = 'Label: %s';
@@ -124,6 +128,7 @@ var
   Lang2: String;
 
 initialization
+  {$ifdef TPARTED_UNICODE}
   Lang := GetEnv('LANG');
   if Lang <> '' then
   begin
@@ -146,5 +151,6 @@ initialization
     if FileExists(Lang2) then
       TranslateResourceStrings(Lang2);
   end;
+  {$endif}
 
 end.
