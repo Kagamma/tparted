@@ -26,7 +26,7 @@ resourcestring
   S_CreateButton = '~C~reate';
   S_DeleteButton = '~D~elete';
   S_FormatButton = '~F~ormat';
-  S_ResizeButton = '~R~esize';
+  S_ResizeButton = 'Move/~R~esize';
   S_DecryptButton = 'Unloc~k~';
   S_UnmountButton = 'Un~m~ount';
   S_CreateGPTButton = 'P.~T~able';
