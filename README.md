@@ -40,8 +40,9 @@ Currently supported filesystems:
 - See `Releases` section.
 
 #### Archlinux User Repository (AUR)
-- For unicode version: Run `git clone https://aur.archlinux.org/tparted-bin.git`, then enter `tparted-bin` directory and run `makepkg -si OPTIONS=-debug`
-- For ShortString/non-unicode version: Run `git clone https://aur.archlinux.org/tparted-git.git`, then enter `tparted-git` directory and run `makepkg -si OPTIONS=-debug`
+- Clone either `https://aur.archlinux.org/tparted-bin.git` or `git clone https://aur.archlinux.org/tparted-git.git`
+- Enter the directory and run `makepkg -si`
+- Note: Since Arch repository only contains fpc version 3.2.2, `tparted-git` will install the ShortString/non-unicode version, while `tparted-bin` will install the unicode version.
 
 #### Building from source
 - For unicode version:
