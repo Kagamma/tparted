@@ -85,5 +85,6 @@ begin
   finally
     UIMain.Done;
     fpSystem('tput cnorm');
+    fpSystem('clear');
   end;
 end.
