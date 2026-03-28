@@ -40,7 +40,7 @@ Currently supported filesystems:
 - See `Releases` section.
 
 #### Archlinux User Repository (AUR)
-- Clone either `https://aur.archlinux.org/tparted-bin.git` or `git clone https://aur.archlinux.org/tparted-git.git`
+- Clone either `https://aur.archlinux.org/tparted-bin.git` or `https://aur.archlinux.org/tparted-git.git`
 - Enter the directory and run `makepkg -si`
 - Note: Since Arch repository only contains fpc version 3.2.2, `tparted-git` will install the ShortString/non-unicode version, while `tparted-bin` will install the unicode version.
 
@@ -48,8 +48,8 @@ Currently supported filesystems:
 - For unicode version:
   + Requires Free Pascal 3.3.1
 - For ShortString version:
-  + Officially support for Free Pascal 3.2.2 and newer, although older versions should work.
-- By default unicode version will be built automatically if it detects fpc 3.3.1 on the system.
+  + Officially support for Free Pascal 3.2.2 and newer, although older versions should also work.
+- By default unicode version will be built automatically if it detects fpc 3.3.1 on the system. Modify `TPARTED_UNICODE` flag in `configs.inc` if you want to control it.
 - Run `make build` to build the app. The binary is located in `./bin` directory.
 - Run `make install` to install the app to `/usr/local/bin`
 
