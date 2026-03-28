@@ -47,7 +47,7 @@ begin
 
   Desktop^.Insert(W);
   {$else}
-  MessageDlg('This feature is disabled in FPC 3.2.2', nil, mfInformation + mfOKButton);
+  MessageDlg('This feature is only available in Free Pascal 3.3.1', nil, mfInformation + mfOKButton);
   {$endif}
 end;
 

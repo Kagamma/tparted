@@ -48,7 +48,7 @@ Currently supported filesystems:
 - For unicode version:
   + Requires Free Pascal 3.3.1
 - For ShortString version:
-  + Officially support for Free Pascal 3.2.2 and newer, although older versions should also work.
+  + Officially support for Free Pascal 3.2.2 or newer, although older versions should also work.
 - By default unicode version will be built automatically if it detects fpc 3.3.1 on the system. Modify `TPARTED_UNICODE` flag in `configs.inc` if you want to control it.
 - Run `make build` to build the app. The binary is located in `./bin` directory.
 - Run `make install` to install the app to `/usr/local/bin`
