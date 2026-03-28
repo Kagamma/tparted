@@ -190,10 +190,12 @@ begin
   Self.FMenuSystem := NewSubMenu('~T~Parted'.ToUnicode, hcNoContext, NewMenu(
     NewItem(S_RefreshDevices.ToUnicode, 'F5', kbF5, cmMenuRefreshDevice, hcNoContext,
     NewLine(
+    {$if FPC_FULLVERSION >= 30301}
     NewItem(S_MenuLogs.ToUnicode, '', kbNoKey, cmMenuDisplayLog, hcNoContext,
+    {$endif}
     NewItem(S_MenuFileSystemSupport.ToUnicode, '', kbNoKey, cmMenuDisplayFileSystemSupport, hcNoContext,
     NewLine(
-    NewItem(S_Quit.ToUnicode, 'Alt-X', kbAltX, cmQuit, hcNoContext, nil))))))
+    NewItem(S_Quit.ToUnicode, 'Alt-X', kbAltX, cmQuit, hcNoContext, nil))))){$if FPC_FULLVERSION >= 30301}){$endif}
   ), FMenuDevices);
 
   M := NewMenu(Self.FMenuSystem);
