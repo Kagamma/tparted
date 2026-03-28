@@ -38,6 +38,7 @@ var
   W: PEditWindow;
   Str: String;
 begin
+  {$if FPC_FULLVERSION >= 30301}
   Desktop^.GetExtent(R);
   R.Grow(-1, -1);
 
@@ -45,6 +46,9 @@ begin
   W^.Editor^.ScrollTo(0, $1FFFFFFF);
 
   Desktop^.Insert(W);
+  {$else}
+  MessageDlg('This feature is disabled in FPC 3.2.2', nil, mfInformation + mfOKButton);
+  {$endif}
 end;
 
 end.
