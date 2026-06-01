@@ -277,7 +277,7 @@ begin
                    ShowPTableDialog(TableType)  then
                 begin
                   LoadingStart(Format(S_CreatingGPT, [TableType]));
-                  QueryCreatePTable(TableType, LDevice^.Path);
+                  QueryCreatePTableSilent(TableType, LDevice^.Path);
                   // Query for device again
                   QueryDeviceAndPartitions(Path, LDevice^);
                   LoadingStop;
